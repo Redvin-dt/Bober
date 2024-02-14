@@ -12,7 +12,7 @@ public class UserController {
 
     UserService userService = new UserService();
 
-    @PostMapping("/registr") // TODO: mb rename
+    @PostMapping("/register")
     public ResponseEntity postUser(@RequestBody UserEntity user) {
         try {
             userService.registration(user);
@@ -22,7 +22,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("/userById") // TODO: mb rename
+    @GetMapping("/userById")
     public ResponseEntity getUserById(@RequestParam Long id) {
         try {
             var user = userService.getUserByID(id);
@@ -32,7 +32,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("/userByLogin") // TODO: mb rename
+    @GetMapping("/userByLogin")
     public ResponseEntity getUserByLogin(@RequestParam String login) {
         try {
             var user = userService.getUserByLogin(login);
