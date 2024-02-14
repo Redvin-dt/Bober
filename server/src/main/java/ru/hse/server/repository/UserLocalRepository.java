@@ -5,8 +5,8 @@ import ru.hse.server.entity.UserEntity;
 
 import java.util.*;
 
-/*
-    class only for test
+/**
+ *  class only for test
  */
 public class UserLocalRepository implements UserRepository {
 
@@ -14,8 +14,10 @@ public class UserLocalRepository implements UserRepository {
     private static long counter = 1;
 
     @Override
-    public <S extends UserEntity> S save(S entity) {
-        return (S) storage.put(Long.valueOf(counter++), entity); // TODO: add check
+    @Nonnull
+    @SuppressWarnings("unchecked")
+    public <S extends UserEntity> S save(@Nonnull S entity) {
+        return (S) Objects.requireNonNull(storage.put(counter++, entity));
     }
 
     @Override
