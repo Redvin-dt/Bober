@@ -7,12 +7,12 @@ import org.springframework.http.ResponseEntity;
 import ru.hse.server.service.UserService;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/users")
 public class UserController {
 
     UserService userService = new UserService();
 
-    @PostMapping("/register")
+    @PostMapping("/registration")
     public ResponseEntity postUser(@RequestBody UserEntity user) {
         try {
             userService.registration(user);
