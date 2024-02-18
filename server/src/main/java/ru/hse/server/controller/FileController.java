@@ -5,8 +5,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.hse.server.service.FileService;
 
-import java.io.*;
-
 @RestController
 @RequestMapping("/files")
 public class FileController {
@@ -23,11 +21,11 @@ public class FileController {
     }
 
     @GetMapping
-    public ResponseEntity<InputStream> getFile(@RequestParam String fileName) { // TODO: rewrite
+    public ResponseEntity<byte[]> getFile(@RequestParam String fileName) {
         try {
-            return ResponseEntity.ok().body(new FileInputStream(fileService.getFile(fileName)));
+            return ResponseEntity.ok().body(fileService.getFile(fileName));
         } catch (Exception e){
-            return ResponseEntity.badRequest().body(new StringBufferInputStream(e.getMessage()));
+            return ResponseEntity.badRequest().body(e.getMessage().getBytes());
         }
     }
 }
