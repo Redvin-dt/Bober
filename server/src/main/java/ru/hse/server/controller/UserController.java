@@ -1,5 +1,6 @@
 package ru.hse.server.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.hse.server.entity.UserEntity;
 
@@ -10,7 +11,11 @@ import ru.hse.server.service.UserService;
 @RequestMapping("/users")
 public class UserController {
 
-    UserService userService = new UserService();
+    UserService userService;
+
+    UserController(UserService userService){
+        this.userService = userService;
+    }
 
     @PostMapping("/registration")
     public ResponseEntity postUser(@RequestBody UserEntity user) {

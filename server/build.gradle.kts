@@ -15,7 +15,10 @@ repositories {
 	mavenCentral()
 }
 
-dependencies {
+dependencies{
+	testImplementation("org.mockito:mockito-core:5.8.0")
+	testImplementation(platform("org.junit:junit-bom:5.7.0"))
+	testImplementation("org.junit.jupiter:junit-jupiter")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
