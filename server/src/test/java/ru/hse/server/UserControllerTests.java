@@ -57,6 +57,7 @@ public class UserControllerTests {
         ReflectionTestUtils.setField(userService, "userRepository", new UserLocalRepository());
         Mockito.when(userService.registration(any())).thenCallRealMethod();
         Mockito.when(userService.getUserByLogin(any())).thenCallRealMethod();
+
         this.mockMvc.perform(post("/users/registration").contentType("application/json").content(userPayload)).andDo(print()).andExpect(status().isOk());
         this.mockMvc.perform(post("/users/registration").contentType("application/json").content(userPayload)).andDo(print()).andExpect(status().isBadRequest());
         this.mockMvc.perform(get("/users/userByLogin?login=" + user.getLogin())).andDo(print()).andExpect(status().isOk()).andExpect(content().json(userPayload));
@@ -69,6 +70,7 @@ public class UserControllerTests {
         Mockito.when(userService.registration(any())).thenCallRealMethod();
         Mockito.when(userService.getUserByID(any())).thenCallRealMethod();
         Mockito.doCallRealMethod().when(userService).deleteUserById(anyLong());
+
         this.mockMvc.perform(post("/users/registration").contentType("application/json").content(userPayload)).andDo(print()).andExpect(status().isOk());
         this.mockMvc.perform(get("/users/userById?id=1")).andDo(print()).andExpect(status().isOk()).andExpect(content().json(userPayload));
         this.mockMvc.perform(delete("/users/userById?id=1")).andDo(print()).andExpect(status().isOk());

@@ -1,6 +1,5 @@
 package ru.hse.server.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.hse.server.entity.UserEntity;
 

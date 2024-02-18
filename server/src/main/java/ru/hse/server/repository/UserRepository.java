@@ -5,5 +5,5 @@ import ru.hse.server.entity.UserEntity;
 import org.springframework.data.repository.CrudRepository;
 
 public interface UserRepository extends CrudRepository<UserEntity, Long> {
-    public UserEntity findByLogin(String login);
+    UserEntity findByLogin(String login);
 }
