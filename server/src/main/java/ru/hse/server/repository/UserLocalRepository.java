@@ -17,7 +17,8 @@ public class UserLocalRepository implements UserRepository {
     @Nonnull
     @SuppressWarnings("unchecked")
     public <S extends UserEntity> S save(@Nonnull S entity) {
-        return (S) Objects.requireNonNull(storage.put(counter++, entity));
+        storage.put(counter++, entity);
+        return entity;
     }
 
     @Override

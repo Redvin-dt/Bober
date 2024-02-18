@@ -1,7 +1,7 @@
 package ru.hse.server.service;
 
 import ru.hse.server.entity.UserEntity;
-import ru.hse.server.exception.UserAlreadyExistExceprion;
+import ru.hse.server.exception.UserAlreadyExistException;
 import ru.hse.server.exception.UserNotFoundException;
 import ru.hse.server.repository.UserLocalRepository;
 import ru.hse.server.repository.UserRepository;
@@ -15,12 +15,12 @@ public class UserService {
 
     UserRepository userRepository = new UserLocalRepository(); // TODO: connect with db and use authowired
 
-    public UserEntity registration(UserEntity user) throws UserAlreadyExistExceprion {
+    public UserEntity registration(UserEntity user) throws UserAlreadyExistException {
         if (userRepository.findByLogin(user.getLogin()) == null) {
             return userRepository.save(user);
         }
 
-        throw new UserAlreadyExistExceprion("Пользователь с таким именем уже существует");
+        throw new UserAlreadyExistException("Пользователь с таким именем уже существует");
     }
 
     public UserEntity getUserByID(Long id) throws UserNotFoundException {
