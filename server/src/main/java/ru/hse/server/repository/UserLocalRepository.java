@@ -11,11 +11,10 @@ import java.util.*;
 public class UserLocalRepository implements UserRepository {
 
     Map<Long, UserEntity> storage = new TreeMap<>();
-    private static long counter = 1;
+    private long counter = 1;
 
     @Override
     @Nonnull
-    @SuppressWarnings("unchecked")
     public <S extends UserEntity> S save(@Nonnull S entity) {
         storage.put(counter++, entity);
         return entity;
