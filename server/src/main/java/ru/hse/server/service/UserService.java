@@ -20,13 +20,13 @@ public class UserService {
             return userRepository.save(user);
         }
 
-        throw new UserAlreadyExistException("Пользователь с таким именем уже существует");
+        throw new UserAlreadyExistException("User with that login already exist");
     }
 
     public UserEntity getUserByID(Long id) throws UserNotFoundException {
         Optional<UserEntity> user = userRepository.findById(id);
         if (user.isEmpty()){
-            throw new UserNotFoundException("Пользователя с таким id не существует");
+            throw new UserNotFoundException("User with that id not found");
         }
         return user.get();
     }
@@ -34,14 +34,14 @@ public class UserService {
     public UserEntity getUserByLogin(String login) throws UserNotFoundException {
         UserEntity user = userRepository.findByLogin(login);
         if (user == null){
-            throw new UserNotFoundException("Пользователя с таким логином не существует");
+            throw new UserNotFoundException("User with that login not found");
         }
         return user;
     }
 
     public void deleteUserById(Long id) throws UserNotFoundException {
         if (userRepository.findById(id).isEmpty()){
-            throw new UserNotFoundException("Пользователя с таким id не существует");
+            throw new UserNotFoundException("User with that id not found");
         }
         userRepository.deleteById(id);
     }
