@@ -3,7 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white">
+    android:background="@color/white"
+    android:clickable="true"
+    android:focusableInTouchMode="true" >
 
     <View
         android:id="@+id/border"
@@ -103,7 +105,8 @@
         app:layout_constraintBottom_toBottomOf="@id/border"
         app:layout_constraintEnd_toEndOf="@id/border"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="@id/border">
+        app:layout_constraintStart_toStartOf="@id/border"
+        app:passwordToggleEnabled="true">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/password"

@@ -1,18 +1,25 @@
 package com.example.client
-
+import android.app.Activity
+import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
 import android.util.Log
 import android.util.Patterns
+import android.view.MotionEvent
+import android.view.View
+import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
-import android.widget.TextView
+import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getSystemService
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+
 
 fun isValidEmail(target: CharSequence?): Boolean {
     return if (target == null || TextUtils.isEmpty(target)) {
@@ -22,7 +29,29 @@ fun isValidEmail(target: CharSequence?): Boolean {
     }
 }
 
+fun isValidPassword(target: CharSequence?): Boolean{
+    if (target != null) {
+        for (c in target) {
+            if (!c.isDigit() && !c.isLetter() && c != '_' && c != '-') {
+                return false
+            }
+        }
+        return true
+    } else {
+        return false
+    }
+}
+
+
 class SignUpActivity : AppCompatActivity() {
+
+    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
+        if (currentFocus != null) {
+            val imm = this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(this.currentFocus!!.windowToken, 0)
+        }
+        return super.dispatchTouchEvent(ev)
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.sign_up)
@@ -45,13 +74,14 @@ class SignUpActivity : AppCompatActivity() {
                 count: Int
             ) {
                 val newText = charSequence.toString()
-                /* if (...) {
-                    loginLayout.error = ""
+                 if (!isValidPassword(newText)) {
+                    loginLayout.setError("Unacceptable symbols in login")
                 } else {
+                    // TODO: get login from db and check
                     loginLayout.boxStrokeColor =
                         ContextCompat.getColor(this@SignUpActivity, R.color.green)
-                    loginLayout.error = null
-                }  TODO: get login from db and check */
+                    loginLayout.setError(null)
+                }
 
             }
 
@@ -125,7 +155,6 @@ class SignUpActivity : AppCompatActivity() {
             }
         }
         passwordEditText.addTextChangedListener(textWatcherforPassword)
-
 
         var signUpButton: Button = findViewById(R.id.sign_up_button)
 
