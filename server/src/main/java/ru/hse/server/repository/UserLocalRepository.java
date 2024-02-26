@@ -6,7 +6,7 @@ import ru.hse.server.entity.UserEntity;
 import java.util.*;
 
 /**
- *  class only for test
+ * class only for test
  */
 public class UserLocalRepository implements UserRepository {
 

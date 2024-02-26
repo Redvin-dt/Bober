@@ -36,9 +36,9 @@ public class UserControllerTests {
     private static String userPayload;
 
     @BeforeEach
-    public void generateUser() throws Exception{
+    public void generateUser() throws Exception {
         user = new UserEntity();
-        user.setId((long)1);
+        user.setId((long) 1);
         user.setLogin("admin");
         user.setPassword("admin");
 
