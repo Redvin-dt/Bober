@@ -1,5 +1,7 @@
 package ru.hse.server.controller;
 
+import jakarta.persistence.EntityExistsException;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import ru.hse.server.entity.UserEntity;
 
@@ -12,7 +14,7 @@ public class UserController {
 
     UserService userService;
 
-    UserController(UserService userService){
+    UserController(UserService userService) {
         this.userService = userService;
     }
 
@@ -20,8 +22,8 @@ public class UserController {
     public ResponseEntity postUser(@RequestBody UserEntity user) {
         try {
             userService.registration(user);
-            return ResponseEntity.ok("Пользователь сохранен");
-        } catch (Exception e) {
+            return ResponseEntity.ok("User saved"); // TODO: add logging
+        } catch (EntityExistsException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
@@ -31,7 +33,7 @@ public class UserController {
         try {
             var user = userService.getUserByID(id);
             return ResponseEntity.ok().body(user);
-        } catch (Exception e) {
+        } catch (EntityNotFoundException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
@@ -41,7 +43,7 @@ public class UserController {
         try {
             var user = userService.getUserByLogin(login);
             return ResponseEntity.ok().body(user);
-        } catch (Exception e) {
+        } catch (EntityNotFoundException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
@@ -51,8 +53,9 @@ public class UserController {
         try {
             userService.deleteUserById(id);
             return ResponseEntity.ok().body("Пользователь удален");
-        } catch (Exception e) {
+        } catch (EntityNotFoundException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
+
         }
     }
 }
