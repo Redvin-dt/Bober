@@ -1,6 +1,7 @@
 package ru.hse.database.entities;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,31 +9,28 @@ import java.util.*;
 
 @Entity
 @Table(name = "Users")
+@Getter
+@Setter
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     @Access(value = AccessType.FIELD)
+    @Setter(AccessLevel.NONE)
     private long userId;
-    @Getter
+
     @Column(name = "login")
     private String userLogin;
-    @Getter
+
     @Column(name = "password")
     private String passwordHash;
 
-    @Setter
-    @Getter
     @Column(name = "meta_info")
     private String metaInfo;
 
-
-    @Getter
     @OneToMany(mappedBy = "admin", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Group> groupsAdmin = new ArrayList<>();
 
-    @Getter
-    @Setter
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "users_groups",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
@@ -45,10 +43,6 @@ public class User {
     public User(String name, String passwordHash) {
         this.userLogin = name;
         this.passwordHash = passwordHash;
-    }
-
-    public Long getUserId() {
-        return this.userId;
     }
 
     @Override

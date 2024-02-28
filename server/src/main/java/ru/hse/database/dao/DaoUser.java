@@ -19,15 +19,18 @@ import org.slf4j.LoggerFactory;
 public class DaoUser {
     static Logger logger = LoggerFactory.getLogger(DaoUser.class);
 
-    static public User getUserById(long id) {
-        User user;
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            user = session.get(User.class, id);
+    public static class NotUniqueUserLoginException extends Exception {
+        public NotUniqueUserLoginException(String errorMessage, String login) {
+            super(errorMessage);
         }
-
-        return user;
     }
-    static public User getUserByLogin(String login) {
+
+    static public User getUserById(long id) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.get(User.class, id);
+        }
+    }
+    public User getUserByLogin(String login) throws NotUniqueUserLoginException {
         Query<User> query;
         List<User> users;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
@@ -47,47 +50,43 @@ public class DaoUser {
         }
 
         if (users.size() > 1) {
-            logger.error("More than 1 users in table with user login " + login);
-            return null;
+            logger.error("More than 1 users in table with user login {}", login);
+            throw new NotUniqueUserLoginException("Found more than 1 user, with login {}", login);
         }
 
         return users.getFirst();
     }
 
     static public Set<Group> getGroupsOfUser(User user) {
-        Set<Group> groups;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             user = session.get(User.class, user.getUserId());
 
             session.beginTransaction();
-            groups = user.getGroupsUserSet();
+            Set<Group> groups = user.getGroupsUserSet();
             session.getTransaction().commit();
+            return groups;
         }
-
-        return groups;
     }
 
     static public List<Group> getGroupsByAdmin(User user) {
-        List<Group> groups;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             user = session.get(User.class, user.getUserId());
 
             session.beginTransaction();
-            groups = user.getGroupsAdmin();
+            List<Group> groups = user.getGroupsAdmin();
             session.getTransaction().commit();
-        }
 
-        return groups;
+            return groups;
+        }
     }
 
     static public void createOrUpdateUser(User user) {
-        try {
-            try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-                session.beginTransaction();
-                session.merge(user);
-                session.getTransaction().commit();
-            }
-        } catch (Exception e) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            session.beginTransaction();
+            session.merge(user);
+            session.getTransaction().commit();
+        }
+        catch (IllegalStateException e) {
             logger.error("Error while merging user with id " + user.getUserId(), e);
         }
     }
@@ -110,19 +109,19 @@ public class DaoUser {
             session.merge(group);
 
             session.getTransaction().commit();
-        } catch (Exception e) {
-            logger.error("Error while erasing user from group " + user.getUserId() + ' ' + group.getGroupId(), e);
+        } catch (IllegalStateException e) {
+            logger.error("Error while erasing user {} from group {}", user.getUserId(), + group.getGroupId(), e);
         }
     }
 
     static public void deleteUser(User user) {
-        Long id = user.getUserId();
+        long id = user.getUserId();
         try (Session session = HibernateUtil.getSessionFactory().openSession()){
             session.beginTransaction();
             session.remove(user);
             session.getTransaction().commit();
-        } catch (Exception e) {
-            logger.error("Error while erasing user from db " + id, e);
+        } catch (IllegalStateException e) {
+            logger.error("Error while erasing user {} from db ", id, e);
         }
     }
 }
