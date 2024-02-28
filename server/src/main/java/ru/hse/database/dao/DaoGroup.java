@@ -20,67 +20,60 @@ public class DaoGroup {
 
     static Logger logger = LoggerFactory.getLogger(DaoGroup.class);
     static public Group getGroupById(long id) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-
-        Group group = session.get(Group.class, id);
-
-        session.close();
-        return group;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.get(Group.class, id);
+        }
     }
-    static public List<Group> getGroupsByName(String goupName) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
+    static public List<Group> getGroupsByName(String groupName) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 
-        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-        CriteriaQuery<Group> criteria = criteriaBuilder.createQuery(Group.class);
+            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+            CriteriaQuery<Group> criteria = criteriaBuilder.createQuery(Group.class);
 
-        Root<Group> root = criteria.from(Group.class);
+            Root<Group> root = criteria.from(Group.class);
 
-        criteria.select(root).where(criteriaBuilder.equal(root.get("groupName"), goupName));
+            criteria.select(root).where(criteriaBuilder.equal(root.get("groupName"), groupName));
 
-        Query<Group> query = session.createQuery(criteria);
+            Query<Group> query = session.createQuery(criteria);
 
-        List<Group> groups = query.getResultList();
-        session.close();
-
-        return groups;
+            return query.getResultList();
+        }
     }
 
     static public User getGroupAdmin(Group group) {
-        User user;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             group = session.get(Group.class, group.getGroupId());
 
             session.beginTransaction();
-            user = group.getAdmin();
+            User user = group.getAdmin();
             session.getTransaction().commit();
-        }
 
-        return user;
+            return user;
+        }
     }
 
     static public Set<User> getUsersOfGroup(Group group) {
-        Set<User> users;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             group = session.get(Group.class, group.getGroupId());
-            session.beginTransaction();
-            users = group.getUsersSet();
-            session.getTransaction().commit();
-        }
 
-        return users;
+            session.beginTransaction();
+            Set<User> users = group.getUsersSet();
+            session.getTransaction().commit();
+
+            return users;
+        }
     }
 
     static public List<Chapter> getChaptersByGroup(Group group) {
-        List<Chapter> chapters;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             group = session.get(Group.class, group.getGroupId());
 
             session.beginTransaction();
-            chapters = group.getChapters();
+            List<Chapter> chapters = group.getChapters();
             session.getTransaction().commit();
-        }
 
-        return chapters;
+            return chapters;
+        }
     }
 
     static public void createOrUpdateGroup(Group group) {
@@ -88,19 +81,19 @@ public class DaoGroup {
             session.beginTransaction();
             session.merge(group);
             session.getTransaction().commit();
-        } catch (Exception e) {
-            logger.error("Error while merging group with id " + group.getGroupId(), e);
+        } catch (IllegalStateException e) {
+            logger.error("Error while merging group with id {}", group.getGroupId(), e);
         }
     }
 
     static public void deleteGroup(Group group) {
-        Long id = group.getGroupId();
+        long id = group.getGroupId();
         try (Session session = HibernateUtil.getSessionFactory().openSession()){
             session.beginTransaction();
             session.remove(group);
             session.getTransaction().commit();
-        } catch (Exception e) {
-            logger.error("Error while erasing group from db " + id, e);
+        } catch (IllegalStateException e) {
+            logger.error("Error while erasing group with id {} from db ", id, e);
         }
     }
 }
