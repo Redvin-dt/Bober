@@ -4,7 +4,7 @@ public abstract class ValidationStep<T> {
 
     ValidationStep<T> nextStep;
 
-    public ValidationStep<T> addStep(ValidationStep<T> step) {
+    public final ValidationStep<T> addStep(ValidationStep<T> step) {
         if (nextStep == null) {
             nextStep = step;
             return this;
@@ -16,7 +16,7 @@ public abstract class ValidationStep<T> {
 
     public abstract ValidationResult validate(T validatedValue);
 
-    protected ValidationResult checkNext(T validatedValue) {
+    protected final ValidationResult checkNext(T validatedValue) {
         if (nextStep == null) {
             return ValidationResult.valid();
         }
