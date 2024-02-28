@@ -21,7 +21,7 @@ public class DaoUser {
 
     public static class NotUniqueUserLoginException extends Exception {
         public NotUniqueUserLoginException(String errorMessage, String login) {
-            super(errorMessage);
+            super(errorMessage + login);
         }
     }
 
@@ -51,7 +51,7 @@ public class DaoUser {
 
         if (users.size() > 1) {
             logger.error("More than 1 users in table with user login {}", login);
-            throw new NotUniqueUserLoginException("Found more than 1 user, with login {}", login);
+            throw new NotUniqueUserLoginException("Found more than 1 user, with login ", login);
         }
 
         return users.getFirst();
