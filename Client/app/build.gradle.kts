@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.client"
+    namespace = "ru.hse.client"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.client"
+        applicationId = "ru.hse.client"
         minSdk = 28
         targetSdk = 34
         versionCode = 1

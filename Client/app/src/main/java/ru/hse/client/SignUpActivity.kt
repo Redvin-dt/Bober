@@ -1,22 +1,14 @@
-package com.example.client
-import android.app.Activity
-import android.content.Context
+package ru.hse.client
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
 import android.util.Log
 import android.util.Patterns
-import android.view.MotionEvent
-import android.view.View
-import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
 import android.widget.Button
-import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.getSystemService
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 
@@ -45,16 +37,11 @@ fun isValidPassword(target: CharSequence?): Boolean{
 
 class SignUpActivity : AppCompatActivity() {
 
-    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
-        if (currentFocus != null) {
-            val imm = this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.hideSoftInputFromWindow(this.currentFocus!!.windowToken, 0)
-        }
-        return super.dispatchTouchEvent(ev)
-    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.sign_up)
+
+
         var loginEditText: TextInputEditText = findViewById(R.id.login)
         var loginLayout: TextInputLayout = findViewById(R.id.login_box)
 
@@ -75,12 +62,12 @@ class SignUpActivity : AppCompatActivity() {
             ) {
                 val newText = charSequence.toString()
                  if (!isValidPassword(newText)) {
-                    loginLayout.setError("Unacceptable symbols in login")
+                     loginLayout.error = "Unacceptable symbols in login"
                 } else {
                     // TODO: get login from db and check
                     loginLayout.boxStrokeColor =
                         ContextCompat.getColor(this@SignUpActivity, R.color.green)
-                    loginLayout.setError(null)
+                     loginLayout.error = null
                 }
 
             }
@@ -160,7 +147,7 @@ class SignUpActivity : AppCompatActivity() {
 
         signUpButton.setOnClickListener {
             var data =
-                emailEditText.text.toString() + " | " + loginEditText.text.toString()  + " | " + passwordEditText.text.toString() + "\n"
+                "email: " + emailEditText.text.toString() + " | login: " + loginEditText.text.toString()  + " | password: " + passwordEditText.text.toString() + "\n"
             if (!isValidEmail(emailEditText.text)) {
                 Toast.makeText(this, "Wrong email", Toast.LENGTH_LONG).show()
                 Log.e("Sign up : wrong email", data)
