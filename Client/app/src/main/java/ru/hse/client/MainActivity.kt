@@ -1,4 +1,4 @@
-package com.example.client
+package ru.hse.client
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

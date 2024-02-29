@@ -9,6 +9,7 @@
         <item name="boxStrokeErrorColor">@color/red</item>
         <item name="errorTextColor">@color/white</item>
         <item name="errorIconTint">@color/error</item>
+        <item name="android:textColor">@color/white</item>
         <item name="cursorErrorColor">@color/white</item>
     </style>
     <dimen name="mtrl_textinput_box_stroke_width_default">2sp</dimen>
