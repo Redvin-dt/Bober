@@ -10,8 +10,6 @@ import ru.hse.database.entities.User;
 import org.springframework.http.ResponseEntity;
 import ru.hse.server.service.UserService;
 
-import java.util.Arrays;
-
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -25,15 +23,14 @@ public class UserController {
     }
 
     @PostMapping("/registration")
-    public ResponseEntity postUser(/*@RequestBody User user*/ @RequestParam String name, String password) {
+    public ResponseEntity postUser(@RequestBody User user) {
         try {
-            var user = new User(name, password);
             userService.registration(user);
             logger.info("User {} saved", user);
-            return ResponseEntity.ok("User saved"); // TODO: add logging and chng message
-        } catch (Exception /*EntityExistsException*/ e) {
-            //logger.error("User {} does not registered, error message: {}", user, e.getMessage());
-            return ResponseEntity.badRequest().body(e.getMessage() + "\n" + Arrays.toString(e.getStackTrace()));
+            return ResponseEntity.ok("User saved");
+        } catch (EntityExistsException e) {
+            logger.error("User {} does not registered, error message: {}", user, e.getMessage());
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
