@@ -4,8 +4,6 @@ import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Qualifier;
 import ru.hse.database.entities.User;
-import ru.hse.server.repository.UserDatabaseRepository;
-import ru.hse.server.repository.UserLocalRepository;
 import ru.hse.server.repository.UserRepository;
 
 import org.springframework.stereotype.Service;
@@ -15,11 +13,11 @@ import java.util.Optional;
 @Service
 public class UserService {
 
-    private final UserRepository userRepository = new UserDatabaseRepository();
+    private final UserRepository userRepository;
 
-    // UserService(@Qualifier("userDatabaseRepository") UserRepository userRepository) {
-    //     this.userRepository = userRepository;
-    // }
+    UserService(@Qualifier("userDatabaseRepository") UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     public User registration(User user) throws EntityExistsException {
         if (userRepository.findByUserLogin(user.getUserLogin()) == null) {
