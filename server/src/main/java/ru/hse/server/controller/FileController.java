@@ -35,6 +35,9 @@ public class FileController {
         } catch (FileValidationException e) {
             logger.error("Invalid file {}, error message: {}", file.getOriginalFilename(), e.getMessage());
             return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            logger.error("Unexpected error", e);
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
@@ -46,6 +49,9 @@ public class FileController {
             return response;
         } catch (IOException e) {
             logger.error("Can not get file with fileName={}, error message: {}", fileName, e.getMessage());
+            return ResponseEntity.badRequest().body(new ByteArrayResource(e.getMessage().getBytes()));
+        } catch (Exception e) {
+            logger.error("Unexpected error", e);
             return ResponseEntity.badRequest().body(new ByteArrayResource(e.getMessage().getBytes()));
         }
     }
