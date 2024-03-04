@@ -30,7 +30,8 @@ public class DaoUser {
             return session.get(User.class, id);
         }
     }
-    public User getUserByLogin(String login) throws NotUniqueUserLoginException {
+
+    static public User getUserByLogin(String login) throws NotUniqueUserLoginException {
         Query<User> query;
         List<User> users;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
@@ -85,14 +86,13 @@ public class DaoUser {
             session.beginTransaction();
             session.merge(user);
             session.getTransaction().commit();
-        }
-        catch (IllegalStateException e) {
+        } catch (IllegalStateException e) {
             logger.error("Error while merging user with id " + user.getUserId(), e);
         }
     }
 
     static public void deleteUserFromGroup(User user, Group group) {
-        try (Session session = HibernateUtil.getSessionFactory().openSession()){
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             session.beginTransaction();
 
             Set<User> users = DaoGroup.getUsersOfGroup(group);
@@ -110,13 +110,13 @@ public class DaoUser {
 
             session.getTransaction().commit();
         } catch (IllegalStateException e) {
-            logger.error("Error while erasing user {} from group {}", user.getUserId(), + group.getGroupId(), e);
+            logger.error("Error while erasing user {} from group {}", user.getUserId(), +group.getGroupId(), e);
         }
     }
 
     static public void deleteUser(User user) {
         long id = user.getUserId();
-        try (Session session = HibernateUtil.getSessionFactory().openSession()){
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             session.beginTransaction();
             session.remove(user);
             session.getTransaction().commit();
