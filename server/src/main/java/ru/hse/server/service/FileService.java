@@ -1,7 +1,9 @@
 package ru.hse.server.service;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.multipart.MultipartFile;
 import ru.hse.server.exception.FileValidationException;
 import ru.hse.server.repository.FileRepository;
@@ -32,7 +34,7 @@ public class FileService {
         return newFileName;
     }
 
-    public byte[] getFile(String name) throws IOException {
+    public Resource getFile(String name) throws IOException {
         return fileRepository.get(name);
     }
 }

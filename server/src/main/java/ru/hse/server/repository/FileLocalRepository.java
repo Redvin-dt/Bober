@@ -1,5 +1,7 @@
 package ru.hse.server.repository;
 
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,14 +27,14 @@ public class FileLocalRepository implements FileRepository {
     }
 
     @Override
-    public byte[] get(String name) throws IOException {
+    public Resource get(String name) throws IOException {
         if (tempDirectory == null) {
             createTempDirectory();
         }
 
         File file = new File(tempDirectory.getAbsolutePath() + name);
         if (file.exists()) {
-            return Files.readAllBytes(file.toPath());
+            return new UrlResource(file.toURI());
         }
 
         throw new FileNotFoundException("File " + name + "not found");
@@ -40,6 +42,7 @@ public class FileLocalRepository implements FileRepository {
 
     private void createTempDirectory() throws IOException {
         tempDirectory = Files.createTempDirectory(UUID.randomUUID() + "_" + "tempDir").toFile();
+        // TODO: do create regular director
         if (!tempDirectory.exists()) {
             throw new FileNotFoundException("Temporary directory does not created");
         }
