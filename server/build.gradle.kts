@@ -16,6 +16,7 @@ repositories {
 }
 
 dependencies {
+    implementation("commons-io:commons-io:2.15.1");
     implementation(group = "org.apache.logging.log4j", name = "log4j-api", version = "2.20.0")
     implementation(group = "org.apache.logging.log4j", name = "log4j-core", version = "2.20.0")
     implementation(group = "org.apache.logging.log4j", name = "log4j-slf4j-impl", version = "2.20.0")
