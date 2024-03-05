@@ -6,7 +6,10 @@ import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 
-public class HibernateUtil {
+import java.io.Closeable;
+import java.io.IOException;
+
+public class HibernateUtil implements Closeable {
     @Getter
     private static SessionFactory sessionFactory = buildSessionFactory();
 
@@ -21,8 +24,8 @@ public class HibernateUtil {
         return sessionFactory;
     }
 
-    public static void shutdown() {
+    @Override
+    public void close() throws IOException {
         getSessionFactory().close();
     }
-
 }

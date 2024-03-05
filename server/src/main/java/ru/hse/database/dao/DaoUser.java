@@ -30,7 +30,7 @@ public class DaoUser {
             return session.get(User.class, id);
         }
     }
-    public User getUserByLogin(String login) throws NotUniqueUserLoginException {
+    static public User getUserByLogin(String login) throws NotUniqueUserLoginException {
         Query<User> query;
         List<User> users;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
