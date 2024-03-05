@@ -28,6 +28,7 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation("org.postgresql:postgresql:42.7.2")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
