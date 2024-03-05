@@ -1,28 +1,30 @@
 package ru.hse.server.repository;
 
 import jakarta.annotation.Nonnull;
-import ru.hse.server.entity.UserEntity;
+import org.springframework.stereotype.Repository;
+import ru.hse.database.entities.User;
 
 import java.util.*;
 
 /**
  * class only for test
  */
+@Repository
 public class UserLocalRepository implements UserRepository {
 
-    Map<Long, UserEntity> storage = new TreeMap<>();
+    Map<Long, User> storage = new TreeMap<>();
     private long counter = 1;
 
     @Override
     @Nonnull
-    public <S extends UserEntity> S save(@Nonnull S entity) {
+    public <S extends User> S save(@Nonnull S entity) {
         storage.put(counter++, entity);
         return entity;
     }
 
     @Override
     @Nonnull
-    public <S extends UserEntity> Iterable<S> saveAll(Iterable<S> entities) {
+    public <S extends User> Iterable<S> saveAll(Iterable<S> entities) {
         List<S> list = new ArrayList<>();
         for (var entity : entities) {
             list.add(save(entity));
@@ -32,7 +34,7 @@ public class UserLocalRepository implements UserRepository {
 
     @Override
     @Nonnull
-    public Optional<UserEntity> findById(@Nonnull Long aLong) {
+    public Optional<User> findById(@Nonnull Long aLong) {
         if (storage.containsKey(aLong)) {
             return Optional.of(storage.get(aLong));
         }
@@ -46,16 +48,16 @@ public class UserLocalRepository implements UserRepository {
 
     @Override
     @Nonnull
-    public Iterable<UserEntity> findAll() {
+    public Iterable<User> findAll() {
         return storage.values();
     }
 
     @Override
     @Nonnull
-    public Iterable<UserEntity> findAllById(@Nonnull Iterable<Long> longs) {
-        List<UserEntity> list = new ArrayList<>();
+    public Iterable<User> findAllById(@Nonnull Iterable<Long> longs) {
+        List<User> list = new ArrayList<>();
         for (var id : longs) {
-            Optional<UserEntity> element = this.findById(id);
+            Optional<User> element = this.findById(id);
             element.ifPresent(list::add);
         }
         return list;
@@ -72,7 +74,7 @@ public class UserLocalRepository implements UserRepository {
     }
 
     @Override
-    public void delete(@Nonnull UserEntity entity) {
+    public void delete(@Nonnull User entity) {
         storage.values().remove(entity);
     }
 
@@ -84,7 +86,7 @@ public class UserLocalRepository implements UserRepository {
     }
 
     @Override
-    public void deleteAll(Iterable<? extends UserEntity> entities) {
+    public void deleteAll(Iterable<? extends User> entities) {
         for (var entity : entities) {
             this.delete(entity);
         }
@@ -95,12 +97,12 @@ public class UserLocalRepository implements UserRepository {
         storage.clear();
     }
 
-    public UserEntity findByLogin(String login) {
+    public User findByUserLogin(String login) {
         var wrapper = new Object() {
-            UserEntity entity = null;
+            User entity = null;
         };
         storage.values().forEach((user) -> {
-            if (user.getLogin().equals(login)) {
+            if (user.getUserLogin().equals(login)) {
                 wrapper.entity = user;
             }
         });

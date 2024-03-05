@@ -5,7 +5,7 @@ import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
-import ru.hse.server.entity.UserEntity;
+import ru.hse.database.entities.User;
 
 import org.springframework.http.ResponseEntity;
 import ru.hse.server.service.UserService;
@@ -23,11 +23,11 @@ public class UserController {
     }
 
     @PostMapping("/registration")
-    public ResponseEntity postUser(@RequestBody UserEntity user) {
+    public ResponseEntity postUser(@RequestBody User user) {
         try {
             userService.registration(user);
             logger.info("User {} saved", user);
-            return ResponseEntity.ok("User saved"); // TODO: add logging and chng message
+            return ResponseEntity.ok("User saved");
         } catch (EntityExistsException e) {
             logger.error("User {} does not registered, error message: {}", user, e.getMessage());
             return ResponseEntity.badRequest().body(e.getMessage());
