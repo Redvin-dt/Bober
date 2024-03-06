@@ -8,4 +8,8 @@
     <string name="fullname">"Full name"</string>
     <string name="email">"Email"</string>
     <string name="registration_text">Register your account</string>
+    <string name="password_confirm">Confirm password</string>
+    <string name="IP">192.168.0.107</string>
+    <string name="log_in_text">Log in to your account</string>
+    <string name="forgot_password">Forgot password?</string>
 </resources>
