@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:clickable="true"
+        android:focusableInTouchMode="true">
+
+    <View
+            android:id="@+id/border"
+            android:layout_width="300sp"
+            android:layout_height="395sp"
+            android:background="@drawable/rounded_border"
+            android:backgroundTint="@color/green_sign_in"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.6"/>
+
+    <TextView
+            android:id="@+id/sign_in_label"
+            android:layout_width="150sp"
+            android:layout_height="50sp"
+            android:fontFamily="@font/roboto"
+            android:text="@string/sign_in"
+            android:textColor="@color/white"
+            android:textSize="35sp"
+            app:layout_constraintBottom_toBottomOf="@id/border"
+            app:layout_constraintEnd_toEndOf="@id/border"
+            app:layout_constraintHorizontal_bias="0.273"
+            app:layout_constraintStart_toStartOf="@id/border"
+            app:layout_constraintTop_toTopOf="@id/border"
+            app:layout_constraintVertical_bias="0.13"/>
+
+    <TextView
+            android:id="@+id/welcome"
+            android:layout_width="175sp"
+            android:layout_height="50sp"
+            android:fontFamily="@font/opensansbold"
+            android:text="@string/welcome"
+            android:textColor="@color/black"
+            android:textSize="35sp"
+            app:layout_constraintBottom_toTopOf="@id/sign_in_label"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toStartOf="@id/border"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.3"/>
+
+    <TextView
+            android:layout_width="300sp"
+            android:layout_height="50sp"
+            android:fontFamily="@font/opensansregular"
+            android:text="@string/log_in_text"
+            android:textColor="@color/gray"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toTopOf="@id/sign_in_label"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toStartOf="@id/welcome"
+            app:layout_constraintTop_toBottomOf="@id/welcome"
+            app:layout_constraintVertical_bias="0.0"/>
+
+
+    <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/login_box"
+            style="@style/TextInputLayoutStyle"
+            app:layout_constraintEnd_toEndOf="@id/border"
+            app:layout_constraintTop_toBottomOf="@id/sign_in_label"
+            app:layout_constraintBottom_toTopOf="@id/sign_up_button"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintVertical_bias="0.15"
+            app:layout_constraintStart_toStartOf="@id/border"
+            app:errorIconDrawable="@null"
+    >
+
+        <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/login"
+                style="@style/TextInputEditTextStyle"
+                android:hint="@string/login"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+            android:id="@+id/forgot_password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/transparent_background"
+            android:text="@string/forgot_password"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="@id/password_box"
+            app:layout_constraintTop_toBottomOf="@id/password_box"
+            app:layout_constraintBottom_toTopOf="@id/sign_up_button"
+            app:layout_constraintStart_toStartOf="@id/border"
+            app:layout_constraintHorizontal_bias="1.1"
+            app:layout_constraintVertical_bias="0.5"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+
+    />
+
+    <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/password_box"
+            style="@style/TextInputLayoutStyle"
+            app:layout_constraintTop_toBottomOf="@id/sign_in_label"
+            app:layout_constraintBottom_toTopOf="@id/sign_up_button"
+            app:layout_constraintEnd_toEndOf="@id/border"
+            app:layout_constraintVertical_bias="0.75"
+            app:layout_constraintStart_toStartOf="@id/border"
+            app:passwordToggleEnabled="true"
+            app:errorEnabled="true"
+            app:errorIconDrawable="@null"
+            app:layout_constraintHorizontal_bias="0.5">
+
+        <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/password"
+                style="@style/TextInputEditTextStyle"
+                android:hint="@string/password"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+            android:id="@+id/sign_up_button"
+            android:layout_width="230sp"
+            android:layout_height="61sp"
+            android:backgroundTint="@color/white"
+            android:text="@string/sign_in"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@id/border"
+            app:layout_constraintEnd_toEndOf="@id/border"
+            app:layout_constraintStart_toStartOf="@id/border"
+            app:layout_constraintHorizontal_bias="0.5"
+            android:layout_marginBottom="30sp"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
