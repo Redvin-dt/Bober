@@ -7,12 +7,16 @@ import android.text.TextWatcher
 import android.util.Log
 import android.util.Patterns
 import android.widget.Button
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import okhttp3.*
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.IOException
+
 
 fun isValidEmail(target: CharSequence?): Boolean {
     return if (target == null || TextUtils.isEmpty(target)) {
@@ -157,12 +161,57 @@ class SignUpActivity : AppCompatActivity() {
         var signUpButton: Button = findViewById(R.id.sign_up_button)
 
         signUpButton.setOnClickListener {
+            val email: String = emailEditText.text.toString()
+            val login: String = loginEditText.text.toString()
+            val password: String = passwordEditText.text.toString()
+            val password_confirm: String = passwordConfirmEditText.text.toString()
 
-            val request: Request = Request.Builder()
-                .url("http://192.168.0.107:8080/users/userById?id=1")
+            if (!isValidEmail(email)) {
+                Toast.makeText(this, "This is not an email", Toast.LENGTH_LONG).show()
+                Log.e("Sign up", "wrong email: $email")
+                return@setOnClickListener
+            }
+
+            if (!isValidLogin(login)) {
+                Toast.makeText(this, "Incorrect login", Toast.LENGTH_LONG).show()
+                Log.e("Sign up", "bad login: $login")
+                return@setOnClickListener
+            }
+
+            if (password.length <= 3) {
+                Toast.makeText(this, "Password is too short", Toast.LENGTH_LONG).show()
+                Log.e("Sign up", "short password:    $password")
+                return@setOnClickListener
+            }
+
+            if (password != password_confirm) {
+                Toast.makeText(this, "Password mismatch", Toast.LENGTH_LONG).show()
+                Log.e("Sign up", "password missmath $password and $password_confirm")
+                return@setOnClickListener
+            }
+
+            val url: String = "http://" + getString(R.string.IP) + "/users/registration"
+
+            val json = "{\n" +
+                    "    \"userLogin\": \"$login\",\n" +
+                    "    \"userEmail\": \"$email\",\n" +
+                    "    \"passwordHash\": \"$password\"\n" +
+                    "}\n"
+
+            val formBody: RequestBody = FormBody.Builder()
+                .add("userLogin", login)
+                .add("userEmail", email)
+                .add("passwordHash", password)
                 .build()
 
-            Log.i("Info", "Request has been sent")
+            val body: RequestBody = json
+                .toRequestBody("application/json".toMediaTypeOrNull())
+            val request: Request = Request.Builder()
+                .url(url)
+                .post(body)
+                .build()
+
+            Log.i("Info", "Request has been sent $url")
             okHttpClient.newCall(request).enqueue(object : Callback {
                 override fun onFailure(call: Call, e: IOException) {
                     Log.e("Error", e.toString())
