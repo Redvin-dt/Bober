@@ -1,5 +1,6 @@
 package ru.hse.database.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -11,6 +12,7 @@ import java.util.*;
 @Table(name = "Users")
 @Getter
 @Setter
+@JsonIgnoreProperties(value = {"groupsAdmin", "groupsUserSet"}) // TODO: write own serialization/deserialization
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
