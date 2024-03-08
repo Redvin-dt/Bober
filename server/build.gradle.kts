@@ -33,7 +33,6 @@ dependencies {
     testImplementation(platform("org.junit:junit-bom:5.7.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")
     //spring
-    //testImplementation("org.springframework.cloud:spring-cloud-starter-contract-stub-runner")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
@@ -60,13 +59,8 @@ protobuf {
 sourceSets {
     main {
         proto {
-            // In addition to the default 'src/main/proto'
-            srcDir("proto")
+            srcDir("../../proto")
             srcDir("src/main/protocolbuffers")
-            // In addition to the default '**/*.proto' (use with caution).
-            // Using an extension other than 'proto' is NOT recommended,
-            // because when proto files are published along with class files, we can
-            // only tell the type of a file from its extension.
             include("**/*.protodevel")
         }
         java {
@@ -75,7 +69,6 @@ sourceSets {
     }
     test {
         proto {
-            // In addition to the default 'src/test/proto'
             srcDir("src/test/protocolbuffers")
         }
     }
