@@ -1,5 +1,6 @@
 package ru.hse.server.controller;
 
+import com.google.protobuf.InvalidProtocolBufferException;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
@@ -8,6 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.http.ResponseEntity;
+import ru.hse.server.proto.EntitiesProto.UserInfo;
 import ru.hse.server.service.UserService;
 
 
@@ -24,13 +26,16 @@ public class UserController {
     }
 
     @PostMapping(value = "/registration", consumes = {MediaType.APPLICATION_PROTOBUF_VALUE, MediaType.APPLICATION_OCTET_STREAM_VALUE})
-    public ResponseEntity postUser(@RequestBody EntitysProto.UserInfo user) {
+    public ResponseEntity postUser(@RequestBody UserInfo user) {
         try {
             userService.registration(user);
-            logger.info("User {} saved", user);
-            return ResponseEntity.ok("User saved");
+            logger.info("user {} saved", user);
+            return ResponseEntity.ok("user saved");
         } catch (EntityExistsException e) {
-            logger.error("User {} does not registered, error message: {}", user, e.getMessage());
+            logger.error("user {} does not registered, error message: {}", user, e.getMessage());
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (InvalidProtocolBufferException e) {
+            logger.error("handle incorrect protobuf {}", user);
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
@@ -39,10 +44,10 @@ public class UserController {
     public ResponseEntity getUserById(@RequestParam Long id) {
         try {
             var user = userService.getUserByID(id);
-            logger.debug("Find user={} with id={}", user, id);
+            logger.debug("find user={} with id={}", user, id);
             return ResponseEntity.ok().body(user);
         } catch (EntityNotFoundException e) {
-            logger.error("Can not find user with id={}, error message: {}", id, e.getMessage());
+            logger.error("can not find user with id={}, error message: {}", id, e.getMessage());
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
@@ -51,10 +56,10 @@ public class UserController {
     public ResponseEntity getUserByLogin(@RequestParam String login) {
         try {
             var user = userService.getUserByLogin(login);
-            logger.debug("Find user={} with login={}", user, login);
+            logger.debug("find user={} with login={}", user, login);
             return ResponseEntity.ok().body(user);
         } catch (EntityNotFoundException e) {
-            logger.error("Can not find user with login={}, error message: {}", login, e.getMessage());
+            logger.error("can not find user with login={}, error message: {}", login, e.getMessage());
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
@@ -63,10 +68,10 @@ public class UserController {
     public ResponseEntity deleteUserById(@RequestParam Long id) {
         try {
             userService.deleteUserById(id);
-            logger.info("User with id={} deleted", id);
-            return ResponseEntity.ok().body("User deleted");
+            logger.info("user with id={} deleted", id);
+            return ResponseEntity.ok().body("user deleted");
         } catch (EntityNotFoundException e) {
-            logger.error("Can not delete user with id={}, error message: {}", id, e.getMessage());
+            logger.error("can not delete user with id={}, error message: {}", id, e.getMessage());
             return ResponseEntity.badRequest().body(e.getMessage());
 
         }
