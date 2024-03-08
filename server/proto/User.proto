@@ -1,0 +1,10 @@
+package test;
+
+option java_package = "ru.hse.protobuf.entities";
+option java_outer_classname = "ProtoUser";
+
+message User {
+  required int64 id = 1;
+  required string name = 2;
+  required string password = 3;
+}
