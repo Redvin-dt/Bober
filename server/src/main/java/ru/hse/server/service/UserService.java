@@ -1,11 +1,14 @@
 package ru.hse.server.service;
 
-import jakarta.persistence.EntityExistsException;
-import jakarta.persistence.EntityNotFoundException;
-import org.springframework.beans.factory.annotation.Qualifier;
+import com.google.protobuf.InvalidProtocolBufferException;
+import ru.hse.server.proto.EntitiesProto;
+import ru.hse.server.proto.EntitiesProto.UserInfo;
 import ru.hse.database.entities.User;
 import ru.hse.server.repository.UserRepository;
 
+import jakarta.persistence.EntityExistsException;
+import jakarta.persistence.EntityNotFoundException;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -19,8 +22,12 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public User registration(User user) throws EntityExistsException {
-        if (userRepository.findByUserLogin(user.getUserLogin()) == null) {
+    public User registration(EntitiesProto.UserInfo userInfo) throws EntityExistsException, InvalidProtocolBufferException {
+        if (!userInfo.hasLogin() || !userInfo.hasPassword()){
+            throw new InvalidProtocolBufferException("user info should have field login and password");
+        }
+        if (userRepository.findByUserLogin(userInfo.getLogin()) == null) {
+            var user = new User(userInfo.getLogin(), userInfo.getPassword());
             return userRepository.save(user);
         }
         throw new EntityExistsException("User with that login already exist");
