@@ -26,7 +26,7 @@ public class User {
     private String passwordHash;
 
     @Column(name = "meta_info")
-    private String metaInfo;
+    private String metaInfo = "";
 
     @OneToMany(mappedBy = "admin", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Group> groupsAdmin = new ArrayList<>();

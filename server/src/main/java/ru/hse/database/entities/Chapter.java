@@ -23,13 +23,13 @@ public class Chapter {
     private String chapterName;
 
     @Column(name = "text")
-    private String textOfChapter;
+    private String textOfChapter = "";
 
     @Column(name = "test_data")
-    private String testData;
+    private String testData = "";
 
     @Column(name = "meta_info")
-    private String metaInfo;
+    private String metaInfo = "";
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "group_host")
