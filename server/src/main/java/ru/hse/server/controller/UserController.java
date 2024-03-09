@@ -1,17 +1,19 @@
 package ru.hse.server.controller;
 
-import com.google.protobuf.InvalidProtocolBufferException;
-import jakarta.persistence.EntityExistsException;
-import jakarta.persistence.EntityNotFoundException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.*;
-
-import org.springframework.http.ResponseEntity;
 import ru.hse.server.proto.EntitiesProto.UserInfo;
 import ru.hse.server.service.UserService;
 
+import com.google.protobuf.InvalidProtocolBufferException;
+
+import jakarta.persistence.EntityExistsException;
+import jakarta.persistence.EntityNotFoundException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
 
 @RestController
 @RequestMapping("/users")
@@ -52,7 +54,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("/userByLogin")
+    @GetMapping(value = "/userByLogin", produces = {MediaType.APPLICATION_PROTOBUF_VALUE})
     public ResponseEntity getUserByLogin(@RequestParam String login) {
         try {
             var user = userService.getUserByLogin(login);
