@@ -21,5 +21,10 @@
         <item name="android:textSize">16sp</item>
         <item name="android:outlineSpotShadowColor">@color/white</item>
     </style>
+    <style name="SwitchButton">
+        <item name="android:layout_width"> wrap_content</item>
+        <item name="android:layout_height"> wrap_content</item>
+        <item name="android:background"> @drawable/transparent_background</item>
+    </style>
 
 </resources>

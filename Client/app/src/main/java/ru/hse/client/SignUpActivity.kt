@@ -1,6 +1,8 @@
 package ru.hse.client
 
+import android.content.Intent
 import android.os.Bundle
+import android.provider.AlarmClock.EXTRA_MESSAGE
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
@@ -10,6 +12,7 @@ import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import okhttp3.*
@@ -172,7 +175,7 @@ class SignUpActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            if (!isValidLogin(login)) {
+            if (login.isEmpty() || !isValidLogin(login)) {
                 Toast.makeText(this, "Incorrect login", Toast.LENGTH_LONG).show()
                 Log.e("Sign up", "bad login: $login")
                 return@setOnClickListener
@@ -198,11 +201,7 @@ class SignUpActivity : AppCompatActivity() {
                     "    \"passwordHash\": \"$password\"\n" +
                     "}\n"
 
-            val formBody: RequestBody = FormBody.Builder()
-                .add("userLogin", login)
-                .add("userEmail", email)
-                .add("passwordHash", password)
-                .build()
+            val mapper = jacksonObjectMapper()
 
             val body: RequestBody = json
                 .toRequestBody("application/json".toMediaTypeOrNull())
@@ -222,5 +221,12 @@ class SignUpActivity : AppCompatActivity() {
                 }
             })
         }
+
+        var haveAnAccountButton: Button = findViewById(R.id.have_an_account)
+        haveAnAccountButton.setOnClickListener {
+            val intent = Intent(this, SignInActivity::class.java)
+            startActivity(intent)
+        }
     }
+
 }
