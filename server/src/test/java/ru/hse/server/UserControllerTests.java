@@ -3,7 +3,7 @@ package ru.hse.server;
 import ru.hse.server.repository.UserLocalRepository;
 import ru.hse.server.service.UserService;
 import ru.hse.server.controller.UserController;
-import ru.hse.server.proto.EntitiesProto.UserInfo;
+import ru.hse.server.proto.EntitiesProto.UserProto;
 
 import org.springframework.http.MediaType;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -32,11 +32,11 @@ public class UserControllerTests {
     @MockBean
     private UserService userService;
 
-    private static UserInfo user;
+    private static UserProto user;
 
     @BeforeEach
     public void generateUser() throws Exception {
-        user = UserInfo.newBuilder().setId(1).setLogin("admin").setPassword("admin").build();
+        user = UserProto.newBuilder().setId(1).setLogin("admin").setPasswordHash("admin").build();
     }
 
     @Test
