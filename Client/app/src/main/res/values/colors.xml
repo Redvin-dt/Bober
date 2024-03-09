@@ -8,5 +8,5 @@
     <color name="green">#17C71E</color>
     <color name="error">#FF9800</color>
     <color name="gray">#8B8885</color>
-    <color name="green_sign_in">#19BD20</color>
+    <color name="sign_in_color">#00BCD4</color>
 </resources>
