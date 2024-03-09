@@ -1,12 +1,14 @@
 package ru.hse.server.service;
 
-import com.google.protobuf.InvalidProtocolBufferException;
 import ru.hse.server.proto.EntitiesProto.UserInfo;
 import ru.hse.database.entities.User;
 import ru.hse.server.repository.UserRepository;
 
+import com.google.protobuf.InvalidProtocolBufferException;
+
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
