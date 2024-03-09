@@ -1,6 +1,6 @@
 package ru.hse.server.service;
 
-import ru.hse.server.proto.EntitiesProto.UserProto;
+import ru.hse.server.proto.EntitiesProto.UserModel;
 import ru.hse.database.entities.User;
 import ru.hse.server.repository.UserRepository;
 import ru.hse.server.utils.ProtoSerializer;
@@ -24,7 +24,7 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public UserProto registration(UserProto userInfo) throws EntityExistsException,
+    public UserModel registration(UserModel userInfo) throws EntityExistsException,
             InvalidProtocolBufferException {
         if (!userInfo.hasLogin() || !userInfo.hasPasswordHash()){
             throw new InvalidProtocolBufferException("user info should have field login and password");
@@ -37,7 +37,7 @@ public class UserService {
         throw new EntityExistsException("user with that login already exist");
     }
 
-    public UserProto getUserByID(Long id) throws EntityNotFoundException {
+    public UserModel getUserByID(Long id) throws EntityNotFoundException {
         Optional<User> user = userRepository.findById(id);
         if (user.isEmpty()) {
             throw new EntityNotFoundException("user with that id not found");
@@ -46,7 +46,7 @@ public class UserService {
         return ProtoSerializer.getProtoFromUser(user.get());
     }
 
-    public UserProto getUserByLogin(String login) throws EntityNotFoundException {
+    public UserModel getUserByLogin(String login) throws EntityNotFoundException {
         User user = userRepository.findByUserLogin(login);
         if (user == null) {
             throw new EntityNotFoundException("user with that login not found");
