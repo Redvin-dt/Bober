@@ -19,26 +19,24 @@ public class DaoChapter {
     }
 
     static public Group getGroupByChapter(Chapter chapter) {
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            chapter = session.get(Chapter.class, chapter.getChapterId());
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        chapter = session.get(Chapter.class, chapter.getChapterId());
 
-            session.beginTransaction();
-            Group group = chapter.getGroupHost();
-            session.getTransaction().commit();
+        session.beginTransaction();
+        Group group = chapter.getGroupHost();
+        session.getTransaction().commit();
 
-            return group;
-        }
+        return group;
     }
 
 
     static public void createOrUpdateChapter(Chapter chapter) {
-        try {
-            try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-                session.beginTransaction();
-                session.merge(chapter);
-                session.getTransaction().commit();
-            }
-        } catch (IllegalStateException e) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            session.beginTransaction();
+            session.merge(chapter);
+            session.getTransaction().commit();
+        }
+        catch (IllegalStateException e) {
             logger.error("Error while merging chapter with id {}", chapter.getChapterId(), e);
         }
     }

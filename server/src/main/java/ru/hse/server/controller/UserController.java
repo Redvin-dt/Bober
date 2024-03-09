@@ -1,6 +1,6 @@
 package ru.hse.server.controller;
 
-import ru.hse.server.proto.EntitiesProto.UserInfo;
+import ru.hse.server.proto.EntitiesProto.UserProto;
 import ru.hse.server.service.UserService;
 
 import com.google.protobuf.InvalidProtocolBufferException;
@@ -28,7 +28,7 @@ public class UserController {
     }
 
     @PostMapping(value = "/registration", consumes = {MediaType.APPLICATION_PROTOBUF_VALUE, MediaType.APPLICATION_OCTET_STREAM_VALUE})
-    public ResponseEntity postUser(@RequestBody UserInfo user) {
+    public ResponseEntity postUser(@RequestBody UserProto user) {
         try {
             userService.registration(user);
             logger.info("user {} saved", user);

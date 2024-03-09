@@ -41,39 +41,36 @@ public class DaoGroup {
     }
 
     static public User getGroupAdmin(Group group) {
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            group = session.get(Group.class, group.getGroupId());
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        group = session.get(Group.class, group.getGroupId());
 
-            session.beginTransaction();
-            User user = group.getAdmin();
-            session.getTransaction().commit();
+        session.beginTransaction();
+        User user = group.getAdmin();
+        session.getTransaction().commit();
 
-            return user;
-        }
+        return user;
     }
 
     static public Set<User> getUsersOfGroup(Group group) {
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            group = session.get(Group.class, group.getGroupId());
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        group = session.get(Group.class, group.getGroupId());
 
-            session.beginTransaction();
-            Set<User> users = group.getUsersSet();
-            session.getTransaction().commit();
+        session.beginTransaction();
+        Set<User> users = group.getUsersSet();
+        session.getTransaction().commit();
 
-            return users;
-        }
+        return users;
     }
 
     static public List<Chapter> getChaptersByGroup(Group group) {
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            group = session.get(Group.class, group.getGroupId());
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        group = session.get(Group.class, group.getGroupId());
 
-            session.beginTransaction();
-            List<Chapter> chapters = group.getChapters();
-            session.getTransaction().commit();
+        session.beginTransaction();
+        List<Chapter> chapters = group.getChapters();
+        session.getTransaction().commit();
 
-            return chapters;
-        }
+        return chapters;
     }
 
     static public void createOrUpdateGroup(Group group) {
