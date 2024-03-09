@@ -1,22 +1,28 @@
 package ru.hse.server;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import ru.hse.server.entity.UserEntity;
+import ru.hse.server.repository.UserLocalRepository;
 import ru.hse.server.service.UserService;
 import ru.hse.server.controller.UserController;
+import ru.hse.server.proto.EntitiesProto.UserInfo;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
-
-import org.junit.jupiter.api.Test;
+import org.springframework.http.MediaType;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@ExtendWith(SpringExtension.class)
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import org.mockito.Mockito;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+
 @WebMvcTest(UserController.class)
 public class UserControllerTests {
 
@@ -26,36 +32,42 @@ public class UserControllerTests {
     @MockBean
     private UserService userService;
 
-    private static UserEntity user;
-    private static String userPayload;
+    private static UserInfo user;
 
     @BeforeEach
     public void generateUser() throws Exception {
-        user = new UserEntity();
-        user.setId((long) 1);
-        user.setLogin("admin");
-        user.setPassword("admin");
-
-        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-        userPayload = ow.writeValueAsString(user);
+        user = UserInfo.newBuilder().setId(1).setLogin("admin").setPassword("admin").build();
     }
-
-    // TODO: write tests
 
     @Test
     public void getUser() throws Exception {
+        Mockito.when(userService.getUserByID(1L)).thenReturn(user);
+        mockMvc.perform(get("/users/userById?id=1")).andDo(print()).andExpect(status().isOk()).andExpect(content().bytes(user.toByteArray()));
     }
 
     @Test
-    public void postUserTwice() throws Exception {
+    public void postUser() throws Exception {
+        mockMvc.perform(post("/users/registration").contentType(MediaType.APPLICATION_PROTOBUF_VALUE).content(user.toByteArray())).andDo(print()).andExpect(status().isOk());
+        verify(userService, times(1)).registration(any());
     }
 
 
     @Test
     public void deleteUser() throws Exception {
+        mockMvc.perform(delete("/users/userById?id=1")).andDo(print()).andExpect(status().isOk());
+        verify(userService, times(1)).deleteUserById(1L);
     }
 
     @Test
-    public void postProtoUser() throws Exception {
+    public void postProtoUserTwice() throws Exception {
+        ReflectionTestUtils.setField(userService, "userRepository", new UserLocalRepository());
+        when(userService.registration(any())).thenCallRealMethod();
+        when(userService.getUserByLogin(any())).thenCallRealMethod();
+
+        mockMvc.perform(post("/users/registration").contentType(MediaType.APPLICATION_PROTOBUF_VALUE).content(user.toByteArray())).andDo(print()).andExpect(status().isOk());
+        verify(userService, times(1)).registration(any());
+
+        mockMvc.perform(post("/users/registration").contentType(MediaType.APPLICATION_PROTOBUF_VALUE).content(user.toByteArray())).andDo(print()).andExpect(status().isBadRequest());
+        verify(userService, times(2)).registration(any());
     }
 }
