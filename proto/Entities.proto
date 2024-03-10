@@ -3,41 +3,28 @@ syntax = "proto3";
 option java_outer_classname = "EntitiesProto";
 option java_package = "ru.hse.server.proto";
 
-message UserInfo {
-  optional int64 id = 1;
-  optional string login = 2;
-  optional string metaInfo = 3;
-  optional string password = 4;
-}
-
-message GroupInfo {
-  optional int64 id = 1;
-  optional string name = 2;
-  optional string metaInfo = 4;
-}
-
 message ChapterList {
-  repeated Chapter chapters = 1;
+  repeated ChapterModel chapters = 1;
 }
 
 message GroupList {
-  repeated GroupInfo groups = 1;
+  repeated GroupModel groups = 1;
 }
 
 message UserList {
-  repeated UserInfo chapters = 1;
+  repeated UserModel users = 1;
 }
 
-message Chapter {
+message ChapterModel {
   optional int64 id = 1;
   optional string name = 2;
   optional string text = 3;
   optional string testData = 4;
   optional string metaInfo = 5;
-  optional GroupInfo group = 6;
+  optional GroupModel group = 6;
 }
 
-message Group {
+message GroupModel {
   optional int64 id = 1;
   optional string name = 2;
   optional string passwordHash = 3;
@@ -45,11 +32,11 @@ message Group {
   optional string metaInfo = 4;
   optional ChapterList chapters = 5;
 
-  optional UserInfo admin = 6;
+  optional UserModel admin = 6;
   optional UserList users = 7;
 }
 
-message User {
+message UserModel {
   optional int64 id = 1;
   optional string login = 2;
   optional string passwordHash = 3;

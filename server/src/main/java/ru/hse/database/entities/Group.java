@@ -24,10 +24,10 @@ public class Group {
     private String groupName;
 
     @Column(name = "password")
-    private String passwordHash;
+    private String passwordHash = "";
 
     @Column(name = "meta_info")
-    private String metaInfo;
+    private String metaInfo = "";
 
     @OneToMany(mappedBy = "groupHost", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Chapter> chapters = new ArrayList<>();
