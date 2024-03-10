@@ -10,6 +10,8 @@ import ru.hse.database.utils.HibernateUtil;
 
 import jakarta.persistence.criteria.CriteriaBuilder;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -46,6 +48,7 @@ public class DaoUser {
             query = session.createQuery(criteria);
             users = query.getResultList();
         }
+
         if (users.isEmpty()) {
             return null;
         }
@@ -59,26 +62,22 @@ public class DaoUser {
     }
 
     static public Set<Group> getGroupsOfUser(User user) {
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            user = session.get(User.class, user.getUserId());
-
-            session.beginTransaction();
-            Set<Group> groups = user.getGroupsUserSet();
-            session.getTransaction().commit();
-            return groups;
-        }
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        user = session.get(User.class, user.getUserId());
+        session.beginTransaction();
+        Set<Group> groups = user.getGroupsUserSet();
+        session.getTransaction().commit();
+        return groups;
     }
 
     static public List<Group> getGroupsByAdmin(User user) {
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            user = session.get(User.class, user.getUserId());
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        user = session.get(User.class, user.getUserId());
+        session.beginTransaction();
+        List<Group> groups = user.getGroupsAdmin();
+        session.getTransaction().commit();
 
-            session.beginTransaction();
-            List<Group> groups = user.getGroupsAdmin();
-            session.getTransaction().commit();
-
-            return groups;
-        }
+        return groups;
     }
 
     static public void createOrUpdateUser(User user) {
@@ -92,7 +91,8 @@ public class DaoUser {
     }
 
     static public void deleteUserFromGroup(User user, Group group) {
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        try {
             session.beginTransaction();
 
             Set<User> users = DaoGroup.getUsersOfGroup(group);

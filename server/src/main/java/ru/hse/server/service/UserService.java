@@ -1,8 +1,9 @@
 package ru.hse.server.service;
 
-import ru.hse.server.proto.EntitiesProto.UserInfo;
+import ru.hse.server.proto.EntitiesProto.UserModel;
 import ru.hse.database.entities.User;
 import ru.hse.server.repository.UserRepository;
+import ru.hse.server.utils.ProtoSerializer;
 
 import com.google.protobuf.InvalidProtocolBufferException;
 
@@ -23,40 +24,34 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public UserInfo registration(UserInfo userInfo) throws EntityExistsException,
+    public UserModel registration(UserModel userInfo) throws EntityExistsException,
             InvalidProtocolBufferException {
-        if (!userInfo.hasLogin() || !userInfo.hasPassword()){
+        if (!userInfo.hasLogin() || !userInfo.hasPasswordHash()){
             throw new InvalidProtocolBufferException("user info should have field login and password");
         }
         if (userRepository.findByUserLogin(userInfo.getLogin()) == null) {
-            var user = new User(userInfo.getLogin(), userInfo.getPassword());
+            var user = new User(userInfo.getLogin(), userInfo.getPasswordHash());
             userRepository.save(user);
-            return userInfo;
+            return ProtoSerializer.getUserInfo(user);
         }
         throw new EntityExistsException("user with that login already exist");
     }
 
-    public UserInfo getUserByID(Long id) throws EntityNotFoundException {
+    public UserModel getUserByID(Long id) throws EntityNotFoundException {
         Optional<User> user = userRepository.findById(id);
         if (user.isEmpty()) {
             throw new EntityNotFoundException("user with that id not found");
         }
 
-        return UserInfo.newBuilder()
-                        .setLogin(user.get().getUserLogin())
-                        .setPassword(user.get().getPasswordHash())
-                        .build();
+        return ProtoSerializer.getProtoFromUser(user.get());
     }
 
-    public UserInfo getUserByLogin(String login) throws EntityNotFoundException {
+    public UserModel getUserByLogin(String login) throws EntityNotFoundException {
         User user = userRepository.findByUserLogin(login);
         if (user == null) {
             throw new EntityNotFoundException("user with that login not found");
         }
-        return UserInfo.newBuilder()
-                        .setLogin(user.getUserLogin())
-                        .setPassword(user.getPasswordHash())
-                        .build();
+        return ProtoSerializer.getProtoFromUser(user);
     }
 
     public void deleteUserById(Long id) throws EntityNotFoundException {
