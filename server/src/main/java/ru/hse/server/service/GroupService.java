@@ -1,32 +1,56 @@
 package ru.hse.server.service;
 
+import com.google.protobuf.InvalidProtocolBufferException;
 import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.hse.database.entities.Group;
+import ru.hse.server.proto.EntitiesProto.GroupModel;
 import ru.hse.server.repository.GroupRepository;
+import ru.hse.server.repository.UserRepository;
+import ru.hse.server.utils.ProtoSerializer;
 
 @Service
 public class GroupService {
 
     static private final Logger logger = LoggerFactory.getLogger(GroupService.class);
     private final GroupRepository groupRepository;
+    private final UserRepository userRepository;
 
-    public GroupService(GroupRepository groupRepository) {
+    public GroupService(GroupRepository groupRepository, @Qualifier("userDatabaseRepository") UserRepository userRepository) {
         this.groupRepository = groupRepository;
+        this.userRepository = userRepository;
     }
 
-    public void createGroup(Group group) {
+    public void createGroup(GroupModel groupModel) throws InvalidProtocolBufferException {
+        if (!groupModel.hasAdmin() || !groupModel.hasName() || !groupModel.hasPasswordHash()) {
+            throw new InvalidProtocolBufferException("invalid protobuf group, require admin, group name and password");
+        }
+
+        var userModel = groupModel.getAdmin();
+
+        if (!userModel.hasId()) {
+            throw new InvalidProtocolBufferException("invalid protobuf group, require id in admin filed");
+        }
+
+        var user = userRepository.findById(userModel.getId());
+        if (user.isEmpty()) {
+            throw new EntityNotFoundException("user with that model not found");
+        }
+
+        Group group = new Group(groupModel.getName(), groupModel.getPasswordHash(), user.get());
+
         groupRepository.save(group);
         logger.info("group={} was saved", group);
     }
 
-    public Group findGroupById(Long id) throws EntityNotFoundException {
+    public GroupModel findGroupById(Long id) throws EntityNotFoundException {
         var group = groupRepository.findById(id);
         if (group.isPresent()) {
             logger.debug("find group with id={}", id);
-            return group.get();
+            return ProtoSerializer.getGroupInfo(group.get());
         } else {
             logger.error("group with id={} not found", id);
             throw new EntityNotFoundException("group with id=" + id + " does not exist");
