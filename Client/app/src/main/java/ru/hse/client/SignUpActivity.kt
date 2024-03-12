@@ -2,7 +2,8 @@ package ru.hse.client
 
 import android.content.Intent
 import android.os.Bundle
-import android.provider.AlarmClock.EXTRA_MESSAGE
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
@@ -18,8 +19,8 @@ import com.google.android.material.textfield.TextInputLayout
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
+import ru.hse.server.proto.EntitiesProto.UserInfo
 import java.io.IOException
-
 
 fun isValidEmail(target: CharSequence?): Boolean {
     return if (target == null || TextUtils.isEmpty(target)) {
@@ -177,6 +178,7 @@ class SignUpActivity : AppCompatActivity() {
 
             if (login.isEmpty() || !isValidLogin(login)) {
                 Toast.makeText(this, "Incorrect login", Toast.LENGTH_LONG).show()
+                loginLayout.error = "Invalid login"
                 Log.e("Sign up", "bad login: $login")
                 return@setOnClickListener
             }
@@ -202,22 +204,35 @@ class SignUpActivity : AppCompatActivity() {
                     "}\n"
 
             val mapper = jacksonObjectMapper()
-
+            val user: User = User.newBuilder().setLogin(login).setPassword(password).build()
             val body: RequestBody = json
                 .toRequestBody("application/json".toMediaTypeOrNull())
+            val requestBody: RequestBody = RequestBody.create("application/x-protobuf".toMediaTypeOrNull(), user.toByteArray());
+
             val request: Request = Request.Builder()
                 .url(url)
-                .post(body)
+                .post(requestBody)
                 .build()
 
             Log.i("Info", "Request has been sent $url")
             okHttpClient.newCall(request).enqueue(object : Callback {
                 override fun onFailure(call: Call, e: IOException) {
-                    Log.e("Error", e.toString())
+                    Log.e("Error", e.toString() + " " + e.message)
+                    Handler(Looper.getMainLooper()).post {
+                        Toast.makeText(this@SignUpActivity, "Something went wrong, try again", Toast.LENGTH_SHORT).show()
+                    }
                 }
 
                 override fun onResponse(call: Call, response: Response) {
                     Log.i("Info", response.toString())
+                    if (response.code == 200) {
+                        val new_user: User
+                    } else if (response.code == 400) {
+                        Handler(Looper.getMainLooper()).post {
+                            Toast.makeText(this@SignUpActivity, "User with this login already exists", Toast.LENGTH_SHORT).show()
+                            loginLayout.error = "User with this login already exists"
+                        }
+                    }
                 }
             })
         }
