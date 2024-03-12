@@ -1,7 +1,16 @@
+import com.google.protobuf.gradle.proto
+import com.google.protobuf.gradle.id
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("com.google.protobuf") version "0.9.4"
+    id("idea")
 }
+
+group = "ru.hse"
+version = "0.0.1-SNAPSHOT"
+
 
 android {
     namespace = "ru.hse.client"
@@ -20,18 +29,56 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = false
+            isDebuggable = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.getByName("debug")
+        }
+
+        debug {
+            isDebuggable = true
         }
     }
+
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
+
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
+    }
+
+    sourceSets.onEach {
+        it.java.srcDir("src/${it.name}/kotlin")
+    }
+
+    sourceSets {
+        named("main") {
+            proto {
+                srcDir("../../proto")
+            }
+            java {
+            }
+        }
+    }
+}
+
+protobuf {
+    protoc {
+        artifact = "com.google.protobuf:protoc:3.19.4"
+    }
+
+    generateProtoTasks {
+        all().forEach { task ->
+            task.builtins{
+                create("java")
+                create("kotlin")
+            }
+            task.generateDescriptorSet = true
+        }
     }
 }
 
@@ -46,4 +93,6 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.9.8")
+    implementation("com.google.protobuf:protobuf-kotlin:3.19.4")
 }
+
