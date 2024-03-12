@@ -15,7 +15,6 @@ import java.util.*;
 @Table(name = "Groups")
 @Getter
 @Setter
-@JsonIgnoreProperties(value = {"chapters", "usersSet", "admin"}) // TODO: write own serialization/deserialization
 public class Group {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

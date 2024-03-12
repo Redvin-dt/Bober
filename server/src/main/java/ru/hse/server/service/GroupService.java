@@ -24,7 +24,7 @@ public class GroupService {
         this.userRepository = userRepository;
     }
 
-    public void createGroup(GroupModel groupModel) throws InvalidProtocolBufferException {
+    public GroupModel createGroup(GroupModel groupModel) throws InvalidProtocolBufferException {
         if (!groupModel.hasAdmin() || !groupModel.hasName() || !groupModel.hasPasswordHash()) {
             throw new InvalidProtocolBufferException("invalid protobuf group, require admin, group name and password");
         }
@@ -42,8 +42,9 @@ public class GroupService {
 
         Group group = new Group(groupModel.getName(), groupModel.getPasswordHash(), user.get());
 
-        groupRepository.save(group);
+        var result = groupRepository.save(group);
         logger.info("group={} was saved", group);
+        return ProtoSerializer.getGroupInfo(result);
     }
 
     public GroupModel findGroupById(Long id) throws EntityNotFoundException {
