@@ -1,5 +1,8 @@
 package ru.hse.database.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonMerge;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -37,16 +40,14 @@ public class Group {
     private User admin;
 
     @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "users_groups",
-            joinColumns = @JoinColumn(name = "group_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
+    @JoinTable(name = "users_groups", joinColumns = @JoinColumn(name = "group_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
     private Set<User> usersSet = new HashSet<User>();
 
     public Group() {
     }
 
-    public Group(String name, String passwordHash, User adminUser) {
-        this.groupName = name;
+    public Group(String groupName, String passwordHash, User adminUser) {
+        this.groupName = groupName;
         this.passwordHash = passwordHash;
         this.admin = adminUser;
         this.usersSet.add(adminUser);
