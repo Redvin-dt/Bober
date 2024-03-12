@@ -1,11 +1,13 @@
 package ru.hse.server.controller;
 
+import com.google.protobuf.InvalidProtocolBufferException;
 import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.hse.database.entities.Group;
+import ru.hse.server.proto.EntitiesProto.GroupModel;
 import ru.hse.server.service.GroupService;
 
 @RestController
@@ -19,14 +21,22 @@ public class GroupController {
         this.groupService = groupService;
     }
 
-    @PostMapping
-    public ResponseEntity<String> createGroup(@RequestParam Group group) {
-        groupService.createGroup(group);
-        logger.info("created group={}", group);
-        return ResponseEntity.ok("group successfully created");
+    @PostMapping(consumes = {MediaType.APPLICATION_PROTOBUF_VALUE, MediaType.APPLICATION_OCTET_STREAM_VALUE})
+    public ResponseEntity<String> createGroup(@RequestBody GroupModel group) {
+        try {
+            groupService.createGroup(group);
+            logger.info("created group={}", group);
+            return ResponseEntity.ok("group successfully created");
+        } catch (EntityNotFoundException e) {
+            logger.error("can not find models with required field", e);
+            return ResponseEntity.badRequest().body("error while creating group: " + e.getMessage());
+        } catch (InvalidProtocolBufferException e) {
+            logger.error("incorrect protobuf type", e);
+            return ResponseEntity.badRequest().body("error while creating group: " + e.getMessage());
+        }
     }
 
-    @GetMapping
+    @GetMapping(produces = {MediaType.APPLICATION_PROTOBUF_VALUE, MediaType.TEXT_PLAIN_VALUE})
     public ResponseEntity getGroup(@RequestParam Long id) {
         try {
             var group = groupService.findGroupById(id);
