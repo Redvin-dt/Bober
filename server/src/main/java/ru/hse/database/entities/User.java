@@ -12,7 +12,6 @@ import java.util.*;
 @Table(name = "Users")
 @Getter
 @Setter
-@JsonIgnoreProperties(value = {"groupsAdmin", "groupsUserSet"}) // TODO: write own serialization/deserialization
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

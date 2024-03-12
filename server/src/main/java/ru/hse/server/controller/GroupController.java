@@ -21,12 +21,13 @@ public class GroupController {
         this.groupService = groupService;
     }
 
-    @PostMapping(consumes = {MediaType.APPLICATION_PROTOBUF_VALUE, MediaType.APPLICATION_OCTET_STREAM_VALUE})
-    public ResponseEntity<String> createGroup(@RequestBody GroupModel group) {
+    @PostMapping(consumes = {MediaType.APPLICATION_PROTOBUF_VALUE, MediaType.APPLICATION_OCTET_STREAM_VALUE},
+            produces = {MediaType.APPLICATION_PROTOBUF_VALUE, MediaType.TEXT_PLAIN_VALUE})
+    public ResponseEntity createGroup(@RequestBody GroupModel group) {
         try {
-            groupService.createGroup(group);
+            var savedGroup = groupService.createGroup(group);
             logger.info("created group={}", group);
-            return ResponseEntity.ok("group successfully created");
+            return ResponseEntity.ok(savedGroup);
         } catch (EntityNotFoundException e) {
             logger.error("can not find models with required field", e);
             return ResponseEntity.badRequest().body("error while creating group: " + e.getMessage());
@@ -42,7 +43,7 @@ public class GroupController {
             var group = groupService.findGroupById(id);
             return ResponseEntity.ok().body(group);
         } catch (EntityNotFoundException e) {
-            logger.error("can not get grop with id={}, since that group does not exists", id);
+            logger.error("can not get group with id={}, since that group does not exists", id);
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
             logger.error("unexpected error", e);
