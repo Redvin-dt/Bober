@@ -28,6 +28,18 @@ public class UserDatabaseRepository implements UserRepository {
     }
 
     @Override
+    public User findByUserEmail(String email) {
+        try {
+            var user = DaoUser.getUserByEmail(email);
+            logger.debug("Find user={} by email={}", user, email);
+            return user;
+        } catch (DaoUser.NotUniqueUserLoginException e) {
+            logger.error("Find more than one user with the same email");
+            return null;
+        }
+    }
+
+    @Override
     @Nonnull
     public <S extends User> S save(@Nonnull S entity) {
         DaoUser.createOrUpdateUser(entity);

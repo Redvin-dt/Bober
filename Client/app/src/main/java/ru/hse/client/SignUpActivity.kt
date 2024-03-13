@@ -1,5 +1,7 @@
 package ru.hse.client
 
+import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -9,18 +11,22 @@ import android.text.TextUtils
 import android.text.TextWatcher
 import android.util.Log
 import android.util.Patterns
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import androidx.fragment.app.Fragment
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import okhttp3.*
+import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.RequestBody.Companion.toRequestBody
-import ru.hse.server.proto.EntitiesProto.UserInfo
+import okio.ByteString
+import ru.hse.server.proto.EntitiesProto.UserModel
 import java.io.IOException
+
 
 fun isValidEmail(target: CharSequence?): Boolean {
     return if (target == null || TextUtils.isEmpty(target)) {
@@ -43,15 +49,36 @@ fun isValidLogin(target: CharSequence?): Boolean {
     }
 }
 
+fun Fragment.hideKeyboard() {
+    view?.let { activity?.hideKeyboard(it) }
+}
+
+fun Activity.hideKeyboard() {
+    hideKeyboard(currentFocus ?: View(this))
+}
+
+fun Context.hideKeyboard(view: View) {
+    val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+    inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+}
+
 class SignUpActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.sign_up)
+
+        hideKeyboard()
+
         val okHttpClient = OkHttpClient()
 
         var loginEditText: TextInputEditText = findViewById(R.id.login)
         var loginLayout: TextInputLayout = findViewById(R.id.login_box)
+        loginEditText.setOnFocusChangeListener{ v, hasFocus ->
+            if (!hasFocus) {
+                hideKeyboard(v)
+            }
+        }
 
         val textWatcherForLogin: TextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -77,6 +104,11 @@ class SignUpActivity : AppCompatActivity() {
 
         var emailEditText: TextInputEditText = findViewById(R.id.email)
         var emailLayout: TextInputLayout = findViewById(R.id.email_box)
+        emailEditText.setOnFocusChangeListener{ v, hasFocus ->
+            if (!hasFocus) {
+                hideKeyboard(v)
+            }
+        }
 
         val textWatcherForEmail: TextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -100,9 +132,19 @@ class SignUpActivity : AppCompatActivity() {
 
         var passwordEditText: TextInputEditText = findViewById(R.id.password)
         var passwordLayout: TextInputLayout = findViewById(R.id.password_box)
+        passwordEditText.setOnFocusChangeListener{ v, hasFocus ->
+            if (!hasFocus) {
+                hideKeyboard(v)
+            }
+        }
 
         var passwordConfirmEditText: TextInputEditText = findViewById(R.id.password_confirm)
         var passwordConfirmLayout: TextInputLayout = findViewById(R.id.password_confirm_box)
+        passwordConfirmEditText.setOnFocusChangeListener{ v, hasFocus ->
+            if (!hasFocus) {
+                hideKeyboard(v)
+            }
+        }
 
         val textWatcherForPassword: TextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -195,42 +237,91 @@ class SignUpActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            val url: String = "http://" + getString(R.string.IP) + "/users/registration"
+            val URlRegistration: String = ("http://" + getString(R.string.IP) + "/users/registration").toHttpUrlOrNull()
+                ?.newBuilder()
+                ?.build()
+                .toString()
 
-            val json = "{\n" +
-                    "    \"userLogin\": \"$login\",\n" +
-                    "    \"userEmail\": \"$email\",\n" +
-                    "    \"passwordHash\": \"$password\"\n" +
-                    "}\n"
-
-            val mapper = jacksonObjectMapper()
-            val user: User = User.newBuilder().setLogin(login).setPassword(password).build()
-            val body: RequestBody = json
-                .toRequestBody("application/json".toMediaTypeOrNull())
+            val user: UserModel = UserModel.newBuilder().setLogin(login).setEmail(email).setPasswordHash(password).build()
             val requestBody: RequestBody = RequestBody.create("application/x-protobuf".toMediaTypeOrNull(), user.toByteArray());
 
-            val request: Request = Request.Builder()
-                .url(url)
+            val requestForRegisterUser: Request = Request.Builder()
+                .url(URlRegistration)
                 .post(requestBody)
                 .build()
 
-            Log.i("Info", "Request has been sent $url")
-            okHttpClient.newCall(request).enqueue(object : Callback {
+            Log.i("Info", "Request has been sent $URlRegistration")
+            val sometghinWentWrongMessage: String = "Something went wrong, try again"
+            okHttpClient.newCall(requestForRegisterUser).enqueue(object : Callback {
                 override fun onFailure(call: Call, e: IOException) {
                     Log.e("Error", e.toString() + " " + e.message)
                     Handler(Looper.getMainLooper()).post {
-                        Toast.makeText(this@SignUpActivity, "Something went wrong, try again", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@SignUpActivity, sometghinWentWrongMessage, Toast.LENGTH_SHORT).show()
                     }
                 }
 
                 override fun onResponse(call: Call, response: Response) {
                     Log.i("Info", response.toString())
                     if (response.code == 200) {
-                        val new_user: User
+                        val URlGetUser: String = ("http://" + getString(R.string.IP) + "/users/userByLogin").toHttpUrlOrNull()
+                            ?.newBuilder()
+                            ?.addQueryParameter("login", login)
+                            ?.build().toString()
+
+                        val requestForGetGeneratedUser: Request = Request.Builder()
+                            .url(URlGetUser)
+                            .build()
+
+                        okHttpClient.newCall(requestForGetGeneratedUser).enqueue(object : Callback {
+                            override fun onFailure(call: Call, e: IOException) {
+                                Log.e("Error", e.toString() + " " + e.message)
+                                Handler(Looper.getMainLooper()).post {
+                                    Toast.makeText(this@SignUpActivity, sometghinWentWrongMessage + " with another login", Toast.LENGTH_SHORT).show()
+                                }
+                            }
+
+                            override fun onResponse(call: Call, response: Response) {
+                                Log.i("Info", response.toString())
+                                if (response.code == 200) {
+                                    val responseBody: ByteString? = response.body?.byteString()
+                                    val registredUser: UserModel = UserModel.parseFrom(responseBody?.toByteArray())
+                                    Handler(Looper.getMainLooper()).post {
+                                        Toast.makeText(this@SignUpActivity, "User has been successfully created", Toast.LENGTH_SHORT).show()
+                                    }
+                                    // TODO: create main Activity
+                                }
+                            }
+                        })
+
                     } else if (response.code == 400) {
-                        Handler(Looper.getMainLooper()).post {
-                            Toast.makeText(this@SignUpActivity, "User with this login already exists", Toast.LENGTH_SHORT).show()
-                            loginLayout.error = "User with this login already exists"
+                        val loginErrorMessage: String = "user with that login already exist"
+                        val emailErrorMessage: String = "user with that email already exist"
+                        if (response.body?.string() == loginErrorMessage) {
+                            Handler(Looper.getMainLooper()).post {
+                                Toast.makeText(
+                                    this@SignUpActivity,
+                                    loginErrorMessage,
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                loginLayout.error = loginErrorMessage
+                            }
+                        } else if (response.body?.string() == emailErrorMessage) {
+                            Handler(Looper.getMainLooper()).post {
+                                Toast.makeText(
+                                    this@SignUpActivity,
+                                    emailErrorMessage,
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                emailLayout.error = emailErrorMessage
+                            }
+                        } else {
+                            Handler(Looper.getMainLooper()).post {
+                                Toast.makeText(
+                                    this@SignUpActivity,
+                                    sometghinWentWrongMessage,
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
                         }
                     }
                 }
