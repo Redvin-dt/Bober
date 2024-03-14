@@ -4,8 +4,6 @@ import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
-import org.hibernate.query.QueryProducer;
-import org.hibernate.query.SelectionQuery;
 import ru.hse.database.entities.Chapter;
 import ru.hse.database.entities.Group;
 import ru.hse.database.entities.User;
