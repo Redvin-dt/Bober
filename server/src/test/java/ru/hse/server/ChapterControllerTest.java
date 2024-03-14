@@ -10,10 +10,10 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import ru.hse.server.controller.ChapterController;
 import ru.hse.server.proto.EntitiesProto;
 import ru.hse.server.proto.EntitiesProto.GroupModel;
 import ru.hse.server.proto.EntitiesProto.ChapterModel;
-import ru.hse.server.proto.EntitiesProto.UserModel;
 import ru.hse.server.service.ChapterService;
 
 import static org.mockito.Mockito.*;
@@ -21,7 +21,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(ChapterControllerTest.class)
+@WebMvcTest(ChapterController.class)
 public class ChapterControllerTest {
 
     @Autowired
@@ -40,6 +40,7 @@ public class ChapterControllerTest {
         var chapterBuilder = ChapterModel.newBuilder();
         chapterModel = chapterBuilder.setId(1).setGroup(userModel).setName("testChapter").build();
         groupBuilder.clear();
+        chapterBuilder.clear();
         incorrectChapterModel = chapterBuilder.setId(1).setName("testIncorrectChapter").build();
     }
 
@@ -76,6 +77,7 @@ public class ChapterControllerTest {
     private void compareResponse(ChapterModel model, MvcResult response) throws InvalidProtocolBufferException {
         Assertions.assertEquals(MediaType.APPLICATION_PROTOBUF_VALUE, response.getResponse().getContentType());
         ChapterModel responseModel = ChapterModel.parseFrom(response.getResponse().getContentAsByteArray());
+
         Assertions.assertEquals(responseModel, model);
     }
 }

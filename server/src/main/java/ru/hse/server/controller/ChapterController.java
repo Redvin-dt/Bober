@@ -22,12 +22,13 @@ public class ChapterController {
         this.chapterService = chapterService;
     }
 
-    @PostMapping(consumes = {MediaType.APPLICATION_PROTOBUF_VALUE, MediaType.APPLICATION_OCTET_STREAM_VALUE})
-    public ResponseEntity<String> createChapter(@RequestBody ChapterModel chapter) {
+    @PostMapping(consumes = {MediaType.APPLICATION_PROTOBUF_VALUE, MediaType.APPLICATION_OCTET_STREAM_VALUE},
+            produces = {MediaType.APPLICATION_PROTOBUF_VALUE, MediaType.TEXT_PLAIN_VALUE})
+    public ResponseEntity createChapter(@RequestBody ChapterModel chapter) {
         try {
-            chapterService.createChapter(chapter);
+            var savedChapter = chapterService.createChapter(chapter);
             logger.info("created chapter={}", chapter);
-            return ResponseEntity.ok("chapter successfully created");
+            return ResponseEntity.ok(savedChapter);
         } catch (EntityNotFoundException e) {
             logger.error("can not find models with required field", e);
             return ResponseEntity.badRequest().body("error while creating chapter: " + e.getMessage());
