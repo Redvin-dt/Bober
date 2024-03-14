@@ -26,7 +26,7 @@ public class UserService {
 
     public UserModel registration(UserModel userInfo) throws EntityExistsException,
             InvalidProtocolBufferException {
-        if (!userInfo.hasLogin() || !userInfo.hasPasswordHash()) {
+        if (!userInfo.hasLogin() || !userInfo.hasPasswordHash() || !userInfo.hasEmail()) {
             throw new InvalidProtocolBufferException("user info should have field login and password");
         }
         if (userRepository.findByUserLogin(userInfo.getLogin()) != null) {
