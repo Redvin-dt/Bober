@@ -93,16 +93,15 @@ class SignInActivity : AppCompatActivity() {
             val login: String = loginEditText.text.toString()
             val password: String = passwordEditText.text.toString()
 
-            if (login.isEmpty() || !isValidLogin(login)) {
-                Toast.makeText(this, "Incorrect login", Toast.LENGTH_LONG).show()
-                loginLayout.error = "Invalid login"
-                Log.e("Sign up", "bad login: $login")
+            if (!isValidLogin(login)) {
+                writeErrorAboutLogin(login, this)
+                Log.e("Sign in", "incorrect login: $login")
                 return@setOnClickListener
             }
 
-            if (password.length <= 3) {
-                Toast.makeText(this, "Password is too short", Toast.LENGTH_LONG).show()
-                Log.e("Sign up", "short password:    $password")
+            if (!isValidPassword(password)) {
+                writeErrorAboutPassword(password, this)
+                Log.e("Sign in", "incorrect password: $password")
                 return@setOnClickListener
             }
 
@@ -155,7 +154,7 @@ class SignInActivity : AppCompatActivity() {
 
                 override fun onResponse(call: Call, response: Response) {
                     Log.i("Info", response.toString())
-                    if (response.code == 200) {
+                    if (response.isSuccessful) {
                         val responseBody: ByteString? = response.body?.byteString()
                         val user: EntitiesProto.UserModel =
                             EntitiesProto.UserModel.parseFrom(responseBody?.toByteArray())
@@ -172,7 +171,7 @@ class SignInActivity : AppCompatActivity() {
                             printErrorAboutBadUser()
                         }
                     } else {
-                        Log.e("Info", "no such login/password")
+                        response.body?.string()?.let { it1 -> Log.e("Info", it1) }
                         printErrorAboutBadUser()
                     }
                 }

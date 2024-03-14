@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.text.Editable
-import android.text.TextUtils
 import android.text.TextWatcher
 import android.util.Log
 import android.util.Patterns
@@ -26,27 +25,104 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okio.ByteString
 import ru.hse.server.proto.EntitiesProto.UserModel
 import java.io.IOException
+import java.util.regex.Matcher
+import java.util.regex.Pattern
 
 
 fun isValidEmail(target: CharSequence?): Boolean {
-    return if (target == null || TextUtils.isEmpty(target)) {
+    return if (target == null) {
         false
     } else {
         Patterns.EMAIL_ADDRESS.matcher(target).matches()
     }
 }
 
-fun isValidLogin(target: CharSequence?): Boolean {
-    if (target != null) {
-        for (c in target) {
-            if (!c.isDigit() && !c.isLetter() && c != '_' && c != '-') {
-                return false
-            }
-        }
-        return true
+fun isValidLogin(login: CharSequence?): Boolean {
+    return if (login == null) {
+        false
     } else {
-        return false
+        val loginPattern: String = "^([0-9]*)(?=.*[a-z])([A-Z]*)(?=\\S+$).{4,}$"
+        val pattern: Pattern = Pattern.compile(loginPattern)
+        val matcher: Matcher = pattern.matcher(login)
+        matcher.matches()
     }
+}
+
+fun writeErrorAboutLogin(login: CharSequence, activity: Activity) {
+    val loginPatternWithoutLCaseLetter: String = "^([0-9]*)([A-Z]*)(?=\\S+$).{4,}$"
+    var pattern: Pattern = Pattern.compile(loginPatternWithoutLCaseLetter)
+    var matcher: Matcher = pattern.matcher(login)
+    if (matcher.matches()) {
+        Toast.makeText(activity, "Login must contain at least one lower case letter", Toast.LENGTH_LONG).show()
+        return
+    }
+    val loginPatternWithSpace: String = "^([0-9]*)(?=.*[a-z])([A-Z]*).{4,}$"
+    pattern = Pattern.compile(loginPatternWithSpace)
+    matcher = pattern.matcher(login)
+    if (matcher.matches()) {
+        Toast.makeText(activity, "Login must not contain spaces", Toast.LENGTH_LONG).show()
+        return
+    }
+    val loginPatternShortLen: String = "^([0-9]*)(?=.*[a-z])([A-Z]*).{0,3}$"
+    pattern = Pattern.compile(loginPatternShortLen)
+    matcher = pattern.matcher(login)
+    if (matcher.matches()) {
+        Toast.makeText(activity, "Login must be at least 4 in length", Toast.LENGTH_LONG).show()
+        return
+    }
+
+    Toast.makeText(activity, "Incorrect login", Toast.LENGTH_LONG).show()
+}
+
+fun isValidPassword(password: CharSequence?): Boolean {
+    return if (password == null) {
+        false
+    } else {
+        val passwordPattern: String = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])([@#$%^&+=]*)(?=\\S+$).{4,}$"
+        val pattern: Pattern = Pattern.compile(passwordPattern)
+        val matcher: Matcher = pattern.matcher(password)
+        matcher.matches()
+    }
+}
+
+fun writeErrorAboutPassword(password: CharSequence, activity: Activity) {
+    val passwordPatternWithoutDigit: String = "^(?=.*[a-z])(?=.*[A-Z])([@#$%^&+=]*)(?=\\S+$).{4,}$"
+    var pattern: Pattern = Pattern.compile(passwordPatternWithoutDigit)
+    var matcher: Matcher = pattern.matcher(password)
+    if (matcher.matches()) {
+        Toast.makeText(activity, "Password must contain at least one digit", Toast.LENGTH_LONG).show()
+        return
+    }
+    val passwordPatternWithoutLCaseLetter: String = "^(?=.*[0-9])(?=.*[A-Z])([@#$%^&+=]*)(?=\\S+$).{4,}$"
+    pattern = Pattern.compile(passwordPatternWithoutLCaseLetter)
+    matcher = pattern.matcher(password)
+    if (matcher.matches()) {
+        Toast.makeText(activity, "Password must contain at least one lower case letter", Toast.LENGTH_LONG).show()
+        return
+    }
+    val passwordPatternWithoutUCaseLetter: String = "^(?=.*[0-9])(?=.*[a-z])([@#$%^&+=]*)(?=\\S+$).{4,}$"
+    pattern = Pattern.compile(passwordPatternWithoutUCaseLetter)
+    matcher = pattern.matcher(password)
+    if (matcher.matches()) {
+        Toast.makeText(activity, "Password must contain at least one upper case letter", Toast.LENGTH_LONG).show()
+        return
+    }
+    val passwordPatternWithSpace: String = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])([@#$%^&+=]*).{4,}$"
+    pattern = Pattern.compile(passwordPatternWithSpace)
+    matcher = pattern.matcher(password)
+    if (matcher.matches()) {
+        Toast.makeText(activity, "Password must not contain spaces", Toast.LENGTH_LONG).show()
+        return
+    }
+    val passwordPatternShortLen: String = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])([@#$%^&+=]*)(?=\\S+\$).{0,3}$"
+    pattern = Pattern.compile(passwordPatternShortLen)
+    matcher = pattern.matcher(password)
+    if (matcher.matches()) {
+        Toast.makeText(activity, "Password must be at least 4 in length", Toast.LENGTH_LONG).show()
+        return
+    }
+
+    Toast.makeText(activity, "Incorrect password", Toast.LENGTH_LONG).show()
 }
 
 fun Fragment.hideKeyboard() {
@@ -74,7 +150,7 @@ class SignUpActivity : AppCompatActivity() {
 
         var loginEditText: TextInputEditText = findViewById(R.id.login)
         var loginLayout: TextInputLayout = findViewById(R.id.login_box)
-        loginEditText.setOnFocusChangeListener{ v, hasFocus ->
+        loginEditText.setOnFocusChangeListener { v, hasFocus ->
             if (!hasFocus) {
                 hideKeyboard(v)
             }
@@ -84,7 +160,8 @@ class SignUpActivity : AppCompatActivity() {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
 
-            override fun onTextChanged(charSequence: CharSequence, start: Int, before: Int, count: Int
+            override fun onTextChanged(
+                charSequence: CharSequence, start: Int, before: Int, count: Int
             ) {
                 val newText = charSequence.toString()
                 if (!isValidLogin(newText)) {
@@ -104,7 +181,7 @@ class SignUpActivity : AppCompatActivity() {
 
         var emailEditText: TextInputEditText = findViewById(R.id.email)
         var emailLayout: TextInputLayout = findViewById(R.id.email_box)
-        emailEditText.setOnFocusChangeListener{ v, hasFocus ->
+        emailEditText.setOnFocusChangeListener { v, hasFocus ->
             if (!hasFocus) {
                 hideKeyboard(v)
             }
@@ -132,7 +209,7 @@ class SignUpActivity : AppCompatActivity() {
 
         var passwordEditText: TextInputEditText = findViewById(R.id.password)
         var passwordLayout: TextInputLayout = findViewById(R.id.password_box)
-        passwordEditText.setOnFocusChangeListener{ v, hasFocus ->
+        passwordEditText.setOnFocusChangeListener { v, hasFocus ->
             if (!hasFocus) {
                 hideKeyboard(v)
             }
@@ -140,9 +217,27 @@ class SignUpActivity : AppCompatActivity() {
 
         var passwordConfirmEditText: TextInputEditText = findViewById(R.id.password_confirm)
         var passwordConfirmLayout: TextInputLayout = findViewById(R.id.password_confirm_box)
-        passwordConfirmEditText.setOnFocusChangeListener{ v, hasFocus ->
+        passwordConfirmEditText.setOnFocusChangeListener { v, hasFocus ->
             if (!hasFocus) {
                 hideKeyboard(v)
+            }
+        }
+
+        fun checkPasswords(passwordOriginal: CharSequence, passwordConfirm: CharSequence) {
+            if (!isValidPassword(passwordOriginal)) {
+                passwordConfirmLayout.error = "Incorrect password"
+                passwordLayout.error = "Incorrect password"
+            } else if (passwordOriginal != passwordConfirm) {
+                passwordLayout.error = null
+                passwordLayout.boxStrokeColor =
+                    ContextCompat.getColor(this@SignUpActivity, R.color.green)
+                passwordConfirmLayout.error = "Passwords are different"
+            } else {
+                passwordConfirmLayout.boxStrokeColor =
+                    ContextCompat.getColor(this@SignUpActivity, R.color.green)
+                passwordLayout.boxStrokeColor = passwordConfirmLayout.boxStrokeColor
+                passwordConfirmLayout.error = null
+                passwordLayout.error = null
             }
         }
 
@@ -153,21 +248,7 @@ class SignUpActivity : AppCompatActivity() {
             override fun onTextChanged(charSequence: CharSequence, start: Int, before: Int, count: Int) {
                 val passwordOriginal = charSequence.toString()
                 val passwordConfirm = passwordConfirmEditText.text.toString()
-                if (passwordOriginal.length <= 3) {
-                    passwordConfirmLayout.error = "Original password is too short"
-                    passwordLayout.error = "Password is too short"
-                } else if (passwordOriginal != passwordConfirm) {
-                    passwordLayout.error = null
-                    passwordLayout.boxStrokeColor =
-                        ContextCompat.getColor(this@SignUpActivity, R.color.green)
-                    passwordConfirmLayout.error = "Passwords are different"
-                } else {
-                    passwordConfirmLayout.boxStrokeColor =
-                        ContextCompat.getColor(this@SignUpActivity, R.color.green)
-                    passwordLayout.boxStrokeColor = passwordConfirmLayout.boxStrokeColor
-                    passwordConfirmLayout.error = null
-                    passwordLayout.error = null
-                }
+                checkPasswords(passwordOriginal, passwordConfirm)
             }
 
             override fun afterTextChanged(editable: Editable) {
@@ -182,21 +263,8 @@ class SignUpActivity : AppCompatActivity() {
             override fun onTextChanged(charSequence: CharSequence, start: Int, before: Int, count: Int) {
                 val passwordOriginal = passwordEditText.text.toString()
                 val passwordConfirm = charSequence.toString()
-                if (passwordOriginal.length <= 3) {
-                    passwordConfirmLayout.error = "Original password is too short"
-                    passwordLayout.error = "Password is too short"
-                } else if (passwordOriginal != passwordConfirm) {
-                    passwordLayout.error = null
-                    passwordLayout.boxStrokeColor =
-                        ContextCompat.getColor(this@SignUpActivity, R.color.green)
-                    passwordConfirmLayout.error = "Passwords are different"
-                } else {
-                    passwordConfirmLayout.boxStrokeColor =
-                        ContextCompat.getColor(this@SignUpActivity, R.color.green)
-                    passwordLayout.boxStrokeColor = passwordConfirmLayout.boxStrokeColor
-                    passwordConfirmLayout.error = null
-                    passwordLayout.error = null
-                }
+                checkPasswords(passwordOriginal, passwordConfirm)
+
             }
 
             override fun afterTextChanged(editable: Editable) {
@@ -210,7 +278,7 @@ class SignUpActivity : AppCompatActivity() {
             val email: String = emailEditText.text.toString()
             val login: String = loginEditText.text.toString()
             val password: String = passwordEditText.text.toString()
-            val password_confirm: String = passwordConfirmEditText.text.toString()
+            val passwordConfirm: String = passwordConfirmEditText.text.toString()
 
             if (!isValidEmail(email)) {
                 Toast.makeText(this, "This is not an email", Toast.LENGTH_LONG).show()
@@ -218,22 +286,21 @@ class SignUpActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            if (login.isEmpty() || !isValidLogin(login)) {
-                Toast.makeText(this, "Incorrect login", Toast.LENGTH_LONG).show()
-                loginLayout.error = "Invalid login"
-                Log.e("Sign up", "bad login: $login")
+            if (!isValidLogin(login)) {
+                writeErrorAboutLogin(login, this)
+                Log.e("Sign up", "incorrect login: $login")
                 return@setOnClickListener
             }
 
-            if (password.length <= 3) {
-                Toast.makeText(this, "Password is too short", Toast.LENGTH_LONG).show()
-                Log.e("Sign up", "short password:    $password")
+            if (!isValidPassword(password)) {
+                writeErrorAboutPassword(password, this)
+                Log.e("Sign up", "incorrect password: $password")
                 return@setOnClickListener
             }
 
-            if (password != password_confirm) {
+            if (password != passwordConfirm) {
                 Toast.makeText(this, "Password mismatch", Toast.LENGTH_LONG).show()
-                Log.e("Sign up", "password missmath $password and $password_confirm")
+                Log.e("Sign up", "password mismatch $password and $passwordConfirm")
                 return@setOnClickListener
             }
 
@@ -242,8 +309,10 @@ class SignUpActivity : AppCompatActivity() {
                 ?.build()
                 .toString()
 
-            val user: UserModel = UserModel.newBuilder().setLogin(login).setEmail(email).setPasswordHash(password).build()
-            val requestBody: RequestBody = RequestBody.create("application/x-protobuf".toMediaTypeOrNull(), user.toByteArray());
+            val user: UserModel =
+                UserModel.newBuilder().setLogin(login).setEmail(email).setPasswordHash(password).build()
+            val requestBody: RequestBody =
+                RequestBody.create("application/x-protobuf".toMediaTypeOrNull(), user.toByteArray());
 
             val requestForRegisterUser: Request = Request.Builder()
                 .url(URlRegistration)
@@ -251,22 +320,23 @@ class SignUpActivity : AppCompatActivity() {
                 .build()
 
             Log.i("Info", "Request has been sent $URlRegistration")
-            val sometghinWentWrongMessage: String = "Something went wrong, try again"
+            val somethingWentWrongMessage: String = "Something went wrong, try again"
             okHttpClient.newCall(requestForRegisterUser).enqueue(object : Callback {
                 override fun onFailure(call: Call, e: IOException) {
                     Log.e("Error", e.toString() + " " + e.message)
                     Handler(Looper.getMainLooper()).post {
-                        Toast.makeText(this@SignUpActivity, sometghinWentWrongMessage, Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@SignUpActivity, somethingWentWrongMessage, Toast.LENGTH_SHORT).show()
                     }
                 }
 
                 override fun onResponse(call: Call, response: Response) {
                     Log.i("Info", response.toString())
-                    if (response.code == 200) {
-                        val URlGetUser: String = ("http://" + getString(R.string.IP) + "/users/userByLogin").toHttpUrlOrNull()
-                            ?.newBuilder()
-                            ?.addQueryParameter("login", login)
-                            ?.build().toString()
+                    if (response.isSuccessful) {
+                        val URlGetUser: String =
+                            ("http://" + getString(R.string.IP) + "/users/userByLogin").toHttpUrlOrNull()
+                                ?.newBuilder()
+                                ?.addQueryParameter("login", login)
+                                ?.build().toString()
 
                         val requestForGetGeneratedUser: Request = Request.Builder()
                             .url(URlGetUser)
@@ -276,7 +346,11 @@ class SignUpActivity : AppCompatActivity() {
                             override fun onFailure(call: Call, e: IOException) {
                                 Log.e("Error", e.toString() + " " + e.message)
                                 Handler(Looper.getMainLooper()).post {
-                                    Toast.makeText(this@SignUpActivity, sometghinWentWrongMessage + " with another login", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(
+                                        this@SignUpActivity,
+                                        somethingWentWrongMessage + " with another login",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
                                 }
                             }
 
@@ -286,14 +360,18 @@ class SignUpActivity : AppCompatActivity() {
                                     val responseBody: ByteString? = response.body?.byteString()
                                     val registredUser: UserModel = UserModel.parseFrom(responseBody?.toByteArray())
                                     Handler(Looper.getMainLooper()).post {
-                                        Toast.makeText(this@SignUpActivity, "User has been successfully created", Toast.LENGTH_SHORT).show()
+                                        Toast.makeText(
+                                            this@SignUpActivity,
+                                            "User has been successfully created",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
                                     }
                                     // TODO: create main Activity
                                 }
                             }
                         })
 
-                    } else if (response.code == 400) {
+                    } else {
                         val loginErrorMessage: String = "user with that login already exist"
                         val emailErrorMessage: String = "user with that email already exist"
                         if (response.body?.string() == loginErrorMessage) {
@@ -318,7 +396,7 @@ class SignUpActivity : AppCompatActivity() {
                             Handler(Looper.getMainLooper()).post {
                                 Toast.makeText(
                                     this@SignUpActivity,
-                                    sometghinWentWrongMessage,
+                                    somethingWentWrongMessage,
                                     Toast.LENGTH_SHORT
                                 ).show()
                             }
