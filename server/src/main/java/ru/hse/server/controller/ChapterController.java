@@ -12,13 +12,13 @@ import ru.hse.server.proto.EntitiesProto.ChapterModel;
 import ru.hse.server.service.ChapterService;
 
 @RestController
-@RequestMapping("/groups")
-public class GroupController {
+@RequestMapping("/chapters")
+public class ChapterController {
 
     static final private Logger logger = LoggerFactory.getLogger(GroupController.class);
     private final ChapterService chapterService;
 
-    public GroupController(ChapterService chapterService) {
+    public ChapterController(ChapterService chapterService) {
         this.chapterService = chapterService;
     }
 
