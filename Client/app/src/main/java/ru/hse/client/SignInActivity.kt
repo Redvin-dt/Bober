@@ -74,8 +74,8 @@ class SignInActivity : AppCompatActivity() {
 
             override fun onTextChanged(charSequence: CharSequence, start: Int, before: Int, count: Int) {
                 val passwordOriginal = charSequence.toString()
-                if (passwordOriginal.length <= 3) {
-                    passwordLayout.error = "Original password is too short"
+                if (!isValidPassword(passwordOriginal)) {
+                    passwordLayout.error = "Incorrect password"
                 } else {
                     passwordLayout.boxStrokeColor = ContextCompat.getColor(this@SignInActivity, R.color.green)
                     passwordLayout.error = null
@@ -152,6 +152,28 @@ class SignInActivity : AppCompatActivity() {
                     }
                 }
 
+                fun printMessageFromBadResponse(message: CharSequence?) {
+                    if (message == null) {
+                        Log.e("Error", "null response message")
+                        Handler(Looper.getMainLooper()).post {
+                            Toast.makeText(
+                                this@SignInActivity,
+                                "Something went wrong, try again",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                        return
+                    }
+                    Log.e("Info", message.toString())
+                    Handler(Looper.getMainLooper()).post {
+                        Toast.makeText(
+                            this@SignInActivity,
+                            message,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+
                 override fun onResponse(call: Call, response: Response) {
                     Log.i("Info", response.toString())
                     if (response.isSuccessful) {
@@ -171,8 +193,7 @@ class SignInActivity : AppCompatActivity() {
                             printErrorAboutBadUser()
                         }
                     } else {
-                        response.body?.string()?.let { it1 -> Log.e("Info", it1) }
-                        printErrorAboutBadUser()
+                        printMessageFromBadResponse(response.body?.string())
                     }
                 }
             })
