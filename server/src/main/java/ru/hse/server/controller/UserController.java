@@ -66,6 +66,18 @@ public class UserController {
         }
     }
 
+    @GetMapping(value = "/userByEmail", produces = {MediaType.APPLICATION_PROTOBUF_VALUE})
+    public ResponseEntity getUserByEmail(@RequestParam String email) {
+        try {
+            var user = userService.getUserByEmail(email);
+            logger.debug("find user={} with email={}", user, email);
+            return ResponseEntity.ok().body(user);
+        } catch (EntityNotFoundException e) {
+            logger.error("can not find user with email={}, error message: {}", email, e.getMessage());
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     @DeleteMapping("/userById")
     public ResponseEntity deleteUserById(@RequestParam Long id) {
         try {

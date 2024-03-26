@@ -19,10 +19,22 @@ public class UserDatabaseRepository implements UserRepository {
     public User findByUserLogin(String login) {
         try {
             var user = DaoUser.getUserByLogin(login);
-            logger.debug("Find user={} by login={}", user, login);
+            logger.debug("find user={} by login={}", user, login);
             return user;
         } catch (DaoUser.NotUniqueUserLoginException e) {
-            logger.error("Find more than one user with the same login");
+            logger.error("find more than one user with the same login");
+            return null;
+        }
+    }
+
+    @Override
+    public User findByUserEmail(String email) {
+        try {
+            var user = DaoUser.getUserByEmail(email);
+            logger.debug("find user={} by email={}", user, email);
+            return user;
+        } catch (DaoUser.NotUniqueUserLoginException e) {
+            logger.error("find more than one user with the same email");
             return null;
         }
     }
@@ -31,7 +43,7 @@ public class UserDatabaseRepository implements UserRepository {
     @Nonnull
     public <S extends User> S save(@Nonnull S entity) {
         DaoUser.createOrUpdateUser(entity);
-        logger.info("User={} was created", entity);
+        logger.info("user={} was created", entity);
         return entity;
     }
 
@@ -49,11 +61,11 @@ public class UserDatabaseRepository implements UserRepository {
     public Optional<User> findById(@Nonnull Long id) {
         var user = DaoUser.getUserById(id);
         if (user == null) {
-            logger.debug("Not found user with id={}", id);
+            logger.debug("not found user with id={}", id);
             return Optional.empty();
         }
 
-        logger.debug("Found user={}, by id={}", user, id);
+        logger.debug("found user={}, by id={}", user, id);
 
         return Optional.of(user);
     }
@@ -62,17 +74,17 @@ public class UserDatabaseRepository implements UserRepository {
     public boolean existsById(@Nonnull Long id) {
         var user = DaoUser.getUserById(id);
         if (user == null) {
-            logger.debug("Not found user with id={}", id);
+            logger.debug("not found user with id={}", id);
             return false;
         }
-        logger.debug("Found user={} with id={}", user, id);
+        logger.debug("found user={} with id={}", user, id);
         return true;
     }
 
     @Override
     @Nonnull
     public Iterable<User> findAll() {
-        logger.error("Call unsupported operation deleteAll");
+        logger.error("call unsupported operation deleteAll");
         throw new UnsupportedOperationException("not implemented yet");
     }
 
@@ -91,7 +103,7 @@ public class UserDatabaseRepository implements UserRepository {
 
     @Override
     public long count() {
-        logger.error("Call unsupported operation deleteAll");
+        logger.error("call unsupported operation deleteAll");
         throw new UnsupportedOperationException("not implemented yet");
     }
 
@@ -101,12 +113,12 @@ public class UserDatabaseRepository implements UserRepository {
         if (user != null) {
             delete(user);
         }
-        logger.info("Not found user with id={}, while try to delete him", id);
+        logger.info("not found user with id={}, while try to delete him", id);
     }
 
     @Override
     public void delete(@Nonnull User entity) {
-        logger.info("User={} was deleted", entity);
+        logger.info("user={} was deleted", entity);
         DaoUser.deleteUser(entity);
     }
 
@@ -126,7 +138,7 @@ public class UserDatabaseRepository implements UserRepository {
 
     @Override
     public void deleteAll() {
-        logger.error("Call unsupported operation deleteAll");
+        logger.error("call unsupported operation deleteAll");
         throw new UnsupportedOperationException("not implemented yet");
     }
 }

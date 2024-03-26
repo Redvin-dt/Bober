@@ -28,6 +28,7 @@ public class ProtoSerializer {
         return UserModel.newBuilder()
                 .setId(user.getUserId())
                 .setLogin(user.getUserLogin())
+                .setEmail(user.getUserEmail())
                 .setPasswordHash(user.getPasswordHash())
                 .setMetaInfo(user.getMetaInfo())
                 .build();
@@ -75,6 +76,7 @@ public class ProtoSerializer {
         return UserModel.newBuilder()
                 .setId(user.getUserId())
                 .setLogin(user.getUserLogin())
+                .setEmail(user.getUserEmail())
                 .setPasswordHash(user.getPasswordHash())
                 .setMetaInfo(user.getMetaInfo())
                 .setAdminOfGroups(convertGroupsToProto(DaoUser.getGroupsByAdmin(user)))

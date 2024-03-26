@@ -26,15 +26,18 @@ public class UserService {
 
     public UserModel registration(UserModel userInfo) throws EntityExistsException,
             InvalidProtocolBufferException {
-        if (!userInfo.hasLogin() || !userInfo.hasPasswordHash()){
+        if (!userInfo.hasLogin() || !userInfo.hasPasswordHash() || !userInfo.hasEmail()) {
             throw new InvalidProtocolBufferException("user info should have field login and password");
         }
-        if (userRepository.findByUserLogin(userInfo.getLogin()) == null) {
-            var user = new User(userInfo.getLogin(), userInfo.getPasswordHash());
-            userRepository.save(user);
-            return ProtoSerializer.getUserInfo(user);
+        if (userRepository.findByUserLogin(userInfo.getLogin()) != null) {
+            throw new EntityExistsException("user with that login already exist");
         }
-        throw new EntityExistsException("user with that login already exist");
+        if (userRepository.findByUserEmail(userInfo.getEmail()) != null) {
+            throw new EntityExistsException("user with that email already exist");
+        }
+        var user = new User(userInfo.getLogin(), userInfo.getEmail(), userInfo.getPasswordHash());
+        userRepository.save(user);
+        return ProtoSerializer.getUserInfo(user);
     }
 
     public UserModel getUserByID(Long id) throws EntityNotFoundException {
@@ -50,6 +53,14 @@ public class UserService {
         User user = userRepository.findByUserLogin(login);
         if (user == null) {
             throw new EntityNotFoundException("user with that login not found");
+        }
+        return ProtoSerializer.getProtoFromUser(user);
+    }
+
+    public UserModel getUserByEmail(String email) throws EntityNotFoundException {
+        User user = userRepository.findByUserEmail(email);
+        if (user == null) {
+            throw new EntityNotFoundException("user with that email not found");
         }
         return ProtoSerializer.getProtoFromUser(user);
     }

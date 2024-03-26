@@ -109,4 +109,17 @@ public class UserLocalRepository implements UserRepository {
 
         return wrapper.entity;
     }
+
+    public User findByUserEmail(String email) {
+        var wrapper = new Object() {
+            User entity = null;
+        };
+        storage.values().forEach((user) -> {
+            if (user.getUserEmail().equals(email)) {
+                wrapper.entity = user;
+            }
+        });
+
+        return wrapper.entity;
+    }
 }

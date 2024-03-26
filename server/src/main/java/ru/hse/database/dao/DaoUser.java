@@ -58,7 +58,36 @@ public class DaoUser {
             throw new NotUniqueUserLoginException("Found more than 1 user, with login ", login);
         }
 
-        return users.getFirst();
+        //return users.getFirst();
+        return users.stream().findFirst().orElse(null);
+    }
+
+    static public User getUserByEmail(String email) throws NotUniqueUserLoginException {
+        Query<User> query;
+        List<User> users;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+
+            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+            CriteriaQuery<User> criteria = criteriaBuilder.createQuery(User.class);
+
+            Root<User> root = criteria.from(User.class);
+
+            criteria.select(root).where(criteriaBuilder.equal(root.get("userEmail"), email));
+
+            query = session.createQuery(criteria);
+            users = query.getResultList();
+        }
+        if (users.isEmpty()) {
+            return null;
+        }
+
+        if (users.size() > 1) {
+            logger.error("More than 1 users in table with user email {}", email);
+            throw new NotUniqueUserLoginException("Found more than 1 user, with email ", email);
+        }
+
+        //return users.getFirst();
+        return users.stream().findFirst().orElse(null);
     }
 
     static public Set<Group> getGroupsOfUser(User user) {

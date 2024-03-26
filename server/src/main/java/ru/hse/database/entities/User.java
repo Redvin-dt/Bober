@@ -23,6 +23,9 @@ public class User {
     @Column(name = "login")
     private String userLogin;
 
+    @Column(name = "email")
+    private String userEmail;
+
     @Column(name = "password")
     private String passwordHash;
 
@@ -39,8 +42,9 @@ public class User {
     public User() {
     }
 
-    public User(String name, String passwordHash) {
-        this.userLogin = name;
+    public User(String login, String email, String passwordHash) {
+        this.userLogin = login;
+        this.userEmail = email;
         this.passwordHash = passwordHash;
     }
 

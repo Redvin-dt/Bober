@@ -4,7 +4,8 @@ create table users
         primary key,
     meta_info varchar(255),
     password  varchar(255),
-    login     varchar(255)
+    login     varchar(255),
+    email     varchar(255)
 );
 
 create table groups

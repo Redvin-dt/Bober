@@ -40,10 +40,11 @@ message UserModel {
   optional int64 id = 1;
   optional string login = 2;
   optional string passwordHash = 3;
+  optional string email = 4;
 
-  optional string metaInfo = 4;
+  optional string metaInfo = 5;
 
-  optional GroupList adminOfGroups = 5;
-  optional GroupList userOfGroups = 6;
+  optional GroupList adminOfGroups = 6;
+  optional GroupList userOfGroups = 7;
 }
 
