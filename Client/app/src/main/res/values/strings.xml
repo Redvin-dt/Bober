@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Client</string>
+    <string name="sign_in">Sign in</string>
+    <string name="sign_up">Sign up</string>
+    <string name="welcome">Welcome!</string>
+    <string name="login">"Login"</string>
+    <string name="password">"Password"</string>
+    <string name="fullname">"Full name"</string>
+    <string name="email">"Email"</string>
+    <string name="registration_text">Register your account</string>
+    <string name="password_confirm">Confirm password</string>
+    <string name="IP">192.168.0.107:8080</string>
+    <string name="log_in_text">Log in to your account</string>
+    <string name="forgot_password">Forgot password?</string>
+    <string name="have_an_account">Have an account?</string>
+    <string name="dont_have_an_account">Don\'t have an account?</string>
+</resources>
