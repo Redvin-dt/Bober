@@ -40,6 +40,16 @@ public class GroupRepository implements CrudRepository<Group, Long> {
         }
     }
 
+    @Nonnull
+    public List<Group> findByName(@Nonnull String groupName) {
+        return DaoGroup.getGroupsByName(groupName);
+    }
+
+    @Nonnull
+    public List<Group> findByPrefixName(@Nonnull String groupName) {
+        return DaoGroup.getGroupsByNamePrefix(groupName);
+    }
+
     @Override
     public boolean existsById(@Nonnull Long id) {
         var group = DaoGroup.getGroupById(id);

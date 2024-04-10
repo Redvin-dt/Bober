@@ -51,6 +51,28 @@ public class GroupController {
         }
     }
 
+    @GetMapping(produces = {MediaType.APPLICATION_PROTOBUF_VALUE, MediaType.TEXT_PLAIN_VALUE})
+    public ResponseEntity getGroupByName(@RequestParam String groupName) {
+        try {
+            var group = groupService.findGroupsByName(groupName);
+            return ResponseEntity.ok().body(group);
+        } catch (Exception e) {
+            logger.error("unexpected error", e);
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping(produces = {MediaType.APPLICATION_PROTOBUF_VALUE, MediaType.TEXT_PLAIN_VALUE})
+    public ResponseEntity getGroupByPrefixName(@RequestParam String groupName) {
+        try {
+            var group = groupService.findGroupsByPrefixOfName(groupName);
+            return ResponseEntity.ok().body(group);
+        } catch (Exception e) {
+            logger.error("unexpected error", e);
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     @DeleteMapping
     public ResponseEntity deleteGroup(@RequestParam Long id) {
         try {
