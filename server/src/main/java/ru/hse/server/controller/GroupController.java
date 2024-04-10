@@ -37,7 +37,7 @@ public class GroupController {
         }
     }
 
-    @GetMapping(produces = {MediaType.APPLICATION_PROTOBUF_VALUE, MediaType.TEXT_PLAIN_VALUE})
+    @GetMapping(value = "/groupById", produces = {MediaType.APPLICATION_PROTOBUF_VALUE, MediaType.TEXT_PLAIN_VALUE})
     public ResponseEntity getGroup(@RequestParam Long id) {
         try {
             var group = groupService.findGroupById(id);
@@ -45,6 +45,28 @@ public class GroupController {
         } catch (EntityNotFoundException e) {
             logger.error("can not get group with id={}, since that group does not exists", id);
             return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            logger.error("unexpected error", e);
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping(value = "/groupByName",produces = {MediaType.APPLICATION_PROTOBUF_VALUE, MediaType.TEXT_PLAIN_VALUE})
+    public ResponseEntity getGroupByName(@RequestParam String groupName) {
+        try {
+            var group = groupService.findGroupsByName(groupName);
+            return ResponseEntity.ok().body(group);
+        } catch (Exception e) {
+            logger.error("unexpected error", e);
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping(value = "/groupByPrefixName",produces = {MediaType.APPLICATION_PROTOBUF_VALUE, MediaType.TEXT_PLAIN_VALUE})
+    public ResponseEntity getGroupByPrefixName(@RequestParam String groupName) {
+        try {
+            var group = groupService.findGroupsByPrefixOfName(groupName);
+            return ResponseEntity.ok().body(group);
         } catch (Exception e) {
             logger.error("unexpected error", e);
             return ResponseEntity.badRequest().body(e.getMessage());

@@ -55,7 +55,7 @@ public class GroupControllerTest {
     @Test
     public void getGroupById() throws Exception {
         when(groupService.findGroupById(1L)).thenReturn(groupModel);
-        var response = mockMvc.perform(get("/groups?id=1")).andDo(print()).andExpect(status().isOk()).andReturn();
+        var response = mockMvc.perform(get("/groups/groupById?id=1")).andDo(print()).andExpect(status().isOk()).andReturn();
 
         compareResponse(groupModel, response);
     }

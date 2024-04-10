@@ -4,6 +4,7 @@ import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
+import org.hibernate.query.SelectionQuery;
 import ru.hse.database.entities.Chapter;
 import ru.hse.database.entities.Group;
 import ru.hse.database.entities.User;
@@ -17,7 +18,7 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 public class DaoGroup {
-
+    private static final int MAX_RESULTS = 20;
     static Logger logger = LoggerFactory.getLogger(DaoGroup.class);
     static public Group getGroupById(long id) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
@@ -36,6 +37,20 @@ public class DaoGroup {
 
             Query<Group> query = session.createQuery(criteria);
 
+            return query.getResultList();
+        }
+    }
+
+    static public List<Group> getGroupsByNamePrefix(String groupPrefix) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+            CriteriaQuery<Group> criteria = criteriaBuilder.createQuery(Group.class);
+
+            Root<Group> root = criteria.from(Group.class);
+
+            criteria.select(root).where(criteriaBuilder.like(root.get("groupName"), groupPrefix + "%"));
+            Query<Group> query = session.createQuery(criteria);
+            query.setMaxResults(MAX_RESULTS);
             return query.getResultList();
         }
     }
