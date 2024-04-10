@@ -37,7 +37,7 @@ public class GroupController {
         }
     }
 
-    @GetMapping(produces = {MediaType.APPLICATION_PROTOBUF_VALUE, MediaType.TEXT_PLAIN_VALUE})
+    @GetMapping(value = "/groupById", produces = {MediaType.APPLICATION_PROTOBUF_VALUE, MediaType.TEXT_PLAIN_VALUE})
     public ResponseEntity getGroup(@RequestParam Long id) {
         try {
             var group = groupService.findGroupById(id);
@@ -51,7 +51,7 @@ public class GroupController {
         }
     }
 
-    @GetMapping(produces = {MediaType.APPLICATION_PROTOBUF_VALUE, MediaType.TEXT_PLAIN_VALUE})
+    @GetMapping(value = "/groupByName",produces = {MediaType.APPLICATION_PROTOBUF_VALUE, MediaType.TEXT_PLAIN_VALUE})
     public ResponseEntity getGroupByName(@RequestParam String groupName) {
         try {
             var group = groupService.findGroupsByName(groupName);
@@ -62,7 +62,7 @@ public class GroupController {
         }
     }
 
-    @GetMapping(produces = {MediaType.APPLICATION_PROTOBUF_VALUE, MediaType.TEXT_PLAIN_VALUE})
+    @GetMapping(value = "/groupByPrefixName",produces = {MediaType.APPLICATION_PROTOBUF_VALUE, MediaType.TEXT_PLAIN_VALUE})
     public ResponseEntity getGroupByPrefixName(@RequestParam String groupName) {
         try {
             var group = groupService.findGroupsByPrefixOfName(groupName);
