@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.hse.database.entities.Group;
 import ru.hse.server.proto.EntitiesProto.GroupModel;
+import ru.hse.server.proto.EntitiesProto.GroupList;
 import ru.hse.server.repository.GroupRepository;
 import ru.hse.server.repository.UserRepository;
 import ru.hse.server.utils.ProtoSerializer;
@@ -56,6 +57,18 @@ public class GroupService {
             logger.error("group with id={} not found", id);
             throw new EntityNotFoundException("group with id=" + id + " does not exist");
         }
+    }
+
+    public GroupList findGroupsByName(String groupName) throws EntityNotFoundException {
+        var groups = groupRepository.findByName(groupName);
+        logger.debug("find groups with group name={}", groupName);
+        return ProtoSerializer.convertGroupsToProto(groups);
+    }
+
+    public GroupList findGroupsByPrefixOfName(String groupName) throws EntityNotFoundException {
+        var groups = groupRepository.findByPrefixName(groupName);
+        logger.debug("find groups with prefix group name={}", groupName);
+        return ProtoSerializer.convertGroupsToProto(groups);
     }
 
     public void deleteGroup(Long id) throws EntityNotFoundException {
