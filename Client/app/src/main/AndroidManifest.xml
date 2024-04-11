@@ -16,40 +16,48 @@
             tools:targetApi="31"
             android:usesCleartextTraffic="true">
         <activity
-                android:name=".SignUpActivity"
+                android:name=".auth.SignUpActivity"
                 android:exported="true"
-        >
+               >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
         <activity
-                android:name=".SignInActivity"
+                android:name=".auth.SignInActivity"
                 android:exported="true">
         </activity>
         <activity
-            android:name=".BaseActivity"
+            android:name=".main.BaseActivity"
             android:exported="true">
         </activity>
         <activity
-                android:name=".GroupsActivity"
+                android:name=".main.GroupsActivity"
                 android:exported="true">
         </activity>
         <activity
-                android:name=".ProfileActivity"
+                android:name=".main.ProfileActivity"
                 android:exported="true">
         </activity>
         <activity
-                android:name=".DeadlinesActivity"
+                android:name=".main.DeadlinesActivity"
                 android:exported="true">
         </activity>
         <activity
-            android:name=".Main.GroupSelectMenuActivity"
+            android:name=".main.DrawerBaseActivity"
             android:exported="true">
         </activity>
         <activity
-            android:name=".Main.GroupCreateActivity"
+                android:name=".main.MainActivity"
+                android:exported="true">
+        </activity>
+        <activity
+            android:name=".main.GroupSelectMenuActivity"
+            android:exported="true">
+        </activity>
+        <activity
+                android:name=".main.GroupCreateActivity"
             android:exported="true">
         </activity>
     </application>

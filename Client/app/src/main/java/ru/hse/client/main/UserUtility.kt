@@ -1,4 +1,4 @@
-package ru.hse.client
+package ru.hse.client.main
 
 import ru.hse.server.proto.EntitiesProto.GroupList
 import ru.hse.server.proto.EntitiesProto.GroupModel
