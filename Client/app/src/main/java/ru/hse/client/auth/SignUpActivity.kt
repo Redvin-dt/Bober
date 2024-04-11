@@ -1,6 +1,7 @@
-package ru.hse.client
+package ru.hse.client.auth
 
 import android.content.Intent
+import ru.hse.client.R
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -17,7 +18,7 @@ class SignUpActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.sign_up)
+        setContentView(R.layout.activity_sign_up)
 
         hideKeyboard()
 
