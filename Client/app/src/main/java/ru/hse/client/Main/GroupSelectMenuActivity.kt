@@ -2,6 +2,8 @@ package ru.hse.client.Main
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import android.widget.Button
 import android.widget.SimpleAdapter
 import androidx.core.content.ContextCompat
 import ru.hse.client.BaseActivity
@@ -17,10 +19,13 @@ class GroupSelectMenuActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = GroupSelectMenuBinding.inflate(layoutInflater)
-        setContentView(R.layout.group_select_menu)
+        setContentView(binding.root)
+
+        binding.createGroupButton.setOnClickListener {
+            onNewGroupPressed()
+        }
 
         createGroupList()
-        setNewGroupButton()
     }
 
     private fun createGroupList(){
@@ -44,13 +49,11 @@ class GroupSelectMenuActivity : BaseActivity() {
         binding.groupSearchList.adapter = adapter
     }
 
-    private fun setNewGroupButton() {
-        val button = binding.createGroupButton
 
-        button.setOnClickListener {
-            val intent = Intent(this@GroupSelectMenuActivity, GroupCreateActivity::class.java)
-            ContextCompat.startActivity(this@GroupSelectMenuActivity, intent, null)
-        }
+    private fun onNewGroupPressed() {
+        Log.i("button pressed", "create group button pressed")
+        val intent = Intent(this, GroupCreateActivity::class.java)
+        startActivity(intent)
     }
 
     companion object{

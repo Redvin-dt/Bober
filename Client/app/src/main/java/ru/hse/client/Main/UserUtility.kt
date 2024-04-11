@@ -17,10 +17,13 @@ class User {
         user = newUser
 
         if (newUser.hasUserOfGroups()) {
-            var groupListProto = newUser.userOfGroups
-
+            val groupListProto = newUser.userOfGroups
             groups = groupListProto.groupsList
         }
+    }
+
+    fun getUserModel(): UserModel? {
+        return user
     }
 
     fun isUserHasLogin(): Boolean {
