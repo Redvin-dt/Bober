@@ -18,6 +18,7 @@ import okhttp3.*
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okio.ByteString
+import ru.hse.client.Main.GroupSelectMenuActivity
 import ru.hse.server.proto.EntitiesProto.UserModel
 import java.io.IOException
 import java.util.regex.Matcher
@@ -170,8 +171,8 @@ fun printMessageFromBadResponse(message: CharSequence?, activity: Activity) {
 
 
 fun tryToLogInUser(
-    password: String,
     login: String,
+    password: String,
     activity: Activity,
     okHttpClient: OkHttpClient,
     loginLayout: TextInputLayout,
@@ -208,7 +209,7 @@ fun tryToLogInUser(
                     if (user_.passwordHash == password) {
                         printOkAboutGoodUser(activity)
                         user.setUser(user_)
-                        val intent = Intent(activity, GroupsActivity::class.java)
+                        val intent = Intent(activity, GroupSelectMenuActivity::class.java)
                         startActivity(activity, intent, null)
                     } else {
                         Log.e("Info", "no such login/password")
@@ -299,7 +300,7 @@ fun tryToRegisterUser(
                                 ).show()
                             }
                             user.setUser(registeredUser)
-                            val intent = Intent(activity, GroupsActivity::class.java)
+                            val intent = Intent(activity, GroupSelectMenuActivity::class.java)
                             startActivity(activity, intent, null)
                         }
                     }

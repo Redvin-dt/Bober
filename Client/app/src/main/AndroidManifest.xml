@@ -44,6 +44,10 @@
                 android:name=".DeadlinesActivity"
                 android:exported="true">
         </activity>
+        <activity
+            android:name=".Main.GroupSelectMenuActivity"
+            android:exported="true">
+        </activity>
     </application>
 
 </manifest>
