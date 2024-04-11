@@ -14,7 +14,15 @@
     <string name="forgot_password">Forgot password?</string>
     <string name="have_an_account">Have an account?</string>
     <string name="dont_have_an_account">Don\'t have an account?</string>
-    <string name="menu_profile">Profile\n</string>
+    <string name="menu_profile">Profile</string>
     <string name="menu_groups">Groups</string>
-    <string name="menu_deadlines">Deadlines\n</string>
+    <string name="menu_deadlines">Deadlines</string>
+    <string name="action_settings">Settings\n</string>
+    <string name="nav_header_photo">Navigation photo\n</string>
+    <string name="nav_header_first_name">First name\n</string>
+    <string name="nav_header_second_name">Second name\n</string>
+    <string name="nav_header_full_name">Full name</string>
+    <string name="nav_header_email_name">Email</string>
+    <string name="menu_drawer_open">Drawer open</string>
+    <string name="menu_drawer_close">Drawer close</string>
 </resources>
