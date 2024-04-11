@@ -1,4 +1,4 @@
-package ru.hse.client.Main
+package ru.hse.client.main
 
 import android.content.Intent
 import android.os.Bundle
@@ -20,14 +20,15 @@ import okio.ByteString
 import ru.hse.client.R
 import ru.hse.client.databinding.GroupCreateBinding
 import ru.hse.client.databinding.GroupSelectMenuBinding
-import ru.hse.client.isNotValidLogin
-import ru.hse.client.isNotValidPassword
-import ru.hse.client.writeErrorAboutLogin
-import ru.hse.client.writeErrorAboutPassword
+import ru.hse.client.auth.isNotValidLogin
+import ru.hse.client.auth.isNotValidPassword
+import ru.hse.client.auth.writeErrorAboutLogin
+import ru.hse.client.auth.writeErrorAboutPassword
+import ru.hse.client.main.GroupSelectMenuActivity
 import ru.hse.server.proto.EntitiesProto
 import ru.hse.server.proto.userModel
 
-import ru.hse.client.user
+import ru.hse.client.main.user
 import java.io.IOException
 
 class GroupCreateActivity : AppCompatActivity() {

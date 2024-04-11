@@ -1,4 +1,4 @@
-package ru.hse.client.Main
+package ru.hse.client.main
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,13 +6,14 @@ import android.util.Log
 import android.widget.Button
 import android.widget.SimpleAdapter
 import androidx.core.content.ContextCompat
-import ru.hse.client.BaseActivity
+import ru.hse.client.main.GroupCreateActivity
+import ru.hse.client.main.DrawerBaseActivity
 import ru.hse.client.R
-import ru.hse.client.databinding.BaseBinding
+import ru.hse.client.databinding.ActivityDrawerBaseBinding
 import ru.hse.client.databinding.GroupSelectMenuBinding
-import ru.hse.client.user
+import ru.hse.client.main.user
 
-class GroupSelectMenuActivity : BaseActivity() {
+class GroupSelectMenuActivity : DrawerBaseActivity() {
 
     private lateinit var binding: GroupSelectMenuBinding
 
@@ -20,6 +21,7 @@ class GroupSelectMenuActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = GroupSelectMenuBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        allocateActivityTitle("Groups")
 
         binding.createGroupButton.setOnClickListener {
             onNewGroupPressed()

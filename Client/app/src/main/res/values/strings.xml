@@ -9,16 +9,24 @@
     <string name="email">"Email"</string>
     <string name="registration_text">Register your account</string>
     <string name="password_confirm">Confirm password</string>
-    <string name="IP">192.168.0.106:8080</string>
+    <string name="IP">192.168.0.107:8080</string>
     <string name="log_in_text">Log in to your account</string>
     <string name="forgot_password">Forgot password?</string>
     <string name="have_an_account">Have an account?</string>
     <string name="dont_have_an_account">Don\'t have an account?</string>
-    <string name="menu_profile">Profile\n</string>
+    <string name="menu_profile">Profile</string>
     <string name="menu_groups">Groups</string>
-    <string name="menu_deadlines">Deadlines\n</string>
+    <string name="menu_deadlines">Deadlines</string>
     <string name="create_group">New group</string>
     <string name="create">Create</string>
     <string name="group_name">Group name</string>
     <string name="group_creation_text">Create new group</string>
+    <string name="action_settings">Settings\n</string>
+    <string name="nav_header_photo">Navigation photo\n</string>
+    <string name="nav_header_first_name">First name\n</string>
+    <string name="nav_header_second_name">Second name\n</string>
+    <string name="nav_header_full_name">Full name</string>
+    <string name="nav_header_email_name">Email</string>
+    <string name="menu_drawer_open">Drawer open</string>
+    <string name="menu_drawer_close">Drawer close</string>
 </resources>
