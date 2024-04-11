@@ -14,4 +14,7 @@
     <string name="forgot_password">Forgot password?</string>
     <string name="have_an_account">Have an account?</string>
     <string name="dont_have_an_account">Don\'t have an account?</string>
+    <string name="menu_profile">Profile\n</string>
+    <string name="menu_groups">Groups</string>
+    <string name="menu_deadlines">Deadlines\n</string>
 </resources>

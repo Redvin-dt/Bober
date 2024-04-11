@@ -2,6 +2,7 @@ package ru.hse.client
 
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
@@ -10,6 +11,7 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.core.content.ContextCompat.getString
+import androidx.core.content.ContextCompat.startActivity
 import androidx.fragment.app.Fragment
 import com.google.android.material.textfield.TextInputLayout
 import okhttp3.*
@@ -200,12 +202,14 @@ fun tryToLogInUser(
             Log.i("Info", response.toString())
             if (response.isSuccessful) {
                 val responseBody: ByteString? = response.body?.byteString()
-                val user: UserModel =
+                val user_: UserModel =
                     UserModel.parseFrom(responseBody?.toByteArray())
-                if (user.hasPasswordHash()) {
-                    if (user.passwordHash == password) {
+                if (user_.hasPasswordHash()) {
+                    if (user_.passwordHash == password) {
                         printOkAboutGoodUser(activity)
-                        // TODO: create main Activity
+                        user.setUser(user_)
+                        val intent = Intent(activity, GroupsActivity::class.java)
+                        startActivity(activity, intent, null)
                     } else {
                         Log.e("Info", "no such login/password")
                         printErrorAboutBadUser(activity, loginLayout, passwordLayout)
@@ -237,10 +241,10 @@ fun tryToRegisterUser(
             ?.build()
             .toString()
 
-    val user: UserModel =
+    val user_: UserModel =
         UserModel.newBuilder().setLogin(login).setEmail(email).setPasswordHash(password).build()
     val requestBody: RequestBody =
-        RequestBody.create("application/x-protobuf".toMediaTypeOrNull(), user.toByteArray())
+        RequestBody.create("application/x-protobuf".toMediaTypeOrNull(), user_.toByteArray())
 
     val requestForRegisterUser: Request = Request.Builder()
         .url(URlRegistration)
@@ -294,7 +298,9 @@ fun tryToRegisterUser(
                                     Toast.LENGTH_SHORT
                                 ).show()
                             }
-                            // TODO: create main Activity
+                            user.setUser(registeredUser)
+                            val intent = Intent(activity, GroupsActivity::class.java)
+                            startActivity(activity, intent, null)
                         }
                     }
                 })

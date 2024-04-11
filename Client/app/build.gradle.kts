@@ -51,6 +51,10 @@ android {
         jvmTarget = "17"
     }
 
+    buildFeatures {
+        viewBinding = true
+    }
+
     sourceSets.onEach {
         it.java.srcDir("src/${it.name}/kotlin")
     }
@@ -64,6 +68,7 @@ android {
             }
         }
     }
+
 }
 
 protobuf {

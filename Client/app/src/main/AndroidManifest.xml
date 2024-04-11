@@ -28,6 +28,22 @@
                 android:name=".SignInActivity"
                 android:exported="true">
         </activity>
+        <activity
+            android:name=".BaseActivity"
+            android:exported="true">
+        </activity>
+        <activity
+                android:name=".GroupsActivity"
+                android:exported="true">
+        </activity>
+        <activity
+                android:name=".ProfileActivity"
+                android:exported="true">
+        </activity>
+        <activity
+                android:name=".DeadlinesActivity"
+                android:exported="true">
+        </activity>
     </application>
 
 </manifest>
