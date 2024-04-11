@@ -7,7 +7,7 @@
     android:orientation="vertical">
 
     <android.widget.SearchView
-        android:id="@+id/groupSearchView"
+        android:id="@+id/group_search_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:iconifiedByDefault="false"
@@ -17,13 +17,13 @@
         />
 
     <ListView
-        android:id="@+id/groupSearchList"
+        android:id="@+id/group_search_list"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_weight="1" />
 
     <Button
-        android:id="@+id/createGroupButton"
+        android:id="@+id/create_group_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
