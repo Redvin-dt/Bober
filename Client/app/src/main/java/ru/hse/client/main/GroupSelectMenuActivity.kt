@@ -2,16 +2,14 @@ package ru.hse.client.main
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
-import android.widget.Button
+import android.widget.AdapterView
 import android.widget.SimpleAdapter
-import androidx.core.content.ContextCompat
-import ru.hse.client.main.GroupCreateActivity
-import ru.hse.client.main.DrawerBaseActivity
-import ru.hse.client.R
-import ru.hse.client.databinding.ActivityDrawerBaseBinding
+
+import android.widget.Toast
 import ru.hse.client.databinding.GroupSelectMenuBinding
-import ru.hse.client.main.user
 
 class GroupSelectMenuActivity : DrawerBaseActivity() {
 
@@ -31,13 +29,14 @@ class GroupSelectMenuActivity : DrawerBaseActivity() {
     }
 
     private fun createGroupList(){
-        var data : MutableList<Map<String, String>> = mutableListOf()
+        val data : MutableList<Map<String, String>> = mutableListOf()
+        val userGroups = user.getUserGroups()
 
-        for (group in user.getUserGroups()) {
+        for (group in userGroups) {
             data.add(mapOf(
                     KEY_TITLE to group.name,
-                    KEY_ADMIN to group.admin.login
-            )
+                    KEY_ADMIN to group.admin.login,
+                    )
             )
         }
 
@@ -49,6 +48,36 @@ class GroupSelectMenuActivity : DrawerBaseActivity() {
                 intArrayOf(android.R.id.text1, android.R.id.text2)
         )
         binding.groupSearchList.adapter = adapter
+
+        binding.groupSearchList.onItemClickListener = AdapterView.OnItemClickListener {parent, view, position, id ->
+            val group = userGroups[position];
+            val groupName = data[position][KEY_TITLE];
+
+            if (groupName != group.name) {
+                Log.e("GroupSelectMenu", "can not open group, group name and position mismatch")
+                Handler(Looper.getMainLooper()).post {
+                    Toast.makeText(this, "Ops, something went wrong", Toast.LENGTH_SHORT).show()
+                }
+                return@OnItemClickListener
+            }
+
+            val intent = Intent(this, GroupSelectMenuBinding::class.java) // TODO: set new class
+            val bundle = Bundle()
+            bundle.putSerializable("group", group)
+            intent.putExtras(bundle)
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            startActivity(intent)
+            finish()
+
+            // Possible code in activity
+            //val bundle = getIntent().extras
+            //var group EntitiesProto.GroupModel // or other values
+
+
+            //if (bundle != null)
+            // group = bundle.getSerializable("group")
+            // TODO: remove
+        }
     }
 
 
