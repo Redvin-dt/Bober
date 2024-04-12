@@ -36,7 +36,7 @@ public class UserControllerTests {
 
     @BeforeEach
     public void generateUser() throws Exception {
-        user = UserModel.newBuilder().setId(1).setLogin("admin").setPasswordHash("admin").build();
+        user = UserModel.newBuilder().setId(1).setLogin("admin").setEmail("admin@yandex.ru").setPasswordHash("admin").build();
     }
 
     @Test
