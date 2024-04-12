@@ -29,10 +29,6 @@
                 android:exported="true">
         </activity>
         <activity
-            android:name=".main.BaseActivity"
-            android:exported="true">
-        </activity>
-        <activity
                 android:name=".main.GroupsActivity"
                 android:exported="true">
         </activity>
