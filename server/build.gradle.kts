@@ -1,15 +1,18 @@
 plugins {
-    java
     id("org.springframework.boot") version "3.2.2"
     id("io.spring.dependency-management") version "1.1.4"
     id("com.google.protobuf") version "0.9.4"
+    application
+    java
 }
 
 group = "ru.hse"
 version = "0.0.1-SNAPSHOT"
 
+
 java {
     sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
 }
 
 repositories {
@@ -56,6 +59,12 @@ protobuf {
     }
 }
 
+
+
+application {
+    mainClass = "ru/hse/server/ServerApplication"
+}
+
 sourceSets {
     main {
         proto {
@@ -73,3 +82,6 @@ sourceSets {
         }
     }
 }
+
+
+
