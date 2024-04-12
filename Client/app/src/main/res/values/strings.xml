@@ -17,6 +17,10 @@
     <string name="menu_profile">Profile</string>
     <string name="menu_groups">Groups</string>
     <string name="menu_deadlines">Deadlines</string>
+    <string name="create_group">New group</string>
+    <string name="create">Create</string>
+    <string name="group_name">Group name</string>
+    <string name="group_creation_text">Create new group</string>
     <string name="action_settings">Settings\n</string>
     <string name="nav_header_photo">Navigation photo\n</string>
     <string name="nav_header_first_name">First name\n</string>

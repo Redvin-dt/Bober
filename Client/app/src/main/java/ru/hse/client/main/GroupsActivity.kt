@@ -7,7 +7,7 @@ import ru.hse.client.databinding.ActivityGroupsBinding
 
 class GroupsActivity: DrawerBaseActivity() {
 
-    lateinit var binding: ActivityGroupsBinding
+    private lateinit var binding: ActivityGroupsBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityGroupsBinding.inflate(layoutInflater)
