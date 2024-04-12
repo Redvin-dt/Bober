@@ -17,7 +17,7 @@ import java.util.List;
 public class ProtoSerializer {
     static public GroupModel getGroupInfo(Group group) {
         return GroupModel.newBuilder()
-                .setId(group.getGroupId())
+                .setId(group.getGroupId()) // TODOOOOOO WHERE ADMIN
                 .setName(group.getGroupName())
                 .setPasswordHash(group.getPasswordHash())
                 .setMetaInfo(group.getMetaInfo())
