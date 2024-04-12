@@ -26,6 +26,11 @@ class GroupActivity: DrawerBaseActivity() {
         } else {
             Log.e("ERROR", "ERROR")
         }
+
+        allocateActivityTitle(group!!.name.toString())
+
+        binding.groupLabel.text = "Group label: " + group!!.name.toString()
+        binding.groupAdmin.text = "Group admin: " + group.admin.login.toString()
     }
 
 }

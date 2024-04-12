@@ -68,7 +68,6 @@ class GroupSelectMenuActivity : DrawerBaseActivity() {
         }
         binding.groupSearchList.adapter = adapter
 
-
         binding.groupSearchList.onItemClickListener = AdapterView.OnItemClickListener {parent, view, position, id ->
             val group = userGroups[position];
             val groupName = data[position][KEY_TITLE];
