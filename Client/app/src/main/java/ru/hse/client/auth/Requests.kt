@@ -108,6 +108,7 @@ fun tryToLogInUser(
                         printOkAboutGoodUser(activity)
                         user.setUser(user_)
                         val intent = Intent(activity, GroupSelectMenuActivity::class.java)
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                         startActivity(activity, intent, null)
                     } else {
                         Log.e("Info", "no such login/password")
@@ -187,7 +188,7 @@ fun tryToRegisterUser(
 
                     override fun onResponse(call: Call, response: Response) {
                         Log.i("Info", response.toString())
-                        if (response.code == 200) {
+                        if (response.isSuccessful) {
                             val responseBody: ByteString? = response.body?.byteString()
                             val registeredUser: EntitiesProto.UserModel = EntitiesProto.UserModel.parseFrom(responseBody?.toByteArray())
                             Handler(Looper.getMainLooper()).post {
@@ -199,6 +200,7 @@ fun tryToRegisterUser(
                             }
                             user.setUser(registeredUser)
                             val intent = Intent(activity, GroupSelectMenuActivity::class.java)
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                             startActivity(activity, intent, null)
                         }
                     }
