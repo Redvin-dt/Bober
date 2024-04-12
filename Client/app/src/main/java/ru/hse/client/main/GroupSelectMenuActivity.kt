@@ -7,17 +7,16 @@ import android.os.Looper
 import android.util.Log
 import android.widget.AdapterView
 import android.widget.SimpleAdapter
-
 import android.widget.Toast
-import ru.hse.client.databinding.GroupSelectMenuBinding
+import ru.hse.client.databinding.ActivityGroupSelectMenuBinding
 
 class GroupSelectMenuActivity : DrawerBaseActivity() {
 
-    private lateinit var binding: GroupSelectMenuBinding
+    private lateinit var binding: ActivityGroupSelectMenuBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = GroupSelectMenuBinding.inflate(layoutInflater)
+        binding = ActivityGroupSelectMenuBinding.inflate(layoutInflater)
         setContentView(binding.root)
         allocateActivityTitle("Groups")
 
@@ -34,18 +33,18 @@ class GroupSelectMenuActivity : DrawerBaseActivity() {
 
         for (group in userGroups) {
             data.add(mapOf(
-                    KEY_TITLE to group.name,
-                    KEY_ADMIN to group.admin.login,
+                        KEY_TITLE to group.name,
+                        KEY_ADMIN to group.admin.login,
                     )
             )
         }
 
         val adapter = SimpleAdapter(
-                this,
-                data,
-                android.R.layout.simple_list_item_2,
-                arrayOf(KEY_TITLE, KEY_ADMIN),
-                intArrayOf(android.R.id.text1, android.R.id.text2)
+            this,
+            data,
+            android.R.layout.simple_list_item_2,
+            arrayOf(KEY_TITLE, KEY_ADMIN),
+            intArrayOf(android.R.id.text1, android.R.id.text2)
         )
         binding.groupSearchList.adapter = adapter
 
@@ -61,7 +60,7 @@ class GroupSelectMenuActivity : DrawerBaseActivity() {
                 return@OnItemClickListener
             }
 
-            val intent = Intent(this, GroupSelectMenuBinding::class.java) // TODO: set new class
+            val intent = Intent(this, ActivityGroupSelectMenuBinding::class.java) // TODO: set new class
             val bundle = Bundle()
             bundle.putSerializable("group", group)
             intent.putExtras(bundle)
@@ -80,15 +79,18 @@ class GroupSelectMenuActivity : DrawerBaseActivity() {
         }
     }
 
-
     private fun onNewGroupPressed() {
         Log.i("button pressed", "create group button pressed")
         val intent = Intent(this, GroupCreateActivity::class.java)
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         startActivity(intent)
+        finish()
     }
 
-    companion object{
-        @JvmStatic val KEY_TITLE = "title"
-        @JvmStatic val KEY_ADMIN = "admin"
+    companion object {
+        @JvmStatic
+        val KEY_TITLE = "title"
+        @JvmStatic
+        val KEY_ADMIN = "admin"
     }
 }
