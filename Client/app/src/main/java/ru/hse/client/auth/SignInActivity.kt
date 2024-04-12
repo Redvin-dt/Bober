@@ -1,4 +1,4 @@
-package ru.hse.client
+package ru.hse.client.auth
 
 import android.content.Intent
 import android.os.Bundle
@@ -11,13 +11,14 @@ import androidx.core.content.ContextCompat
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import okhttp3.*
+import ru.hse.client.R
 
 
 class SignInActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.sign_in)
+        setContentView(R.layout.activity_sign_in)
 
         val okHttpClient = OkHttpClient()
 
@@ -40,7 +41,6 @@ class SignInActivity : AppCompatActivity() {
                 if (isNotValidLogin(newText)) {
                     loginLayout.error = "Unacceptable symbols in login"
                 } else {
-                    // TODO: get login from db and check
                     loginLayout.boxStrokeColor =
                         ContextCompat.getColor(this@SignInActivity, R.color.green)
                     loginLayout.error = null
@@ -69,7 +69,9 @@ class SignInActivity : AppCompatActivity() {
                 if (isNotValidPassword(passwordOriginal)) {
                     passwordLayout.error = "Incorrect password"
                 } else {
-                    passwordLayout.boxStrokeColor = ContextCompat.getColor(this@SignInActivity, R.color.green)
+                    passwordLayout.boxStrokeColor = ContextCompat.getColor(this@SignInActivity,
+                        R.color.green
+                    )
                     passwordLayout.error = null
                 }
             }
