@@ -1,14 +1,18 @@
 package ru.hse.client.main
 
+import android.R
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import android.widget.AdapterView
-import android.widget.SimpleAdapter
-import android.widget.Toast
+import android.view.View
+import android.view.ViewGroup
+import android.widget.*
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import ru.hse.client.databinding.ActivityGroupSelectMenuBinding
+
 
 class GroupSelectMenuActivity : DrawerBaseActivity() {
 
@@ -24,8 +28,17 @@ class GroupSelectMenuActivity : DrawerBaseActivity() {
             onNewGroupPressed()
         }
 
+
+        val swipeRefreshLayout: SwipeRefreshLayout = binding.swipeRefreshLayout
+        swipeRefreshLayout.setOnRefreshListener {
+            user.updateUser(this)
+            createGroupList()
+            swipeRefreshLayout.isRefreshing = false
+        }
+
         createGroupList()
     }
+
 
     private fun createGroupList(){
         val data : MutableList<Map<String, String>> = mutableListOf()
@@ -39,14 +52,22 @@ class GroupSelectMenuActivity : DrawerBaseActivity() {
             )
         }
 
-        val adapter = SimpleAdapter(
+        val adapter = object: SimpleAdapter(
             this,
             data,
-            android.R.layout.simple_list_item_2,
+            R.layout.simple_list_item_2,
             arrayOf(KEY_TITLE, KEY_ADMIN),
-            intArrayOf(android.R.id.text1, android.R.id.text2)
-        )
+            intArrayOf(R.id.text1, R.id.text2)
+        ) {
+            override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+                val view = super.getView(position, convertView, parent)
+                val text1 = view.findViewById<TextView>(android.R.id.text1)
+                text1.setTextColor(Color.BLACK)
+                return view
+            }
+        }
         binding.groupSearchList.adapter = adapter
+
 
         binding.groupSearchList.onItemClickListener = AdapterView.OnItemClickListener {parent, view, position, id ->
             val group = userGroups[position];
@@ -60,24 +81,17 @@ class GroupSelectMenuActivity : DrawerBaseActivity() {
                 return@OnItemClickListener
             }
 
-            val intent = Intent(this, ActivityGroupSelectMenuBinding::class.java) // TODO: set new class
+            val intent = Intent(this, GroupActivity::class.java)
             val bundle = Bundle()
             bundle.putSerializable("group", group)
             intent.putExtras(bundle)
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             startActivity(intent)
             finish()
-
-            // Possible code in activity
-            //val bundle = getIntent().extras
-            //var group EntitiesProto.GroupModel // or other values
-
-
-            //if (bundle != null)
-            // group = bundle.getSerializable("group")
-            // TODO: remove
         }
+
     }
+
 
     private fun onNewGroupPressed() {
         Log.i("button pressed", "create group button pressed")

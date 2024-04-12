@@ -62,7 +62,7 @@ class User {
         return groups
     }
 
-    fun setUserByLogin(activity: Activity, login: String) {
+    private fun setUserByLogin(activity: Activity, login: String) {
         val URlGetUser: String =
             ("http://" + ContextCompat.getString(activity, R.string.IP) + "/users/userByLogin").toHttpUrlOrNull()
                 ?.newBuilder()
