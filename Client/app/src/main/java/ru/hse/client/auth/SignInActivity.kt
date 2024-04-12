@@ -41,7 +41,6 @@ class SignInActivity : AppCompatActivity() {
                 if (isNotValidLogin(newText)) {
                     loginLayout.error = "Unacceptable symbols in login"
                 } else {
-                    // TODO: get login from db and check
                     loginLayout.boxStrokeColor =
                         ContextCompat.getColor(this@SignInActivity, R.color.green)
                     loginLayout.error = null

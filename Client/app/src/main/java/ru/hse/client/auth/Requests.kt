@@ -7,11 +7,14 @@ import android.os.Looper
 import android.util.Log
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.startActivity
 import com.google.android.material.textfield.TextInputLayout
 import okhttp3.*
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okio.ByteString
+import ru.hse.client.main.GroupSelectMenuActivity
+import ru.hse.server.proto.EntitiesProto.UserModel
 import ru.hse.server.proto.EntitiesProto
 import java.io.IOException
 import ru.hse.client.R
@@ -66,8 +69,8 @@ fun printMessageFromBadResponse(message: CharSequence?, activity: Activity) {
 
 
 fun tryToLogInUser(
-    password: String,
     login: String,
+    password: String,
     activity: Activity,
     okHttpClient: OkHttpClient,
     loginLayout: TextInputLayout,
@@ -104,8 +107,9 @@ fun tryToLogInUser(
                     if (user_.passwordHash == password) {
                         printOkAboutGoodUser(activity)
                         user.setUser(user_)
-                        val intent = Intent(activity, GroupsActivity::class.java)
-                        ContextCompat.startActivity(activity, intent, null)
+                        val intent = Intent(activity, GroupSelectMenuActivity::class.java)
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                        startActivity(activity, intent, null)
                     } else {
                         Log.e("Info", "no such login/password")
                         printErrorAboutBadUser(activity, loginLayout, passwordLayout)
@@ -184,7 +188,7 @@ fun tryToRegisterUser(
 
                     override fun onResponse(call: Call, response: Response) {
                         Log.i("Info", response.toString())
-                        if (response.code == 200) {
+                        if (response.isSuccessful) {
                             val responseBody: ByteString? = response.body?.byteString()
                             val registeredUser: EntitiesProto.UserModel = EntitiesProto.UserModel.parseFrom(responseBody?.toByteArray())
                             Handler(Looper.getMainLooper()).post {
@@ -195,8 +199,9 @@ fun tryToRegisterUser(
                                 ).show()
                             }
                             user.setUser(registeredUser)
-                            val intent = Intent(activity, GroupsActivity::class.java)
-                            ContextCompat.startActivity(activity, intent, null)
+                            val intent = Intent(activity, GroupSelectMenuActivity::class.java)
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                            startActivity(activity, intent, null)
                         }
                     }
                 })

@@ -41,7 +41,7 @@ open class DrawerBaseActivity: AppCompatActivity(), NavigationView.OnNavigationI
 
         when (item.itemId) {
             R.id.nav_groups -> {
-                val intent = Intent(this, GroupsActivity::class.java)
+                val intent = Intent(this, GroupSelectMenuActivity::class.java)
                 startActivity(intent)
                 overridePendingTransition(0, 0)
             }
