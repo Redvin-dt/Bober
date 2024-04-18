@@ -30,7 +30,7 @@ class GroupActivity: DrawerBaseActivity() {
         allocateActivityTitle(group!!.name.toString())
 
         binding.groupLabel.text = "Group label: " + group!!.name.toString()
-        binding.groupAdmin.text = "Group admin: " + group.admin.login.toString()
+        binding.groupAdmin.text = "Group admin: " + " test"
     }
 
 }

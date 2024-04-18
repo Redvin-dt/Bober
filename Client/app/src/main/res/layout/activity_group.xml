@@ -35,4 +35,34 @@
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintVertical_bias="0.12"/>
 
+    <TextView
+            android:id="@+id/group_chapters"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="textStart"
+            android:textSize="20sp"
+            android:textColor="@color/black"
+            android:text="Chapters:"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintVertical_bias="0.17"/>
+
+
+    <ListView
+            android:id="@+id/group_list_chapters"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintTop_toBottomOf="@id/group_chapters"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:divider="@color/black"
+            android:dividerHeight="2dp"
+            android:background="@drawable/list_view_border"
+    />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
