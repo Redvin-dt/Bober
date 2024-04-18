@@ -17,10 +17,11 @@ import java.util.List;
 public class ProtoSerializer {
     static public GroupModel getGroupInfo(Group group) {
         return GroupModel.newBuilder()
-                .setId(group.getGroupId()) // TODOOOOOO WHERE ADMIN
+                .setId(group.getGroupId())
                 .setName(group.getGroupName())
                 .setPasswordHash(group.getPasswordHash())
                 .setMetaInfo(group.getMetaInfo())
+                .setAdmin(getUserInfo(group.getAdmin()))
                 .build();
     }
 
