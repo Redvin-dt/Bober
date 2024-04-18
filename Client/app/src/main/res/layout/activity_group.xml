@@ -21,6 +21,7 @@
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintVertical_bias="0.05"/>
 
+    
     <TextView
             android:id="@+id/group_admin"
             android:layout_width="match_parent"
