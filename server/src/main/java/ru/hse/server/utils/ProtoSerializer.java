@@ -31,7 +31,6 @@ public class ProtoSerializer {
                 .setLogin(user.getUserLogin())
                 .setEmail(user.getUserEmail())
                 .setPasswordHash(user.getPasswordHash())
-                .setPasswordSalt(user.getPasswordSalt())
                 .setMetaInfo(user.getMetaInfo())
                 .build();
     }
@@ -80,7 +79,6 @@ public class ProtoSerializer {
                 .setLogin(user.getUserLogin())
                 .setEmail(user.getUserEmail())
                 .setPasswordHash(user.getPasswordHash())
-                .setPasswordSalt(user.getPasswordSalt())
                 .setMetaInfo(user.getMetaInfo())
                 .setAdminOfGroups(convertGroupsToProto(DaoUser.getGroupsByAdmin(user)))
                 .setUserOfGroups(convertGroupsToProto(new ArrayList<>(DaoUser.getGroupsOfUser(user))))

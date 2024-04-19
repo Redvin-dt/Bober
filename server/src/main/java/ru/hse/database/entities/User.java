@@ -45,11 +45,10 @@ public class User {
     public User() {
     }
 
-    public User(String login, String email, String passwordHash, String passwordSalt) {
+    public User(String login, String email, String passwordHash) {
         this.userLogin = login;
         this.userEmail = email;
         this.passwordHash = passwordHash;
-        this.passwordSalt = passwordSalt;
     }
 
     @Override

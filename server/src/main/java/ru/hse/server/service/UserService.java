@@ -26,7 +26,7 @@ public class UserService {
 
     public UserModel registration(UserModel userInfo) throws EntityExistsException,
             InvalidProtocolBufferException {
-        if (!userInfo.hasLogin() || !userInfo.hasPasswordHash() || !userInfo.hasEmail() || !userInfo.hasPasswordSalt()) {
+        if (!userInfo.hasLogin() || !userInfo.hasPasswordHash() || !userInfo.hasEmail()) {
             throw new InvalidProtocolBufferException("user info should have field login and password");
         }
         if (userRepository.findByUserLogin(userInfo.getLogin()) != null) {
@@ -35,7 +35,7 @@ public class UserService {
         if (userRepository.findByUserEmail(userInfo.getEmail()) != null) {
             throw new EntityExistsException("user with that email already exist");
         }
-        var user = new User(userInfo.getLogin(), userInfo.getEmail(), userInfo.getPasswordHash(), userInfo.getPasswordSalt());
+        var user = new User(userInfo.getLogin(), userInfo.getEmail(), userInfo.getPasswordHash());
         userRepository.save(user);
         return ProtoSerializer.getUserInfo(user);
     }
