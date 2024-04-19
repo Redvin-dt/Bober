@@ -7,13 +7,15 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import java.security.SecureRandom
+import java.io.IOException
 import java.security.spec.KeySpec
+import java.util.*
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 import javax.crypto.SecretKey
 import javax.crypto.SecretKeyFactory
 import javax.crypto.spec.PBEKeySpec
+
 
 fun isNotValidEmail(target: CharSequence?): Boolean {
     return if (target == null) {
@@ -125,24 +127,27 @@ fun Context.hideKeyboard(view: View) {
     inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
 }
 
-private const val ALGORITHM = "PBKDF2WithHmacSHA512"
-private const val ITERATIONS = 12000
-private const val KEY_LENGTH = 256
-private const val SECRET = "BOBER9107814265"
+object Util {
+    @Throws(IOException::class)
+    fun getProperty(key: String?, context: Context): String {
+        val properties: Properties = Properties()
 
-@OptIn(ExperimentalStdlibApi::class)
-fun generateRandomSalt(): String {
-    val random = SecureRandom()
-    val salt = ByteArray(32)
-    random.nextBytes(salt)
-    return salt.toHexString();
+        val assetManager = context.assets
+        val inputStream = assetManager.open("app.properties")
+        properties.load(inputStream)
+        return properties.getProperty(key)
+    }
 }
 
 @OptIn(ExperimentalStdlibApi::class)
-fun generateHash(password: String, salt: String): String {
-    val combinedSalt = "$salt$SECRET".toByteArray()
-    val factory: SecretKeyFactory = SecretKeyFactory.getInstance(ALGORITHM)
-    val spec: KeySpec = PBEKeySpec(password.toCharArray(), combinedSalt, ITERATIONS, KEY_LENGTH)
+fun generateHash(password: String, context: Context): String {
+    val secretKey = Util.getProperty("SECRET_KEY", context)
+    val algorithm = Util.getProperty("ALGORITHM", context)
+    val iterations = Util.getProperty("ITERATIONS", context).toInt()
+    val keyLength = Util.getProperty("KEY_LENGTH", context).toInt()
+    val combined = secretKey.toByteArray()
+    val factory: SecretKeyFactory = SecretKeyFactory.getInstance(algorithm)
+    val spec: KeySpec = PBEKeySpec(password.toCharArray(), combined, iterations, keyLength)
     val key: SecretKey = factory.generateSecret(spec)
     val hash: ByteArray = key.encoded
     return hash.toHexString()

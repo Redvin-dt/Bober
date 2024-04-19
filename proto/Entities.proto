@@ -41,11 +41,10 @@ message UserModel {
   optional string login = 2;
   optional string passwordHash = 3;
   optional string email = 4;
-  optional string passwordSalt = 5;
 
-  optional string metaInfo = 6;
+  optional string metaInfo = 5;
 
-  optional GroupList adminOfGroups = 7;
-  optional GroupList userOfGroups = 8;
+  optional GroupList adminOfGroups = 6;
+  optional GroupList userOfGroups = 7;
 }
 
