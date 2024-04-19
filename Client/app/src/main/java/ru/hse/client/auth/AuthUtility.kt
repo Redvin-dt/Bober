@@ -7,8 +7,13 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import java.security.SecureRandom
+import java.security.spec.KeySpec
 import java.util.regex.Matcher
 import java.util.regex.Pattern
+import javax.crypto.SecretKey
+import javax.crypto.SecretKeyFactory
+import javax.crypto.spec.PBEKeySpec
 
 fun isNotValidEmail(target: CharSequence?): Boolean {
     return if (target == null) {
@@ -118,5 +123,28 @@ fun Activity.hideKeyboard() {
 fun Context.hideKeyboard(view: View) {
     val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
     inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+}
+
+private const val ALGORITHM = "PBKDF2WithHmacSHA512"
+private const val ITERATIONS = 12000
+private const val KEY_LENGTH = 256
+private const val SECRET = "BOBER9107814265"
+
+@OptIn(ExperimentalStdlibApi::class)
+fun generateRandomSalt(): String {
+    val random = SecureRandom()
+    val salt = ByteArray(32)
+    random.nextBytes(salt)
+    return salt.toHexString();
+}
+
+@OptIn(ExperimentalStdlibApi::class)
+fun generateHash(password: String, salt: String): String {
+    val combinedSalt = "$salt$SECRET".toByteArray()
+    val factory: SecretKeyFactory = SecretKeyFactory.getInstance(ALGORITHM)
+    val spec: KeySpec = PBEKeySpec(password.toCharArray(), combinedSalt, ITERATIONS, KEY_LENGTH)
+    val key: SecretKey = factory.generateSecret(spec)
+    val hash: ByteArray = key.encoded
+    return hash.toHexString()
 }
 

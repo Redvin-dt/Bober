@@ -101,5 +101,7 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.9.8")
     implementation("com.google.protobuf:protobuf-kotlin:3.19.4")
+    implementation("org.bouncycastle:bcpkix-jdk15to18:1.68")
+    implementation("org.bouncycastle:bcprov-jdk15to18:1.68")
 }
 
