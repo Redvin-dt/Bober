@@ -103,8 +103,8 @@ fun tryToLogInUser(
                 val responseBody: ByteString? = response.body?.byteString()
                 val user_: EntitiesProto.UserModel =
                     EntitiesProto.UserModel.parseFrom(responseBody?.toByteArray())
-                if (user_.hasPasswordHash()) {
-                    if (user_.passwordHash == password) {
+                if (user_.hasPasswordHash() && user_.hasPasswordSalt()) {
+                    if (user_.passwordHash == generateHash(password, user_.passwordSalt)) {
                         printOkAboutGoodUser(activity)
                         user.setUser(user_)
                         val intent = Intent(activity, GroupSelectMenuActivity::class.java)
@@ -135,6 +135,9 @@ fun tryToRegisterUser(
     loginLayout: TextInputLayout,
     emailLayout: TextInputLayout
 ) {
+    val salt: String = generateRandomSalt()
+    val passwordHash: String = generateHash(password, salt)
+
     val URlRegistration: String =
         ("http://" + ContextCompat.getString(activity, R.string.IP) + "/users/registration").toHttpUrlOrNull()
             ?.newBuilder()
@@ -142,7 +145,7 @@ fun tryToRegisterUser(
             .toString()
 
     val user_: EntitiesProto.UserModel =
-        EntitiesProto.UserModel.newBuilder().setLogin(login).setEmail(email).setPasswordHash(password).build()
+        EntitiesProto.UserModel.newBuilder().setLogin(login).setEmail(email).setPasswordHash(passwordHash).setPasswordSalt(salt).build()
     val requestBody: RequestBody =
         RequestBody.create("application/x-protobuf".toMediaTypeOrNull(), user_.toByteArray())
 

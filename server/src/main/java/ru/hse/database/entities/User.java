@@ -29,6 +29,9 @@ public class User {
     @Column(name = "password")
     private String passwordHash;
 
+    @Column(name = "passwordSalt")
+    private String passwordSalt;
+
     @Column(name = "meta_info")
     private String metaInfo = "";
 
@@ -42,10 +45,11 @@ public class User {
     public User() {
     }
 
-    public User(String login, String email, String passwordHash) {
+    public User(String login, String email, String passwordHash, String passwordSalt) {
         this.userLogin = login;
         this.userEmail = email;
         this.passwordHash = passwordHash;
+        this.passwordSalt = passwordSalt;
     }
 
     @Override
