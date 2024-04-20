@@ -44,6 +44,11 @@
         <item name="android:layout_marginRight">10dp</item>
         <item name="android:background">@color/green</item>
     </style>
+    
+    <style name="roundImage">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
 
 
 </resources>
