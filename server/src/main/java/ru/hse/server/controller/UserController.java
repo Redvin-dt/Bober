@@ -1,6 +1,10 @@
 package ru.hse.server.controller;
 
+import jakarta.security.auth.message.AuthException;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.client.HttpClientErrorException;
 import ru.hse.server.proto.EntitiesProto.UserModel;
+import ru.hse.server.service.AuthService;
 import ru.hse.server.service.UserService;
 
 import com.google.protobuf.InvalidProtocolBufferException;
@@ -16,29 +20,42 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/users")
 public class UserController {
+    final static private int UNAUTHORIZED_STATUS = 401;
 
     static Logger logger = LoggerFactory.getLogger(UserController.class);
 
-    UserService userService;
+    private final UserService userService;
+    private final AuthService authService;
 
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
-
-    @PostMapping(value = "/registration", consumes = {MediaType.APPLICATION_PROTOBUF_VALUE, MediaType.APPLICATION_OCTET_STREAM_VALUE})
-    public ResponseEntity postUser(@RequestBody UserModel user) {
+    @PostMapping(value = "/registration", consumes = {MediaType.APPLICATION_PROTOBUF_VALUE, MediaType.APPLICATION_OCTET_STREAM_VALUE}, produces = {MediaType.APPLICATION_PROTOBUF_VALUE})
+    public ResponseEntity registrationUser(@RequestBody UserModel user) {
         try {
-            userService.registration(user);
-            logger.info("user {} saved", user);
-            return ResponseEntity.ok("user saved");
+            var registeredUser = userService.registration(user);
+            registeredUser = registeredUser.toBuilder().setAccessToken(authService.getAccessToken(user)).build();
+            logger.info("user {} saved", registeredUser);
+            return ResponseEntity.ok(registeredUser);
         } catch (EntityExistsException e) {
             logger.error("user {} does not registered, error message: {}", user, e.getMessage());
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (InvalidProtocolBufferException e) {
             logger.error("handle incorrect protobuf {}", user);
             return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (AuthException e) {
+            logger.error("can not generate user token", e);
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+    }
+
+    @GetMapping(value = "/login", consumes = {MediaType.APPLICATION_PROTOBUF_VALUE, MediaType.APPLICATION_OCTET_STREAM_VALUE}, produces = {MediaType.APPLICATION_PROTOBUF_VALUE})
+    public ResponseEntity loginUser(@RequestBody UserModel user) {
+        try {
+            return ResponseEntity.ok().body(authService.login(user));
+        } catch (AuthException e) {
+            logger.error("incorrect user info, request login user={}", user, e);
+            return ResponseEntity.status(UNAUTHORIZED_STATUS).body(e.getMessage());
         }
     }
 
@@ -91,3 +108,4 @@ public class UserController {
         }
     }
 }
+

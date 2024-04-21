@@ -164,6 +164,8 @@ fun tryToRegisterUser(
         }
 
         override fun onResponse(call: Call, response: Response) {
+            val responseBody: ByteString? = response.body?.byteString()
+            val registeredUser: UserModel = UserModel.parseFrom(responseBody?.toByteArray())
             Log.i("Info", response.toString())
             if (response.isSuccessful) {
                 val URlGetUser: String =
@@ -174,6 +176,7 @@ fun tryToRegisterUser(
 
                 val requestForGetGeneratedUser: Request = Request.Builder()
                     .url(URlGetUser)
+                    .header("Authorization", "Bearer " + registeredUser.accessToken)
                     .build()
 
                 okHttpClient.newCall(requestForGetGeneratedUser).enqueue(object : Callback {

@@ -73,7 +73,7 @@ android {
 
 protobuf {
     protoc {
-        artifact = "com.google.protobuf:protoc:3.19.4"
+        artifact = "com.google.protobuf:protoc:3.25.3"
     }
 
     generateProtoTasks {
@@ -100,7 +100,7 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.9.8")
-    implementation("com.google.protobuf:protobuf-kotlin:3.19.4")
+    implementation("com.google.protobuf:protobuf-kotlin:3.25.3")
     implementation("org.bouncycastle:bcpkix-jdk15to18:1.68")
     implementation("org.bouncycastle:bcprov-jdk15to18:1.68")
 }
