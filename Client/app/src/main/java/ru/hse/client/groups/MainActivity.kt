@@ -1,4 +1,4 @@
-package ru.hse.client.main
+package ru.hse.client.groups
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

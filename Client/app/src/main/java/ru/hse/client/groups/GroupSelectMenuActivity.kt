@@ -1,22 +1,20 @@
-package ru.hse.client.main
+package ru.hse.client.groups
 
-import android.R
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import android.view.View
-import android.view.ViewGroup
 import android.widget.*
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import ru.hse.client.R
 import ru.hse.client.databinding.ActivityGroupSelectMenuBinding
-
+import ru.hse.client.utility.DrawerBaseActivity
+import ru.hse.client.utility.user
 
 class GroupSelectMenuActivity : DrawerBaseActivity() {
 
     private lateinit var binding: ActivityGroupSelectMenuBinding
+    private var dataArrayList = ArrayList<ListData?>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,53 +27,47 @@ class GroupSelectMenuActivity : DrawerBaseActivity() {
         }
 
 
-        val swipeRefreshLayout: SwipeRefreshLayout = binding.swipeRefreshLayout
+        /*val swipeRefreshLayout: SwipeRefreshLayout = binding.swipeRefreshLayout
         swipeRefreshLayout.setOnRefreshListener {
             user.updateUser(this)
             createGroupList()
             swipeRefreshLayout.isRefreshing = false
-        }
+        }*/
 
         createGroupList()
     }
 
 
-    private fun createGroupList(){
-        val data : MutableList<Map<String, String>> = mutableListOf()
+    private fun createGroupList() {
+        val data: MutableList<Map<String, String>> = mutableListOf()
         val userGroups = user.getUserGroups()
 
         for (group in userGroups) {
-            data.add(mapOf(
-                        KEY_TITLE to group.name,
-                        KEY_ADMIN to group.admin.login,
-                    )
+            data.add(
+                mapOf(
+                    KEY_TITLE to group.name,
+                    KEY_ADMIN to group.admin.login,
+                )
+            )
+            dataArrayList.add(
+                ListData(
+                    group.name.toString(),
+                    group.admin.login.toString(),
+                    R.drawable.base_group_item_img
+                )
             )
         }
 
-        val adapter = object: SimpleAdapter(
-            this,
-            data,
-            R.layout.simple_list_item_2,
-            arrayOf(KEY_TITLE, KEY_ADMIN),
-            intArrayOf(R.id.text1, R.id.text2)
-        ) {
-            override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-                val view = super.getView(position, convertView, parent)
-                val text1 = view.findViewById<TextView>(android.R.id.text1)
-                text1.setTextColor(Color.BLACK)
-                return view
-            }
-        }
-        binding.groupSearchList.adapter = adapter
+        binding.groupSearchList.adapter = ListAdapter(this, dataArrayList)
 
-        binding.groupSearchList.onItemClickListener = AdapterView.OnItemClickListener {parent, view, position, id ->
-            val group = userGroups[position];
-            val groupName = data[position][KEY_TITLE];
+        binding.groupSearchList.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
+            val group = userGroups[position]
+            val groupName = data[position][KEY_TITLE]
 
             if (groupName != group.name) {
                 Log.e("GroupSelectMenu", "can not open group, group name and position mismatch")
                 Handler(Looper.getMainLooper()).post {
-                    Toast.makeText(this, "Ops, something went wrong", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Something went wrong", Toast.LENGTH_SHORT).show()
                 }
                 return@OnItemClickListener
             }
@@ -103,6 +95,7 @@ class GroupSelectMenuActivity : DrawerBaseActivity() {
     companion object {
         @JvmStatic
         val KEY_TITLE = "title"
+
         @JvmStatic
         val KEY_ADMIN = "admin"
     }

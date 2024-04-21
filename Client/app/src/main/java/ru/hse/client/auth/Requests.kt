@@ -13,12 +13,11 @@ import okhttp3.*
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okio.ByteString
-import ru.hse.client.main.GroupSelectMenuActivity
-import ru.hse.server.proto.EntitiesProto.UserModel
+import ru.hse.client.groups.GroupSelectMenuActivity
 import ru.hse.server.proto.EntitiesProto
 import java.io.IOException
 import ru.hse.client.R
-import ru.hse.client.main.*
+import ru.hse.client.utility.user
 
 fun printErrorAboutBadUser(activity: Activity, loginLayout: TextInputLayout, passwordLayout: TextInputLayout) {
     Log.e("Info", "no such user with this login")
