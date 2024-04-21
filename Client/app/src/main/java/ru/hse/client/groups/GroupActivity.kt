@@ -1,9 +1,9 @@
-package ru.hse.client.main
+package ru.hse.client.groups
 
 import android.os.Bundle
 import android.util.Log
 import ru.hse.client.databinding.ActivityGroupBinding
-import ru.hse.client.databinding.ActivityGroupSelectMenuBinding
+import ru.hse.client.utility.DrawerBaseActivity
 import ru.hse.server.proto.EntitiesProto
 
 class GroupActivity: DrawerBaseActivity() {
@@ -29,8 +29,9 @@ class GroupActivity: DrawerBaseActivity() {
 
         allocateActivityTitle(group!!.name.toString())
 
-        binding.groupLabel.text = "Group label: " + group!!.name.toString()
-        binding.groupAdmin.text = "Group admin: " + " test"
+        binding.groupTitle.text = group.name.toString()
+        binding.groupAdmin.text = group.admin.login.toString()
+
     }
 
 }

@@ -1,24 +1,16 @@
-package ru.hse.client.main
+package ru.hse.client.utility
 
 import android.app.Activity
-import android.content.Intent
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
-import android.widget.Toast
 import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.startActivity
 import okhttp3.*
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okio.ByteString
 import ru.hse.client.R
 import ru.hse.server.proto.EntitiesProto
-import ru.hse.server.proto.EntitiesProto.GroupList
 import ru.hse.server.proto.EntitiesProto.GroupModel
 import ru.hse.server.proto.EntitiesProto.UserModel
-import ru.hse.server.proto.userModel
 import java.io.IOException
-import java.util.Optional
 
 class User {
     private var user: UserModel? = null

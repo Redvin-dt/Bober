@@ -9,7 +9,7 @@
     <string name="email">"Email"</string>
     <string name="registration_text">Register your account</string>
     <string name="password_confirm">Confirm password</string>
-    <string name="IP">192.168.0.107:8080</string>
+    <string name="IP">192.168.0.102:8080</string>
     <string name="log_in_text">Log in to your account</string>
     <string name="forgot_password">Forgot password?</string>
     <string name="have_an_account">Have an account?</string>
@@ -30,5 +30,9 @@
     <string name="menu_drawer_open">Drawer open</string>
     <string name="menu_drawer_close">Drawer close</string>
     <string name="admin">"Admin"</string>
-    <string name="title">"Group title"</string>
+    <string name="group_title">"Group title"</string>
+    <string name="chapters">Chapters:</string>
+    <string name="number">Number</string>
+    <string name="chapter_title">Chapter title</string>
+
 </resources>

@@ -1,9 +1,8 @@
-package ru.hse.client.main
+package ru.hse.client.profile
 
-import ru.hse.client.R
 import android.os.Bundle
-import ru.hse.client.databinding.ActivityBaseBinding
 import ru.hse.client.databinding.ActivityProfileBinding
+import ru.hse.client.utility.DrawerBaseActivity
 
 class ProfileActivity: DrawerBaseActivity() {
 
