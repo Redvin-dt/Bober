@@ -13,11 +13,13 @@ import ru.hse.server.utils.ProtoSerializer;
 public class AuthService {
     private final UserRepository userRepository;
     private final JWTProviderService jwtProviderService;
+    private final PasswordEncoderService passwordEncoderService;
 
     public AuthService(@Qualifier("userDatabaseRepository") UserRepository userRepository,
-                       JWTProviderService jwtProviderService) {
+                       JWTProviderService jwtProviderService, PasswordEncoderService passwordEncoderService) {
         this.jwtProviderService = jwtProviderService;
         this.userRepository = userRepository;
+        this.passwordEncoderService = passwordEncoderService;
     }
 
     public EntitiesProto.UserModel login(@Nonnull EntitiesProto.UserModel userModel) throws AuthException {
@@ -27,7 +29,7 @@ public class AuthService {
             throw new AuthException("no such user");
         }
 
-        if (user.getPasswordHash().equals(userModel.getPasswordHash())) { // TODO: add hashing for password
+        if (passwordEncoderService.matchPassword(userModel.getPasswordHash(), user.getPasswordHash())) {
             return ProtoSerializer.getUserInfo(user).toBuilder().setAccessToken(jwtProviderService.generateAccessToken(user)).build();
         } else {
             throw new AuthException("wrong password");
