@@ -21,6 +21,7 @@ public class ProtoSerializer {
                 .setName(group.getGroupName())
                 .setPasswordHash(group.getPasswordHash())
                 .setMetaInfo(group.getMetaInfo())
+                .setAdmin(getUserInfo(group.getAdmin()))
                 .build();
     }
 
