@@ -41,6 +41,7 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     implementation("org.springframework.boot:spring-boot-starter-security")
     testImplementation("org.springframework.security:spring-security-test")
+    compileOnly("org.springframework.boot:spring-boot-configuration-processor")
     //db
     implementation("org.postgresql:postgresql:42.7.2")
     //protobuf
