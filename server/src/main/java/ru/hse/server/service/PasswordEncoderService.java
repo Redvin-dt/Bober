@@ -6,18 +6,10 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class PasswordEncoderService {
-    @Value("${userService.passwordSecret}")
-    private String passwordSecret;
-    @Value("${userService.hashIteration}")
-    private int iteration;
-    @Value("${userService.saltLength}")
-    private int saltLength;
     private final Pbkdf2PasswordEncoder pbkdf2PasswordEncoder;
 
-    PasswordEncoderService() {
-        pbkdf2PasswordEncoder = new Pbkdf2PasswordEncoder(passwordSecret,
-                saltLength, iteration,
-                Pbkdf2PasswordEncoder.SecretKeyFactoryAlgorithm.PBKDF2WithHmacSHA256);
+    PasswordEncoderService(@Value("${userService.passwordSecret}") String passwordSecret, @Value("${userService.hashIteration}") int iteration, @Value("${userService.saltLength}") int saltLength) {
+        pbkdf2PasswordEncoder = new Pbkdf2PasswordEncoder(passwordSecret, saltLength, iteration, Pbkdf2PasswordEncoder.SecretKeyFactoryAlgorithm.PBKDF2WithHmacSHA256);
         pbkdf2PasswordEncoder.setEncodeHashAsBase64(true);
     }
 

@@ -12,12 +12,12 @@ import ru.hse.server.utils.ProtoSerializer;
 @Service
 public class AuthService {
     private final UserRepository userRepository;
-    private final JWTProviderService jwtProviderService;
+    private final JWTProvider jwtProvider;
     private final PasswordEncoderService passwordEncoderService;
 
     public AuthService(@Qualifier("userDatabaseRepository") UserRepository userRepository,
-                       JWTProviderService jwtProviderService, PasswordEncoderService passwordEncoderService) {
-        this.jwtProviderService = jwtProviderService;
+                       JWTProvider jwtProvider, PasswordEncoderService passwordEncoderService) {
+        this.jwtProvider = jwtProvider;
         this.userRepository = userRepository;
         this.passwordEncoderService = passwordEncoderService;
     }
@@ -30,7 +30,7 @@ public class AuthService {
         }
 
         if (passwordEncoderService.matchPassword(userModel.getPasswordHash(), user.getPasswordHash())) {
-            return ProtoSerializer.getUserInfo(user).toBuilder().setAccessToken(jwtProviderService.generateAccessToken(user)).build();
+            return ProtoSerializer.getUserInfo(user).toBuilder().setAccessToken(jwtProvider.generateAccessToken(user)).build();
         } else {
             throw new AuthException("wrong password");
         }
@@ -43,6 +43,6 @@ public class AuthService {
             throw new AuthException("no such user");
         }
 
-        return jwtProviderService.generateAccessToken(user);
+        return jwtProvider.generateAccessToken(user);
     }
 }

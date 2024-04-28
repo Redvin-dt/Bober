@@ -1,8 +1,5 @@
 package ru.hse.server.service;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.parameters.P;
-import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
 import ru.hse.server.proto.EntitiesProto.UserModel;
 import ru.hse.database.entities.User;
 import ru.hse.server.repository.UserRepository;
