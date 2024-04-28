@@ -12,7 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
-import ru.hse.server.service.JWTProviderService;
+import ru.hse.server.service.JWTProvider;
 import ru.hse.server.utils.JWTUtils;
 
 import java.io.IOException;
@@ -22,7 +22,7 @@ import java.io.IOException;
 public class JWTFilter extends OncePerRequestFilter {
     private static final String AUTHORIZATION_HEADER = "Authorization";
 
-    private final JWTProviderService jwtProviderService;
+    private final JWTProvider jwtProviderService;
 
     private String getTokenFromRequest(HttpServletRequest request) {
         System.out.println(request.getHeader(AUTHORIZATION_HEADER));

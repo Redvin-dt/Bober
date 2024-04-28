@@ -8,6 +8,7 @@ import org.springframework.http.converter.protobuf.ProtobufJsonFormatHttpMessage
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 @Configuration
 public class ProtobufConfiguration {
@@ -24,6 +25,6 @@ public class ProtobufConfiguration {
 
     @Bean
     RestTemplate restTemplate(@Qualifier("protobufHttpMessageConverter") ProtobufHttpMessageConverter hmc) {
-        return new RestTemplate(Arrays.asList(hmc));
+        return new RestTemplate(Collections.singletonList(hmc));
     }
 }
