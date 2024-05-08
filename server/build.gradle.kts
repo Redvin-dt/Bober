@@ -27,7 +27,7 @@ dependencies {
     implementation(group = "org.apache.logging.log4j", name = "log4j-core", version = "2.20.0")
     implementation(group = "org.apache.logging.log4j", name = "log4j-slf4j-impl", version = "2.20.0")
     // lombok
-    compileOnly("org.projectlombok:lombok:1.18.30")
+    implementation("org.projectlombok:lombok:1.18.30")
     annotationProcessor("org.projectlombok:lombok:1.18.30")
     testCompileOnly("org.projectlombok:lombok:1.18.30")
     testAnnotationProcessor("org.projectlombok:lombok:1.18.30")
@@ -41,7 +41,7 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     implementation("org.springframework.boot:spring-boot-starter-security")
     testImplementation("org.springframework.security:spring-security-test")
-    compileOnly("org.springframework.boot:spring-boot-configuration-processor")
+    implementation("org.springframework.boot:spring-boot-configuration-processor")
     //db
     implementation("org.postgresql:postgresql:42.7.2")
     //protobuf
@@ -50,8 +50,8 @@ dependencies {
 
     //jwt
     implementation("io.jsonwebtoken:jjwt-api:0.11.5")
-    compileOnly("io.jsonwebtoken:jjwt-impl:0.11.5")
-    compileOnly("io.jsonwebtoken:jjwt-jackson:0.11.5")
+    implementation("io.jsonwebtoken:jjwt-impl:0.11.5")
+    implementation("io.jsonwebtoken:jjwt-jackson:0.11.5")
     implementation("javax.xml.bind:jaxb-api:2.3.1")
 }
 
