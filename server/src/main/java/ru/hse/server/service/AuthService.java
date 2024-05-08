@@ -30,7 +30,11 @@ public class AuthService {
         }
 
         if (passwordEncoderService.matchPassword(userModel.getPasswordHash(), user.getPasswordHash())) {
-            return ProtoSerializer.getUserInfo(user).toBuilder().setAccessToken(jwtProvider.generateAccessToken(user)).build();
+            return ProtoSerializer
+                    .getUserInfo(user)
+                    .toBuilder()
+                    .setAccessToken(jwtProvider.generateAccessToken(user))
+                    .build();
         } else {
             throw new AuthException("wrong password");
         }
