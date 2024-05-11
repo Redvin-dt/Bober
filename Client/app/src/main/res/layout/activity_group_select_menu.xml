@@ -23,27 +23,26 @@
 
 
     <ListView
-        android:id="@+id/group_search_list"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="12sp"
-        android:scrollbars="vertical"
-        tools:listitem="@layout/group_list_item"
-        app:layout_constraintTop_toBottomOf="@id/group_search_view"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="10sp"
-    />
-
-
+            android:id="@+id/group_search_list"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="12sp"
+            android:scrollbars="vertical"
+            tools:listitem="@layout/group_list_item"
+            app:layout_constraintTop_toBottomOf="@id/group_search_view"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="10sp"
+            app:layout_constraintHorizontal_bias="0.0"/>
     <Button
             android:id="@+id/create_group_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:text="@string/create_group"
+            android:backgroundTint="@color/lavanda"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
