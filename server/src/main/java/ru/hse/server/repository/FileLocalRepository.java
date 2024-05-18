@@ -1,38 +1,48 @@
 package ru.hse.server.repository;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.multipart.MultipartFile;
+import ru.hse.server.exception.DeleteFileException;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.UUID;
 
 @Repository
 public class FileLocalRepository implements FileRepository {
+    private static final Logger logger = LoggerFactory.getLogger(FileLocalRepository.class);
 
-    private File tempDirectory;
+    private final File directory;
+
+
+    FileLocalRepository(@Value("${fileLocalRepository.saveFileDir}") String fileDirectory) {
+        directory = new File(fileDirectory);
+
+        if (!directory.exists()) {
+            logger.error("can not find directory {}", fileDirectory);
+            throw new RuntimeException("file directory " + fileDirectory + " does not exist"); // TODO: mb not runtime
+        }
+
+        if (!directory.isDirectory()) {
+            logger.error("{} is not a directory", fileDirectory);
+            throw new RuntimeException(fileDirectory + " is not directory");
+        }
+    }
 
     @Override
     public void save(MultipartFile file, String name) throws IOException {
-        if (tempDirectory == null) {
-            createTempDirectory();
-        }
-
-        file.transferTo(Path.of(tempDirectory.getAbsolutePath() + name));
+        file.transferTo(Path.of(directory.getAbsolutePath() + File.separator + name));
     }
 
     @Override
     public Resource get(String name) throws IOException {
-        if (tempDirectory == null) {
-            createTempDirectory();
-        }
-
-        File file = new File(tempDirectory.getAbsolutePath() + name);
+        File file = new File(directory.getAbsolutePath() + File.separator + name);
         if (file.exists()) {
             return new UrlResource(file.toURI());
         }
@@ -40,11 +50,15 @@ public class FileLocalRepository implements FileRepository {
         throw new FileNotFoundException("File " + name + "not found");
     }
 
-    private void createTempDirectory() throws IOException {
-        tempDirectory = Files.createTempDirectory(UUID.randomUUID() + "_" + "tempDir").toFile();
-        // TODO: do create regular director
-        if (!tempDirectory.exists()) {
-            throw new FileNotFoundException("Temporary directory does not created");
+    @Override
+    public void delete(String name) throws IOException, DeleteFileException {
+        File file = new File(directory.getAbsolutePath() + File.separator + name);
+        if (!file.exists()) {
+            throw new FileNotFoundException("File " + name + "not found");
+        }
+
+        if (!file.delete()) {
+            throw new DeleteFileException("Can not delete file " + name);
         }
     }
 }
