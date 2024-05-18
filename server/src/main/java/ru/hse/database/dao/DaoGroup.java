@@ -21,9 +21,9 @@ public class DaoGroup {
     private static final int MAX_RESULTS = 20;
     static Logger logger = LoggerFactory.getLogger(DaoGroup.class);
     static public Group getGroupById(long id) {
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
             return session.get(Group.class, id);
-        }
+
     }
     static public List<Group> getGroupsByName(String groupName) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {

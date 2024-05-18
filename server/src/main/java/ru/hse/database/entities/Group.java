@@ -53,6 +53,14 @@ public class Group {
         this.usersSet.add(adminUser);
     }
 
+    public void addUser(User user) {
+        usersSet.add(user);
+    }
+
+    public void removeUser(User user) {
+        usersSet.remove(user);
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj.getClass() != Group.class) {
