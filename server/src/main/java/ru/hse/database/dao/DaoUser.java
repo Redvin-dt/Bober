@@ -28,9 +28,8 @@ public class DaoUser {
     }
 
     static public User getUserById(long id) {
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            return session.get(User.class, id);
-        }
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        return session.get(User.class, id);
     }
 
     static public User getUserByLogin(String login) throws NotUniqueUserLoginException {
