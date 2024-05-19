@@ -23,5 +23,7 @@
         <mapping class="ru.hse.database.entities.User" />
         <mapping class="ru.hse.database.entities.Group" />
         <mapping class="ru.hse.database.entities.Chapter" />
+        <mapping class="ru.hse.database.entities.Test" />
+        <mapping class="ru.hse.database.entities.Question" />
     </session-factory>
 </hibernate-configuration>
