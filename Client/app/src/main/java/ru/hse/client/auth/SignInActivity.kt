@@ -1,5 +1,6 @@
 package ru.hse.client.auth
 
+import android.accounts.AccountManager
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
@@ -10,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
-import okhttp3.*
+import okhttp3.OkHttpClient
 import ru.hse.client.R
 
 
