@@ -2,6 +2,7 @@ package ru.hse.client.auth
 
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.util.Patterns
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -151,5 +152,9 @@ fun generateHash(password: String, context: Context): String {
     val key: SecretKey = factory.generateSecret(spec)
     val hash: ByteArray = key.encoded
     return hash.toHexString()
+}
+
+fun finishAuth(intent: Intent) {
+
 }
 
