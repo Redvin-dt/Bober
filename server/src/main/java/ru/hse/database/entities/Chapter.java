@@ -5,6 +5,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -34,6 +36,9 @@ public class Chapter {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "group_host")
     private Group groupHost;
+
+    @OneToMany(mappedBy = "chapterHost", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Test> tests = new ArrayList<>();
 
     public Chapter() {
     }

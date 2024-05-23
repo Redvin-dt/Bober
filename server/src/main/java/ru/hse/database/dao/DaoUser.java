@@ -119,6 +119,26 @@ public class DaoUser {
         }
     }
 
+    static public void addUserToGroup(User user, Group group) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        try {
+            session.beginTransaction();
+
+            Set<User> users = DaoGroup.getUsersOfGroup(group);
+
+            users.add(user);
+
+            group.setUsersSet(users);
+
+            session.merge(user);
+            session.merge(group);
+
+            session.getTransaction().commit();
+        } catch (IllegalStateException e) {
+            logger.error("Error while erasing user {} from group {}", user.getUserId(), +group.getGroupId(), e);
+        }
+    }
+
     static public void deleteUserFromGroup(User user, Group group) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         try {
