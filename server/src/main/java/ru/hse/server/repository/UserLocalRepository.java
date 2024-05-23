@@ -25,7 +25,7 @@ public class UserLocalRepository implements UserRepository {
     @Override
     public User update(User user) {
         if (!storage.containsKey(user.getUserId())) {
-            return null; // TODO: mb do another way
+            return null;
         }
         storage.put(user.getUserId(), user);
         return user;

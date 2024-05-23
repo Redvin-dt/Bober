@@ -19,7 +19,7 @@ public class UserDatabaseRepository implements UserRepository {
     @Override
     public User update(User user) {
         if (DaoUser.getUserById(user.getUserId()) == null) {
-            return null; // TODO: delete or do smth better
+            return null;
         }
 
         DaoUser.createOrUpdateUser(user);
