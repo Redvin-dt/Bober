@@ -69,5 +69,6 @@ message UserModel {
 
   optional GroupList adminOfGroups = 6;
   optional GroupList userOfGroups = 7;
+  optional GroupList invitations = 8;
 }
 

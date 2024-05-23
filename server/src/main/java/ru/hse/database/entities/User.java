@@ -38,6 +38,11 @@ public class User {
     @JoinTable(name = "users_groups", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "group_id", referencedColumnName = "id"))
     private Set<Group> groupsUserSet = new HashSet<Group>();
 
+    @ManyToMany(cascade =  CascadeType.ALL)
+    @JoinTable(name = "users_invitations",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "group_id", referencedColumnName = "id"))
+    private Set<Group> invitations = new HashSet<>();
+
     public User() {
     }
 
@@ -45,6 +50,10 @@ public class User {
         this.userLogin = login;
         this.userEmail = email;
         this.passwordHash = passwordHash;
+    }
+
+    public void addInvitation(Group group) {
+        invitations.add(group);
     }
 
     @Override

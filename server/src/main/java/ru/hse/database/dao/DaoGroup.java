@@ -17,14 +17,16 @@ import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 public class DaoGroup {
     private static final int MAX_RESULTS = 20;
     static Logger logger = LoggerFactory.getLogger(DaoGroup.class);
+
     static public Group getGroupById(long id) {
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            return session.get(Group.class, id);
-        }
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        return session.get(Group.class, id);
     }
+
     static public List<Group> getGroupsByName(String groupName) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 
@@ -89,7 +91,7 @@ public class DaoGroup {
     }
 
     static public void createOrUpdateGroup(Group group) {
-        try (Session session = HibernateUtil.getSessionFactory().openSession()){
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             session.beginTransaction();
             session.merge(group);
             session.getTransaction().commit();
@@ -100,7 +102,7 @@ public class DaoGroup {
 
     static public void deleteGroup(Group group) {
         long id = group.getGroupId();
-        try (Session session = HibernateUtil.getSessionFactory().openSession()){
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             session.beginTransaction();
             session.remove(group);
             session.getTransaction().commit();
