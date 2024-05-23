@@ -15,9 +15,8 @@ public class DaoTest {
     static Logger logger = LoggerFactory.getLogger(DaoTest.class);
 
     static public Test getTestById(long id) {
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            return session.get(Test.class, id);
-        }
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        return session.get(Test.class, id);
     }
     static public void createOrUpdateTest(Test test, List<Question> questions) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
@@ -27,6 +26,17 @@ public class DaoTest {
             session.getTransaction().commit();
         } catch (IllegalStateException e) {
             logger.error("Error while merging user with id " + test.getTestId(), e);
+        }
+    }
+
+    static public void deleteTest(Test test) {
+        long id = test.getTestId();
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            session.beginTransaction();
+            session.remove(test);
+            session.getTransaction().commit();
+        } catch (IllegalStateException e) {
+            logger.error("Error while erasing test {} from db ", id, e);
         }
     }
 }
