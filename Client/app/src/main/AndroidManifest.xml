@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.ADD_ACCOUNTS" />
     <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
+    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
 
     <application
             android:allowBackup="true"
@@ -45,7 +46,7 @@
         </service>
 
         <activity
-                android:name=".auth.SignInActivity"
+                android:name=".entry.SignInActivity"
                 android:exported="true">
         </activity>
         <activity

@@ -20,16 +20,11 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody
 import okhttp3.Response
-import okio.ByteString
 import ru.hse.client.R
-import ru.hse.client.auth.*
 import ru.hse.client.databinding.ActivityGroupCreateBinding
-import ru.hse.client.databinding.ActivityGroupSelectMenuBinding
-import ru.hse.client.main.GroupSelectMenuActivity
+import ru.hse.client.entry.*
 import ru.hse.server.proto.EntitiesProto
-import ru.hse.server.proto.userModel
 
-import ru.hse.client.main.user
 import java.io.IOException
 
 class GroupCreateActivity : AppCompatActivity() {

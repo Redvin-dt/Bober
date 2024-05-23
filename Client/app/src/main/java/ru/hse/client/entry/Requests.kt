@@ -1,4 +1,4 @@
-package ru.hse.client.auth
+package ru.hse.client.entry
 
 import android.app.Activity
 import android.content.Intent
@@ -68,7 +68,7 @@ fun printMessageFromBadResponse(message: CharSequence?, activity: Activity) {
 }
 
 
-fun tryToLogInUser(
+fun logInUser(
     login: String,
     password: String,
     activity: Activity,
@@ -126,7 +126,7 @@ fun tryToLogInUser(
 }
 
 
-fun tryToRegisterUser(
+fun registerUser(
     login: String,
     email: String,
     password: String,
@@ -246,5 +246,4 @@ fun tryToRegisterUser(
         }
     })
 }
-
 

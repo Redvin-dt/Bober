@@ -28,7 +28,7 @@ class AuthenticatorActivity: AppCompatActivity(), AccountManagerCallback<Bundle>
     private lateinit var accountManger: AccountManager
     private lateinit var account: Account
     private lateinit var binding: ActivityAuthenticatorBinding
-    private var authService: Authenticator? = null
+    private var authService: AuthenticatorService? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,12 +70,12 @@ class AuthenticatorActivity: AppCompatActivity(), AccountManagerCallback<Bundle>
     }
 
     private fun deleteAccount() {
+        val accountManager = AccountManager.get(this)
         val account = Account("name", "ru.hse.client")
-        authService?.removeAccount(account)
+        accountManager.removeAccountExplicitly(account)
     }
 
     private fun createAccount() {
-        val authenticator = Authenticator(this)
         val accountManager = AccountManager.get(this)
         val account = Account("name", "ru.hse.client")
         val options = Bundle()
@@ -84,20 +84,6 @@ class AuthenticatorActivity: AppCompatActivity(), AccountManagerCallback<Bundle>
         accountManager.addAccountExplicitly(account, "abc", options)
 
         Log.d("Authenticator", "Account created")
-    }
-
-    override fun run(future: AccountManagerFuture<Bundle>?) {
-        if (future != null) {
-            try {
-                val bundle: Bundle = future.result
-                val intent: Intent? = bundle.getParcelable(AccountManager.KEY_INTENT)
-                if (intent != null) {
-                    Log.d("debug", "Token = " + intent.getStringExtra(AuthenticatorActivity.TOKEN))
-                }
-            } catch (e: OperationCanceledException) {
-                e.printStackTrace()
-            }
-        }
     }
 
 }
