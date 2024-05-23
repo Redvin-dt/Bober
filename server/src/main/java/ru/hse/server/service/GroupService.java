@@ -10,7 +10,9 @@ import org.springframework.stereotype.Service;
 import ru.hse.database.entities.Group;
 import ru.hse.database.entities.User;
 import ru.hse.server.exception.EntityUpdateException;
+import ru.hse.server.proto.EntitiesProto;
 import ru.hse.server.proto.EntitiesProto.GroupModel;
+import ru.hse.server.proto.EntitiesProto.UserModel;
 import ru.hse.server.proto.EntitiesProto.GroupList;
 import ru.hse.server.repository.GroupRepository;
 import ru.hse.server.repository.UserRepository;
@@ -46,6 +48,14 @@ public class GroupService {
         var result = groupRepository.save(group);
         logger.info("group={} was saved", group);
         return ProtoSerializer.getGroupInfo(result);
+    }
+
+    public void enterGroup(UserModel user, GroupModel group) throws InvalidProtocolBufferException {
+        if (!group.hasName() || !group.hasPasswordHash() || !user.hasLogin()) {
+            throw new InvalidProtocolBufferException("invalid protocol buffer on entry group");
+        }
+
+        
     }
 
     public GroupModel findGroupById(Long id) throws EntityNotFoundException {
