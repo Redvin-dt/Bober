@@ -1,6 +1,5 @@
 package ru.hse.client.auth
 
-import android.R.attr
 import android.accounts.AbstractAccountAuthenticator
 import android.accounts.Account
 import android.accounts.AccountAuthenticatorResponse
@@ -14,7 +13,7 @@ import android.util.Log
 import java.util.*
 
 
-class Authenticator(context: Context?) : AbstractAccountAuthenticator(context) {
+class AccountAuthenticator(context: Context?) : AbstractAccountAuthenticator(context) {
 
     private val TOKEN = "BOBERAuthenticator"
     private val mContext: Context? = context
@@ -108,8 +107,8 @@ class Authenticator(context: Context?) : AbstractAccountAuthenticator(context) {
         TODO("Not yet implemented")
     }
 
-    fun removeAccount(account: Account) {
-        val accountManager = AccountManager.get(mContext)
-        accountManager.removeAccount(account, null, null)
+    override fun getAccountRemovalAllowed(response: AccountAuthenticatorResponse?, account: Account?): Bundle {
+        return super.getAccountRemovalAllowed(response, account)
     }
+
 }

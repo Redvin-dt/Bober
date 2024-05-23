@@ -1,4 +1,4 @@
-package ru.hse.client.auth
+package ru.hse.client.entry
 
 import android.app.Activity
 import android.content.Context

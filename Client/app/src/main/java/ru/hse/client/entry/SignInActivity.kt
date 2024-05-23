@@ -1,6 +1,5 @@
-package ru.hse.client.auth
+package ru.hse.client.entry
 
-import android.accounts.AccountManager
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
@@ -100,7 +99,7 @@ class SignInActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            tryToLogInUser(login, password, this@SignInActivity, okHttpClient, loginLayout, passwordLayout)
+            logInUser(login, password, this@SignInActivity, okHttpClient, loginLayout, passwordLayout)
 
         }
 

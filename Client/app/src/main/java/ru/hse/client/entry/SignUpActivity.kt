@@ -1,4 +1,4 @@
-package ru.hse.client.auth
+package ru.hse.client.entry
 
 import android.content.Intent
 import ru.hse.client.R
@@ -180,7 +180,7 @@ class SignUpActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            tryToRegisterUser(login, email, password, this@SignUpActivity, okHttpClient, loginLayout, emailLayout)
+            registerUser(login, email, password, this@SignUpActivity, okHttpClient, loginLayout, emailLayout)
 
         }
 
