@@ -17,8 +17,7 @@ public class InviteService { // TODO: add delete of expired invites and other co
     private final UserRepository userRepository; // TODO: add constructor with qualified
     private final GroupRepository groupRepository;
 
-    public InviteService(@Qualifier("userDatabaseRepository") UserRepository userRepository,
-                         GroupRepository groupRepository) {
+    public InviteService(@Qualifier("userDatabaseRepository") UserRepository userRepository, GroupRepository groupRepository) {
         this.userRepository = userRepository;
         this.groupRepository = groupRepository;
     }
@@ -27,31 +26,38 @@ public class InviteService { // TODO: add delete of expired invites and other co
         var user = getUser(userId);
         var group = getGroup(groupId);
 
-        var invitations = user.getInvitationsId();
-        if (!invitations.contains(group.getGroupId())) {
+        var invitations = user.getInvitations();
+
+        if (!invitations.contains(group)) {
             logger.error("user has not invitations to group with id={}", groupId);
             throw new EntityNotFoundException("user has not invitations to group with id=" + groupId);
         }
 
-        invitations.remove(group.getGroupId());
+        invitations.remove(group);
 
         group.addUser(user);
-        groupRepository.update(group); // TODO: add some check if update will return smth
-        userRepository.update(user);
+        if (groupRepository.update(group) == null) {
+            throw new EntityNotFoundException("group has not updated");
+        }
+
+        if (userRepository.update(user) == null) {
+            throw new EntityNotFoundException("user has not updated");
+        }
     }
 
     public void declineInvite(Long userId, Long groupId) {
         var user = getUser(userId);
         var group = getGroup(groupId);
 
-        var invitations = user.getInvitationsId();
-        if (!invitations.contains(group.getGroupId())) {
+        var invitations = user.getInvitations();
+        if (!invitations.contains(group)) {
             logger.error("user has not invitations to group with id={}", groupId);
             throw new EntityNotFoundException("user has not invitations to group with id=" + groupId);
         }
 
-        invitations.remove(group.getGroupId());
+        invitations.remove(group);
         userRepository.update(user);
+        groupRepository.update(group); // TODO: add some check if update will return smth
     }
 
     public void createInvite(Long userId, Long groupId) {
@@ -59,15 +65,16 @@ public class InviteService { // TODO: add delete of expired invites and other co
         var group = getGroup(groupId);
 
         var admin = group.getAdmin();
-
+;
         if (user.equals(admin)) {
             logger.error("user has to be admin of group to invite other members");
             throw new EntityNotFoundException("user has to be admin of group to invite other members"); // TODO: set
             // another exception
         }
 
-        user.addInvitation(group.getGroupId());
+        user.addInvitation(group);
         userRepository.update(user);
+        groupRepository.update(group);
     }
 
     private User getUser(Long userId) {
