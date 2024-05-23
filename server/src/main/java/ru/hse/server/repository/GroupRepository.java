@@ -31,7 +31,7 @@ public class GroupRepository implements CrudRepository<Group, Long> {
 
     public <S extends Group> S update(@Nonnull S group) {
         if (DaoGroup.getGroupById(group.getGroupId()) == null) {
-            return null; // TODO: delete or do smth better
+            return null;
         }
 
         DaoGroup.createOrUpdateGroup(group);

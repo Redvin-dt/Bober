@@ -7,11 +7,13 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.hse.database.entities.Group;
 import ru.hse.database.entities.User;
+import ru.hse.server.exception.AccessException;
+import ru.hse.server.exception.EntityUpdateException;
 import ru.hse.server.repository.GroupRepository;
 import ru.hse.server.repository.UserRepository;
 
 @Service
-public class InviteService { // TODO: add delete of expired invites and other constraint
+public class InviteService {
     private final Logger logger = LoggerFactory.getLogger(InviteService.class);
 
     private final UserRepository userRepository; // TODO: add constructor with qualified
@@ -22,7 +24,7 @@ public class InviteService { // TODO: add delete of expired invites and other co
         this.groupRepository = groupRepository;
     }
 
-    public void acceptInvite(Long userId, Long groupId) {
+    public void acceptInvite(Long userId, Long groupId) throws EntityUpdateException {
         var user = getUser(userId);
         var group = getGroup(groupId);
 
@@ -34,18 +36,11 @@ public class InviteService { // TODO: add delete of expired invites and other co
         }
 
         invitations.remove(group);
-
         group.addUser(user);
-        if (groupRepository.update(group) == null) {
-            throw new EntityNotFoundException("group has not updated");
-        }
-
-        if (userRepository.update(user) == null) {
-            throw new EntityNotFoundException("user has not updated");
-        }
+        updateEntities(user, group);
     }
 
-    public void declineInvite(Long userId, Long groupId) {
+    public void declineInvite(Long userId, Long groupId) throws EntityUpdateException {
         var user = getUser(userId);
         var group = getGroup(groupId);
 
@@ -56,11 +51,10 @@ public class InviteService { // TODO: add delete of expired invites and other co
         }
 
         invitations.remove(group);
-        userRepository.update(user);
-        groupRepository.update(group); // TODO: add some check if update will return smth
+        updateEntities(user, group);
     }
 
-    public void createInvite(Long userId, Long groupId) {
+    public void createInvite(Long userId, Long groupId) throws AccessException, EntityUpdateException {
         var user = getUser(userId);
         var group = getGroup(groupId);
 
@@ -68,13 +62,11 @@ public class InviteService { // TODO: add delete of expired invites and other co
 ;
         if (user.equals(admin)) {
             logger.error("user has to be admin of group to invite other members");
-            throw new EntityNotFoundException("user has to be admin of group to invite other members"); // TODO: set
-            // another exception
+            throw new AccessException("user has to be admin of group to invite other members");
         }
 
         user.addInvitation(group);
-        userRepository.update(user);
-        groupRepository.update(group);
+        updateEntities(user, group);
     }
 
     private User getUser(Long userId) {
@@ -95,5 +87,14 @@ public class InviteService { // TODO: add delete of expired invites and other co
         }
 
         return group.get();
+    }
+
+    private void updateEntities(User user, Group group) throws EntityUpdateException {
+        if (userRepository.update(user) == null) {
+            throw new EntityUpdateException("failed while update user with id=" + user.getUserId());
+        }
+        if (groupRepository.update(group) == null) {
+            throw new EntityUpdateException("failed while update group with id=" + group.getGroupId());
+        }
     }
 }

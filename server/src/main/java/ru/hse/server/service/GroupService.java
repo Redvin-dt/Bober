@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.hse.database.entities.Group;
 import ru.hse.database.entities.User;
+import ru.hse.server.exception.EntityUpdateException;
 import ru.hse.server.proto.EntitiesProto.GroupModel;
 import ru.hse.server.proto.EntitiesProto.GroupList;
 import ru.hse.server.repository.GroupRepository;
@@ -53,32 +54,34 @@ public class GroupService {
         return ProtoSerializer.getGroupInfo(group);
     }
 
-    public void addUser(Long userId, Long groupId) throws EntityNotFoundException {
+    public void addUser(Long userId, Long groupId) throws EntityNotFoundException, EntityUpdateException {
         var user = getUserById(userId);
         var group = getGroupById(groupId);
 
         var userSet = group.getUsersSet();
         if (userSet.contains(user)) {
-            // TODO: throw error mb new
             throw new EntityExistsException("user already in group");
         }
 
         group.addUser(user);
-        groupRepository.update(group); // TODO: add check if it will return smth
+        if (groupRepository.update(group) == null) {
+            throw new EntityUpdateException("can not update group");
+        }
     }
 
-    public void deleteUser(Long userId, Long groupId) throws EntityNotFoundException {
+    public void deleteUser(Long userId, Long groupId) throws EntityNotFoundException, EntityUpdateException {
         var user = getUserById(userId);
         var group = getGroupById(groupId);
 
         var userSet = group.getUsersSet();
         if (!userSet.contains(user)) {
-            // TODO: throw error mb new
             throw new EntityNotFoundException("user not in this group");
         }
 
         group.removeUser(user);
-        groupRepository.update(group); // TODO: add check if it will return smth
+        if (groupRepository.update(group) == null) {
+            throw new EntityUpdateException("can not update group");
+        }
     }
 
     public GroupList findGroupsByName(String groupName) throws EntityNotFoundException {
