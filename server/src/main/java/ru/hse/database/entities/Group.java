@@ -39,6 +39,10 @@ public class Group {
     @JoinTable(name = "users_groups", joinColumns = @JoinColumn(name = "group_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
     private Set<User> usersSet = new HashSet<User>();
 
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "users_invitations", joinColumns = @JoinColumn(name = "group_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
+    private Set<User> invitedUsers = new HashSet<User>();
+
     public Group() {
     }
 
@@ -49,10 +53,17 @@ public class Group {
         this.usersSet.add(adminUser);
     }
 
+    public void addUser(User user) {
+        usersSet.add(user);
+    }
+
+    public void removeUser(User user) {
+        usersSet.remove(user);
+    }
+
     @Override
     public boolean equals(Object obj) {
-        if (obj.getClass() != Group.class) {
-            Group tmp = (Group) obj;
+        if (obj instanceof Group tmp) {
             return (Objects.equals(tmp.getGroupId(), getGroupId()));
         }
         return false;
