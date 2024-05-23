@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "Questions")
@@ -47,5 +48,18 @@ public class Question {
     }
 
     public Question() {
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Question tmp) {
+            return (Objects.equals(tmp.getQuestionId(), getQuestionId()));
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Math.toIntExact(getQuestionId());
     }
 }

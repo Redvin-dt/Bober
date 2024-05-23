@@ -49,8 +49,7 @@ public class User {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj.getClass() != User.class) {
-            User tmp = (User) obj;
+        if (obj instanceof User tmp) {
             return (Objects.equals(tmp.getUserId(), getUserId()));
         }
         return false;
