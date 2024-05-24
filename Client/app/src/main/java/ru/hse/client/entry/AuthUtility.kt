@@ -16,7 +16,7 @@ import java.util.regex.Pattern
 import javax.crypto.SecretKey
 import javax.crypto.SecretKeyFactory
 import javax.crypto.spec.PBEKeySpec
-import ru.hse.client.main.MainActivity
+import ru.hse.client.auth.MainActivity
 
 
 fun isNotValidEmail(target: CharSequence?): Boolean {

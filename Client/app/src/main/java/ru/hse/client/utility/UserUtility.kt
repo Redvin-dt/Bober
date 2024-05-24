@@ -94,7 +94,8 @@ class User {
                 Log.i("Info", response.toString())
                 if (response.isSuccessful) {
                     val responseBody: ByteString? = response.body?.byteString()
-                    val registeredUser: EntitiesProto.UserModel = EntitiesProto.UserModel.parseFrom(responseBody?.toByteArray())
+                    val registeredUser: EntitiesProto.UserModel =
+                        EntitiesProto.UserModel.parseFrom(responseBody?.toByteArray())
                     setUser(registeredUser)
                 } else {
                     response.body?.let { Log.i("Error", it.string()) }
@@ -124,7 +125,8 @@ class User {
                 Log.i("Info", response.toString())
                 if (response.isSuccessful) {
                     val responseBody: ByteString? = response.body?.byteString()
-                    val registeredUser: EntitiesProto.UserModel = EntitiesProto.UserModel.parseFrom(responseBody?.toByteArray())
+                    val registeredUser: EntitiesProto.UserModel =
+                        EntitiesProto.UserModel.parseFrom(responseBody?.toByteArray())
                     setUser(registeredUser)
                 } else {
                     response.body?.let { Log.i("Error", it.string()) }
@@ -133,7 +135,7 @@ class User {
         })
     }
 
-    fun check_token_is_valid(context: Context, login: String, token: String) : Boolean {
+    fun check_token_is_valid(context: Context, login: String, token: String): Boolean {
         val URlGetUser: String =
             ("http://" + context.resources.getString(R.string.IP) + "/users/userByLogin").toHttpUrlOrNull()
                 ?.newBuilder()
@@ -190,15 +192,19 @@ class User {
             override fun onResponse(call: Call, response: Response) {
                 Log.i("Info", response.toString())
                 if (response.isSuccessful) {
-                    } else {
-                        response.body?.let { Log.i("Error", it.string()) }
-                    }
-                    countDownLatch.countDown()
+                    val responseBody: ByteString? = response.body?.byteString()
+                    val registeredUser: EntitiesProto.UserModel =
+                        EntitiesProto.UserModel.parseFrom(responseBody?.toByteArray())
+                    setUser(registeredUser)
+                } else {
+                    response.body?.let { Log.i("Error", it.string()) }
                 }
-            })
+                countDownLatch.countDown()
+            }
+        })
 
-            countDownLatch.await();
-        }
+        countDownLatch.await();
+    }
 
     fun updateUser(activity: Activity) {
         if (user == null) {

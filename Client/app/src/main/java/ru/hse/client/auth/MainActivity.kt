@@ -1,12 +1,11 @@
-package ru.hse.client.groups
+package ru.hse.client.auth
 
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import ru.hse.client.auth.AuthenticationManager
-import ru.hse.client.auth.SingletonController
 import ru.hse.client.entry.SignInActivity
+import ru.hse.client.groups.GroupSelectMenuActivity
 
 
 class MainActivity : AppCompatActivity() {
