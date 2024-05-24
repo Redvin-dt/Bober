@@ -22,7 +22,6 @@
         <activity
                 android:name=".main.MainActivity"
                 android:exported="true">
-               >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -59,28 +58,32 @@
                 android:exported="true">
         </activity>
         <activity
-                android:name=".main.GroupsActivity"
+                android:name=".groups.GroupsActivity"
                 android:exported="true">
         </activity>
         <activity
-                android:name=".main.ProfileActivity"
+                android:name=".profile.ProfileActivity"
                 android:exported="true">
         </activity>
         <activity
-                android:name=".main.DeadlinesActivity"
+                android:name=".groups.DeadlinesActivity"
                 android:exported="true">
         </activity>
         <activity
-            android:name=".main.DrawerBaseActivity"
+            android:name=".utility.DrawerBaseActivity"
             android:exported="true">
         </activity>
         <activity
-            android:name=".main.GroupSelectMenuActivity"
+            android:name=".groups.GroupSelectMenuActivity"
             android:exported="true">
         </activity>
         <activity
-                android:name=".main.GroupCreateActivity"
+                android:name=".groups.GroupCreateActivity"
             android:exported="true">
+        </activity>
+        <activity
+                android:name=".groups.GroupActivity"
+                android:exported="true">
         </activity>
     </application>
 
