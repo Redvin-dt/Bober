@@ -49,7 +49,7 @@ public class UserController {
         }
     }
 
-    @GetMapping(value = "/login", consumes = {MediaType.APPLICATION_PROTOBUF_VALUE, MediaType.APPLICATION_OCTET_STREAM_VALUE}, produces = {MediaType.APPLICATION_PROTOBUF_VALUE})
+    @PostMapping(value = "/login", consumes = {MediaType.APPLICATION_PROTOBUF_VALUE, MediaType.APPLICATION_OCTET_STREAM_VALUE}, produces = {MediaType.APPLICATION_PROTOBUF_VALUE})
     public ResponseEntity loginUser(@RequestBody UserModel user) {
         try {
             return ResponseEntity.ok().body(authService.login(user));

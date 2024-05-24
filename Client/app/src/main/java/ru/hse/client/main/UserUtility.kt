@@ -1,27 +1,24 @@
 package ru.hse.client.main
 
 import android.app.Activity
-import android.content.Intent
-import android.os.Handler
-import android.os.Looper
+import android.content.Context
 import android.util.Log
-import android.widget.Toast
-import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.startActivity
 import okhttp3.*
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.internal.wait
 import okio.ByteString
 import ru.hse.client.R
 import ru.hse.server.proto.EntitiesProto
-import ru.hse.server.proto.EntitiesProto.GroupList
 import ru.hse.server.proto.EntitiesProto.GroupModel
 import ru.hse.server.proto.EntitiesProto.UserModel
-import ru.hse.server.proto.userModel
 import java.io.IOException
-import java.util.Optional
+import java.util.concurrent.CountDownLatch
+
 
 class User {
     private var user: UserModel? = null
+    private lateinit var clientHashedPassword: String
     private var groups: List<GroupModel> = listOf()
     private val okHttpClient = OkHttpClient()
 
@@ -47,7 +44,7 @@ class User {
     }
 
     fun getUserLogin(): String {
-        return user!!.getLogin()
+        return user!!.login
     }
 
     fun isUserHasEmail(): Boolean {
@@ -55,7 +52,7 @@ class User {
     }
 
     fun getUserEmail(): String {
-        return user!!.getEmail()
+        return user!!.email
     }
 
     fun getUserGroups(): List<GroupModel> {
@@ -63,18 +60,31 @@ class User {
     }
 
     fun getUserToken(): String {
-        return user!!.getAccessToken()
+        return user!!.accessToken
     }
 
-    fun setUserByLogin(activity: Activity, login: String) {
+    fun getHashedPassword(): String {
+        return user!!.passwordHash
+    }
+
+    fun setUserClientPassword(password: String) {
+        clientHashedPassword = password
+    }
+
+    fun getUserClientPassword(): String? {
+        return clientHashedPassword
+    }
+
+    fun setUserByLogin(context: Context, login: String) {
         val URlGetUser: String =
-            ("http://" + ContextCompat.getString(activity, R.string.IP) + "/users/userByLogin").toHttpUrlOrNull()
+            ("http://" + context.resources.getString(R.string.IP) + "/users/userByLogin").toHttpUrlOrNull()
                 ?.newBuilder()
                 ?.addQueryParameter("login", login)
                 ?.build().toString()
 
         val requestForGetGeneratedUser: Request = Request.Builder()
             .url(URlGetUser)
+            .header("Authorization", "Bearer " + getUserToken())
             .build()
 
         okHttpClient.newCall(requestForGetGeneratedUser).enqueue(object : Callback {
@@ -93,6 +103,106 @@ class User {
                 }
             }
         })
+    }
+
+    fun setUserByEmail(context: Context, email: String, token: String) {
+        val URlGetUser: String =
+            ("http://" + context.resources.getString(R.string.IP) + "/users/userByEmail").toHttpUrlOrNull()
+                ?.newBuilder()
+                ?.addQueryParameter("email", email)
+                ?.build().toString()
+
+        val requestForGetGeneratedUser: Request = Request.Builder()
+            .url(URlGetUser)
+            .header("Authorization", "Bearer ${token}")
+            .build()
+
+        okHttpClient.newCall(requestForGetGeneratedUser).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                Log.e("Error", e.toString() + " " + e.message)
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                Log.i("Info", response.toString())
+                if (response.isSuccessful) {
+                    val responseBody: ByteString? = response.body?.byteString()
+                    val registeredUser: EntitiesProto.UserModel = EntitiesProto.UserModel.parseFrom(responseBody?.toByteArray())
+                    setUser(registeredUser)
+                } else {
+                    response.body?.let { Log.i("Error", it.string()) }
+                }
+            }
+        })
+    }
+
+    fun check_token_is_valid(context: Context, login: String, token: String) : Boolean {
+        val URlGetUser: String =
+            ("http://" + context.resources.getString(R.string.IP) + "/users/userByLogin").toHttpUrlOrNull()
+                ?.newBuilder()
+                ?.addQueryParameter("login", login)
+                ?.build().toString()
+
+        val requestForGetGeneratedUser: Request = Request.Builder()
+            .url(URlGetUser)
+            .header("Authorization", "Bearer $token")
+            .build()
+
+        var answer: Boolean = false
+        okHttpClient.newCall(requestForGetGeneratedUser).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                Log.e("Error", e.toString() + " " + e.message)
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                Log.i("Info", response.toString())
+                if (response.isSuccessful) {
+                    answer = true
+                }
+            }
+        })
+        return answer
+    }
+
+
+    fun updateUserFromServer(context: Context, login: String, password: String, email: String) {
+        val user_: EntitiesProto.UserModel =
+            EntitiesProto.UserModel.newBuilder().setLogin(login).setEmail(email).setPasswordHash(password).build()
+
+        val requestBody: RequestBody =
+            RequestBody.create("application/x-protobuf".toMediaTypeOrNull(), user_.toByteArray())
+
+        val URlRegistration: String =
+            ("http://" + context.resources.getString(R.string.IP) + "/users/login").toHttpUrlOrNull()
+                ?.newBuilder()
+                ?.build()
+                .toString()
+
+        val requestForLogIn: Request = Request.Builder()
+            .url(URlRegistration)
+            .post(requestBody)
+            .build()
+
+        val countDownLatch = CountDownLatch(1)
+        okHttpClient.newCall(requestForLogIn).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                Log.e("Error", e.toString() + " " + e.message)
+                countDownLatch.countDown()
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                Log.i("Info", response.toString())
+                if (response.isSuccessful) {
+                    val responseBody: ByteString? = response.body?.byteString()
+                    val registeredUser: EntitiesProto.UserModel = EntitiesProto.UserModel.parseFrom(responseBody?.toByteArray())
+                    setUser(registeredUser)
+                } else {
+                    response.body?.let { Log.i("Error", it.string()) }
+                }
+                countDownLatch.countDown()
+            }
+        })
+
+        countDownLatch.await();
     }
 
     fun updateUser(activity: Activity) {

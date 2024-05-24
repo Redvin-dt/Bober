@@ -107,6 +107,9 @@ class SignInActivity : AppCompatActivity() {
         dontHaveAnAccountButton.setOnClickListener {
             val intent = Intent(this, SignUpActivity::class.java)
             startActivity(intent)
+            val data: Intent = Intent()
+            setResult(RESULT_OK, data)
+            finish()
         }
 
         val forgotPasswordButton: Button = findViewById(R.id.forgot_password)

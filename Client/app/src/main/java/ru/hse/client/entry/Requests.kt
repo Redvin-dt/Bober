@@ -6,6 +6,7 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity.RESULT_OK
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.startActivity
 import com.google.android.material.textfield.TextInputLayout
@@ -76,16 +77,26 @@ fun logInUser(
     loginLayout: TextInputLayout,
     passwordLayout: TextInputLayout
 ) {
-    val URlGetUser: String = ("http://" + ContextCompat.getString(activity, R.string.IP) + "/users/userByLogin").toHttpUrlOrNull()
-        ?.newBuilder()
-        ?.addQueryParameter("login", login)
-        ?.build().toString()
+    val passwordHash: String = generateHash(password, activity)
 
-    val requestForGetUser: Request = Request.Builder()
+    val URlGetUser: String =
+        ("http://" + ContextCompat.getString(activity, R.string.IP) + "/users/login").toHttpUrlOrNull()
+            ?.newBuilder()
+            ?.build()
+            .toString()
+
+    val user_: EntitiesProto.UserModel =
+        EntitiesProto.UserModel.newBuilder().setLogin(login).setPasswordHash(passwordHash).build()
+
+    val requestBody: RequestBody =
+        RequestBody.create("application/x-protobuf".toMediaTypeOrNull(), user_.toByteArray())
+
+    val requestForLogInUser: Request = Request.Builder()
         .url(URlGetUser)
+        .post(requestBody)
         .build()
 
-    okHttpClient.newCall(requestForGetUser).enqueue(object : Callback {
+    okHttpClient.newCall(requestForLogInUser).enqueue(object : Callback {
         override fun onFailure(call: Call, e: IOException) {
             Log.e("Error", e.toString() + " " + e.message)
             Handler(Looper.getMainLooper()).post {
@@ -104,16 +115,13 @@ fun logInUser(
                 val user_: EntitiesProto.UserModel =
                     EntitiesProto.UserModel.parseFrom(responseBody?.toByteArray())
                 if (user_.hasPasswordHash()) {
-                    if (user_.passwordHash == generateHash(password, activity)) { // TODO
-                        printOkAboutGoodUser(activity)
-                        user.setUser(user_)
-                        val intent = Intent(activity, GroupSelectMenuActivity::class.java)
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                        startActivity(activity, intent, null)
-                    } else {
-                        Log.e("Info", "no such login/password")
-                        printErrorAboutBadUser(activity, loginLayout, passwordLayout)
-                    }
+                    Log.i("Info", "success")
+                    printOkAboutGoodUser(activity)
+                    user.setUser(user_)
+                    user.setUserClientPassword(passwordHash)
+                    val data: Intent = Intent()
+                    activity.setResult(RESULT_OK, data)
+                    activity.finish()
                 } else {
                     Log.e("Info", "no such login/password")
                     printErrorAboutBadUser(activity, loginLayout, passwordLayout)
@@ -169,7 +177,10 @@ fun registerUser(
             Log.i("Info", response.toString())
             if (response.isSuccessful) {
                 val URlGetUser: String =
-                    ("http://" + ContextCompat.getString(activity, R.string.IP) + "/users/userByLogin").toHttpUrlOrNull()
+                    ("http://" + ContextCompat.getString(
+                        activity,
+                        R.string.IP
+                    ) + "/users/userByLogin").toHttpUrlOrNull()
                         ?.newBuilder()
                         ?.addQueryParameter("login", login)
                         ?.build().toString()
@@ -195,7 +206,8 @@ fun registerUser(
                         Log.i("Info", response.toString())
                         if (response.isSuccessful) {
                             val responseBody: ByteString? = response.body?.byteString()
-                            val registeredUser: EntitiesProto.UserModel = EntitiesProto.UserModel.parseFrom(responseBody?.toByteArray())
+                            val registeredUser: EntitiesProto.UserModel =
+                                EntitiesProto.UserModel.parseFrom(responseBody?.toByteArray())
                             Handler(Looper.getMainLooper()).post {
                                 Toast.makeText(
                                     activity,
@@ -204,9 +216,10 @@ fun registerUser(
                                 ).show()
                             }
                             user.setUser(registeredUser)
-                            val intent = Intent(activity, GroupSelectMenuActivity::class.java)
-                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                            startActivity(activity, intent, null)
+                            user.setUserClientPassword(passwordHash)
+                            val data: Intent = Intent()
+                            activity.setResult(RESULT_OK, data)
+                            activity.finish()
                         }
                     }
                 })
