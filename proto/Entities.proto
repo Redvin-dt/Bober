@@ -3,6 +3,20 @@ syntax = "proto3";
 option java_outer_classname = "EntitiesProto";
 option java_package = "ru.hse.server.proto";
 
+message QuestionModel {
+  optional int64 id = 1;
+  optional string question = 2;
+  repeated int64 rightAnswers = 3;
+  repeated string answers = 4;
+}
+
+message TestModel {
+  optional int64 id = 1;
+  optional string name = 2;
+  optional int64 position = 3;
+  optional QuestionList questions = 4;
+}
+
 message ChapterList {
   repeated ChapterModel chapters = 1;
 }
@@ -15,6 +29,14 @@ message UserList {
   repeated UserModel users = 1;
 }
 
+message QuestionList {
+  repeated QuestionModel questions = 1;
+}
+
+message TestList {
+  repeated TestModel tests = 1;
+}
+
 message ChapterModel {
   optional int64 id = 1;
   optional string name = 2;
@@ -22,6 +44,7 @@ message ChapterModel {
   optional string testData = 4;
   optional string metaInfo = 5;
   optional GroupModel group = 6;
+  optional TestList tests = 7;
 }
 
 message GroupModel {
@@ -47,4 +70,5 @@ message UserModel {
 
   optional GroupList adminOfGroups = 7;
   optional GroupList userOfGroups = 8;
+  optional GroupList invitations = 9;
 }
