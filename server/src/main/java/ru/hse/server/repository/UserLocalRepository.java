@@ -23,6 +23,15 @@ public class UserLocalRepository implements UserRepository {
     }
 
     @Override
+    public User update(User user) {
+        if (!storage.containsKey(user.getUserId())) {
+            return null;
+        }
+        storage.put(user.getUserId(), user);
+        return user;
+    }
+
+    @Override
     @Nonnull
     public <S extends User> Iterable<S> saveAll(Iterable<S> entities) {
         List<S> list = new ArrayList<>();
@@ -96,6 +105,8 @@ public class UserLocalRepository implements UserRepository {
     public void deleteAll() {
         storage.clear();
     }
+
+
 
     public User findByUserLogin(String login) {
         var wrapper = new Object() {
