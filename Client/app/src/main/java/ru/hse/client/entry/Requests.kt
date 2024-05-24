@@ -171,10 +171,10 @@ fun registerUser(
         }
 
         override fun onResponse(call: Call, response: Response) {
-            val responseBody: ByteString? = response.body?.byteString()
-            val registeredUser: UserModel = UserModel.parseFrom(responseBody?.toByteArray())
             Log.i("Info", response.toString())
             if (response.isSuccessful) {
+                val responseBody: ByteString? = response.body?.byteString()
+                val registeredUser: UserModel = UserModel.parseFrom(responseBody?.toByteArray())
                 val URlGetUser: String =
                     ("http://" + ContextCompat.getString(
                         activity,
