@@ -8,14 +8,14 @@ import android.os.Binder
 import android.os.IBinder
 
 class AuthenticatorService : Service() {
-    private val authenticator: AccountAuthenticator by lazy { AccountAuthenticator(this) }
+    private val authenticator: AccountManager by lazy { AccountManager.get(this) }
 
     override fun onBind(intent: Intent?): IBinder? {
         return AuthenticatorServiceBinder(authenticator)
     }
 
-    class AuthenticatorServiceBinder(private val accountAuthenticator: AccountAuthenticator) : Binder() {
-        fun getAuthenticator(): AccountAuthenticator {
+    class AuthenticatorServiceBinder(private val accountAuthenticator: AccountManager) : Binder() {
+        fun getAuthenticator(): AccountManager {
             return accountAuthenticator
         }
     }

@@ -16,6 +16,7 @@ import java.util.regex.Pattern
 import javax.crypto.SecretKey
 import javax.crypto.SecretKeyFactory
 import javax.crypto.spec.PBEKeySpec
+import ru.hse.client.main.MainActivity
 
 
 fun isNotValidEmail(target: CharSequence?): Boolean {
@@ -152,9 +153,5 @@ fun generateHash(password: String, context: Context): String {
     val key: SecretKey = factory.generateSecret(spec)
     val hash: ByteArray = key.encoded
     return hash.toHexString()
-}
-
-fun finishAuth(intent: Intent) {
-
 }
 

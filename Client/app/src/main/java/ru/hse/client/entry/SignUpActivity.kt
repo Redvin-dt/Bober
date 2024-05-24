@@ -189,6 +189,9 @@ class SignUpActivity : AppCompatActivity() {
         haveAnAccountButton.setOnClickListener {
             val intent = Intent(this, SignInActivity::class.java)
             startActivity(intent)
+            val data: Intent = Intent()
+            setResult(RESULT_OK, data)
+            finish()
         }
     }
 
