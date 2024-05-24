@@ -1,4 +1,4 @@
-package ru.hse.client.main
+package ru.hse.client.utility
 
 import android.app.Activity
 import android.content.Context
@@ -6,7 +6,6 @@ import android.util.Log
 import okhttp3.*
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.internal.wait
 import okio.ByteString
 import ru.hse.client.R
 import ru.hse.server.proto.EntitiesProto
@@ -14,7 +13,6 @@ import ru.hse.server.proto.EntitiesProto.GroupModel
 import ru.hse.server.proto.EntitiesProto.UserModel
 import java.io.IOException
 import java.util.concurrent.CountDownLatch
-
 
 class User {
     private var user: UserModel? = null
@@ -52,7 +50,7 @@ class User {
     }
 
     fun getUserEmail(): String {
-        return user!!.email
+        return user!!.getEmail()
     }
 
     fun getUserGroups(): List<GroupModel> {
@@ -192,18 +190,15 @@ class User {
             override fun onResponse(call: Call, response: Response) {
                 Log.i("Info", response.toString())
                 if (response.isSuccessful) {
-                    val responseBody: ByteString? = response.body?.byteString()
-                    val registeredUser: EntitiesProto.UserModel = EntitiesProto.UserModel.parseFrom(responseBody?.toByteArray())
-                    setUser(registeredUser)
-                } else {
-                    response.body?.let { Log.i("Error", it.string()) }
+                    } else {
+                        response.body?.let { Log.i("Error", it.string()) }
+                    }
+                    countDownLatch.countDown()
                 }
-                countDownLatch.countDown()
-            }
-        })
+            })
 
-        countDownLatch.await();
-    }
+            countDownLatch.await();
+        }
 
     fun updateUser(activity: Activity) {
         if (user == null) {

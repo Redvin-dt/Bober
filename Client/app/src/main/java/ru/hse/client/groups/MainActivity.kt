@@ -1,4 +1,4 @@
-package ru.hse.client.main
+package ru.hse.client.groups
 
 import android.content.Intent
 import android.os.Bundle
@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             ContextCompat.startActivity(this, intent, null)
         } else {
-            var intent = Intent(this, SignInActivity::class.java)
+            val intent = Intent(this, SignInActivity::class.java)
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             startActivityForResult(intent, 100)
         }

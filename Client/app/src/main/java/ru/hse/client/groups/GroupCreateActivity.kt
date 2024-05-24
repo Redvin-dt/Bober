@@ -1,4 +1,4 @@
-package ru.hse.client.main
+package ru.hse.client.groups
 
 import android.content.Intent
 import android.os.Bundle
@@ -23,6 +23,7 @@ import okhttp3.Response
 import ru.hse.client.R
 import ru.hse.client.databinding.ActivityGroupCreateBinding
 import ru.hse.client.entry.*
+import ru.hse.client.utility.user
 import ru.hse.server.proto.EntitiesProto
 
 import java.io.IOException

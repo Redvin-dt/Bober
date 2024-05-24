@@ -14,12 +14,11 @@ import okhttp3.*
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okio.ByteString
-import ru.hse.client.main.GroupSelectMenuActivity
+import ru.hse.client.groups.GroupSelectMenuActivity
 import ru.hse.server.proto.EntitiesProto.UserModel
-import ru.hse.server.proto.EntitiesProto
 import java.io.IOException
 import ru.hse.client.R
-import ru.hse.client.main.*
+import ru.hse.client.utility.user
 
 fun printErrorAboutBadUser(activity: Activity, loginLayout: TextInputLayout, passwordLayout: TextInputLayout) {
     Log.e("Info", "no such user with this login")
@@ -85,8 +84,8 @@ fun logInUser(
             ?.build()
             .toString()
 
-    val user_: EntitiesProto.UserModel =
-        EntitiesProto.UserModel.newBuilder().setLogin(login).setPasswordHash(passwordHash).build()
+    val user_: UserModel =
+        UserModel.newBuilder().setLogin(login).setPasswordHash(passwordHash).build()
 
     val requestBody: RequestBody =
         RequestBody.create("application/x-protobuf".toMediaTypeOrNull(), user_.toByteArray())
@@ -112,8 +111,8 @@ fun logInUser(
             Log.i("Info", response.toString())
             if (response.isSuccessful) {
                 val responseBody: ByteString? = response.body?.byteString()
-                val user_: EntitiesProto.UserModel =
-                    EntitiesProto.UserModel.parseFrom(responseBody?.toByteArray())
+                val user_: UserModel =
+                    UserModel.parseFrom(responseBody?.toByteArray())
                 if (user_.hasPasswordHash()) {
                     Log.i("Info", "success")
                     printOkAboutGoodUser(activity)
@@ -151,8 +150,8 @@ fun registerUser(
             ?.build()
             .toString()
 
-    val user_: EntitiesProto.UserModel =
-        EntitiesProto.UserModel.newBuilder().setLogin(login).setEmail(email).setPasswordHash(passwordHash).build()
+    val user_: UserModel =
+        UserModel.newBuilder().setLogin(login).setEmail(email).setPasswordHash(passwordHash).build()
     val requestBody: RequestBody =
         RequestBody.create("application/x-protobuf".toMediaTypeOrNull(), user_.toByteArray())
 
@@ -206,8 +205,8 @@ fun registerUser(
                         Log.i("Info", response.toString())
                         if (response.isSuccessful) {
                             val responseBody: ByteString? = response.body?.byteString()
-                            val registeredUser: EntitiesProto.UserModel =
-                                EntitiesProto.UserModel.parseFrom(responseBody?.toByteArray())
+                            val registeredUser: UserModel =
+                                UserModel.parseFrom(responseBody?.toByteArray())
                             Handler(Looper.getMainLooper()).post {
                                 Toast.makeText(
                                     activity,
