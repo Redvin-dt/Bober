@@ -155,6 +155,7 @@ class GroupCreateActivity : AppCompatActivity() {
         val request: Request = Request.Builder()
                 .url(URlCreateGroup)
                 .post(requestBody)
+                .header("Authorization", "Bearer " + user.getUserToken())
                 .build()
 
         Log.i("Info", "Request has been sent $URlCreateGroup")
