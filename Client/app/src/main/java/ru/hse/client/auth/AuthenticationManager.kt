@@ -11,7 +11,6 @@ import android.util.Log
 import ru.hse.client.auth.MainActivity
 import ru.hse.client.utility.user
 
-
 class AuthenticationManager(context: Context) {
     private var mContext: Context = context
     private var mAccountManager: AccountManager = AccountManager.get(mContext)
