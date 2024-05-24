@@ -8,7 +8,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import ru.hse.client.main.MainActivity
+import ru.hse.client.auth.MainActivity
 import ru.hse.client.utility.user
 
 
