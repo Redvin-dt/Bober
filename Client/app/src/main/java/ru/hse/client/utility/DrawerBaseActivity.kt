@@ -17,8 +17,7 @@ import ru.hse.client.profile.ProfileActivity
 
 open class DrawerBaseActivity: AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
-
-    lateinit var drawerLayout: DrawerLayout
+    private lateinit var drawerLayout: DrawerLayout
 
     override fun setContentView(view: View) {
         drawerLayout = layoutInflater.inflate(R.layout.activity_drawer_base, null) as DrawerLayout
@@ -63,6 +62,6 @@ open class DrawerBaseActivity: AppCompatActivity(), NavigationView.OnNavigationI
     }
 
     protected fun allocateActivityTitle(titleString: String) {
-        supportActionBar?.setTitle(titleString)
+        supportActionBar?.title = titleString
     }
 }
