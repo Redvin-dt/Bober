@@ -7,6 +7,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.hse.server.exception.AccessException;
+import ru.hse.server.exception.EntityUpdateException;
 import ru.hse.server.proto.EntitiesProto.GroupModel;
 import ru.hse.server.service.GroupService;
 
@@ -70,6 +72,26 @@ public class GroupController {
         } catch (Exception e) {
             logger.error("unexpected error", e);
             return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PostMapping(value = "/enter", consumes = {MediaType.APPLICATION_PROTOBUF_VALUE})
+    public ResponseEntity enterGroup(@RequestBody GroupModel group, @RequestParam Long userId) {
+        try {
+            groupService.enterGroup(userId, group);
+            return ResponseEntity.ok().body("user now member of group");
+        } catch (InvalidProtocolBufferException e) {
+            logger.error("invalid protocol buffer in enter request", e);
+            return ResponseEntity.badRequest().body("invalid protobuf, error: " + e.getMessage());
+        } catch (AccessException e) {
+            logger.error("failed to access group");
+            return ResponseEntity.badRequest().body("invalid group id or password");
+        } catch (EntityNotFoundException e) {
+            logger.error("failed while find user or group in enter request", e);
+            return ResponseEntity.badRequest().body("invalid user id or group id");
+        } catch (Exception e) {
+            logger.error("unexpected error in enter request", e);
+            return ResponseEntity.badRequest().body("unexpected error");
         }
     }
 
