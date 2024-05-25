@@ -11,6 +11,7 @@ import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okio.ByteString
 import ru.hse.client.R
 import ru.hse.client.utility.printMessageFromBadResponse
+import ru.hse.client.utility.user
 import ru.hse.server.proto.EntitiesProto
 import java.io.IOException
 import java.util.concurrent.CountDownLatch
@@ -62,4 +63,17 @@ fun getGroupsByPrefix(
 
     countDownLatch.await(5, TimeUnit.SECONDS)
     return groupList
+}
+
+fun enterGroup(
+        group: EntitiesProto.GroupModel,
+        activity: Activity,
+        okHttpClient: OkHttpClient
+) {
+    val urlEnterGroup : String = ("http://" + ContextCompat.getString(activity, R.string.IP) + "/groups/enter").toHttpUrlOrNull()
+            ?.newBuilder()
+            ?.addQueryParameter("userId", user.getUserLogin())
+            ?.build().toString()
+
+    val requestForEnterGroup =
 }

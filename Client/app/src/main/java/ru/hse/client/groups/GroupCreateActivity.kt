@@ -161,8 +161,8 @@ class GroupCreateActivity : AppCompatActivity() {
                 .build()
 
         Log.i("Info", "Request has been sent $URlCreateGroup")
-        val countDownLatch = CountDownLatch(1)
         val somethingWentWrongMessage: String = "Something went wrong, try again"
+        val countDownLatch = CountDownLatch(1)
         okHttpClient.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
                 Log.e("Error", e.toString() + " " + e.message)
@@ -177,16 +177,15 @@ class GroupCreateActivity : AppCompatActivity() {
                 if (response.isSuccessful) {
                     user.updateUser(context)
                     Log.i("Info", "Group created")
-                    return
                 } else {
                     Handler(Looper.getMainLooper()).post {
-                        Toast.makeText(context, response.body?.string(), Toast.LENGTH_SHORT).show() // TODO: set error message to layout?
+                        Toast.makeText(context, response.body?.string(), Toast.LENGTH_SHORT).show()
                     }
                 }
                 countDownLatch.countDown()
-
             }
         })
 
+        countDownLatch.await()
     }
 }

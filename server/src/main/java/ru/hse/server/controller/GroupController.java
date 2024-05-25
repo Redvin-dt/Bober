@@ -75,11 +75,12 @@ public class GroupController {
         }
     }
 
-    @PostMapping(value = "/enter", consumes = {MediaType.APPLICATION_PROTOBUF_VALUE})
-    public ResponseEntity enterGroup(@RequestBody GroupModel group, @RequestParam Long userId) {
+    @PostMapping(value = "/enter", consumes = {MediaType.APPLICATION_PROTOBUF_VALUE}, produces = {MediaType.APPLICATION_PROTOBUF_VALUE})
+    public ResponseEntity enterGroup(@RequestBody GroupModel group, @RequestParam String userLogin) {
         try {
-            groupService.enterGroup(userId, group);
-            return ResponseEntity.ok().body("user now member of group");
+            // TODO: check user by token
+            var groupProto = groupService.enterGroup(userLogin, group);
+            return ResponseEntity.ok().body(groupProto);
         } catch (InvalidProtocolBufferException e) {
             logger.error("invalid protocol buffer in enter request", e);
             return ResponseEntity.badRequest().body("invalid protobuf, error: " + e.getMessage());
