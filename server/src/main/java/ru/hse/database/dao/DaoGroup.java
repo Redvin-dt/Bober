@@ -44,7 +44,8 @@ public class DaoGroup {
     }
 
     static public List<Group> getGroupsByNamePrefix(String groupPrefix) {
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+
+        Session session = HibernateUtil.getSessionFactory().openSession();
             CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
             CriteriaQuery<Group> criteria = criteriaBuilder.createQuery(Group.class);
 
@@ -54,7 +55,6 @@ public class DaoGroup {
             Query<Group> query = session.createQuery(criteria);
             query.setMaxResults(MAX_RESULTS);
             return query.getResultList();
-        }
     }
 
     static public User getGroupAdmin(Group group) {

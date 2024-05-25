@@ -1,6 +1,7 @@
 package ru.hse.client.groups
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -12,19 +13,28 @@ import ru.hse.client.databinding.ActivityGroupSelectMenuBinding
 import ru.hse.client.utility.DrawerBaseActivity
 import ru.hse.client.utility.user
 import ru.hse.server.proto.EntitiesProto
+import java.util.regex.Pattern
+
 
 class GroupSelectMenuActivity : DrawerBaseActivity() {
 
     private lateinit var binding: ActivityGroupSelectMenuBinding
-    private var dataArrayList = ArrayList<ListData?>()
+    private lateinit var dataArrayList: ArrayList<ListData?>
+    private lateinit var listViewAdapter: ListAdapter
 
     private var okHttpClient = OkHttpClient()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityGroupSelectMenuBinding.inflate(layoutInflater)
+
+        dataArrayList = ArrayList<ListData?>()
+        listViewAdapter = ListAdapter(this, dataArrayList)
+
         setContentView(binding.root)
         allocateActivityTitle("Groups")
+
+        binding.groupSearchList.adapter = listViewAdapter
 
         binding.createGroupButton.setOnClickListener {
             onNewGroupPressed()
@@ -34,43 +44,44 @@ class GroupSelectMenuActivity : DrawerBaseActivity() {
             drawGroupsByPrefix("")
         }
 
+        val textView: AutoCompleteTextView = binding.groupSearchView.findViewById(binding.groupSearchView.getContext().getResources().getIdentifier("android:id/search_src_text", null, null))
+        textView.setTextColor(Color.BLACK)
+
         binding.groupSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                // on below line we are checking
-                // if query exist or not.
-                //if (programmingLanguagesList.contains(query)) {
-                //    // if query exist within list we
-                //    // are filtering our list adapter.
-                //    listAdapter.filter.filter(query)
-                //} else {
-                //    // if query is not present we are displaying
-                //    // a toast message as no  data found..
-                //    Toast.makeText(this@MainActivity, "No Language found..", Toast.LENGTH_LONG)
-                //            .show()
-                //} // TODO: add filters
+
                 if (query != null) {
+                    if (!filterSearchText(query)) {
+                        Toast.makeText(this@GroupSelectMenuActivity, "Incorrect group name", Toast.LENGTH_LONG).show()
+                        drawUserGroupList()
+                        return false
+                    }
                     drawGroupsByPrefix(query)
                 } else {
-                    drawUserGroupList() // TODO: mb set smth else
+                    drawUserGroupList()
                 }
                 return false
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                // if query text is change in that case we
-                // are filtering our adapter with
-                // new text on below line.
-                return false // TODO: add filters
+                if (newText == null) {
+                    textView.setTextColor(Color.BLACK)
+                    return false
+                }
+
+                if (filterSearchText(newText)) {
+                    textView.setTextColor(Color.BLACK)
+                } else {
+                    textView.setTextColor(Color.RED)
+                }
+                return false
             }
-        }) // TODO: remove comments
+        })
 
-
-        /*val swipeRefreshLayout: SwipeRefreshLayout = binding.swipeRefreshLayout
-        swipeRefreshLayout.setOnRefreshListener {
-            user.updateUser(this)
-            createGroupList()
-            swipeRefreshLayout.isRefreshing = false
-        }*/
+        binding.groupSearchView.setOnCloseListener {
+            drawUserGroupList()
+            false;
+        }
 
         drawUserGroupList()
     }
@@ -78,8 +89,8 @@ class GroupSelectMenuActivity : DrawerBaseActivity() {
     private fun drawGroupsByPrefix(prefixName: String) {
         val groups = getGroupsByPrefix(prefixName, this@GroupSelectMenuActivity, okHttpClient)
         if (groups == null) {
-            Log.e("Error", "can not find group with this prefix") // TODO: add smth else, rename
-            drawUserGroupList(); // TODO: mb remove
+            Log.e("Error", "can not find group with this prefix")
+            drawUserGroupList();
             return;
         }
 
@@ -92,8 +103,10 @@ class GroupSelectMenuActivity : DrawerBaseActivity() {
 
     }
 
-    private fun drawGroupsList(groups : List<EntitiesProto.GroupModel>) {
+    private fun drawGroupsList(groups: List<EntitiesProto.GroupModel>) {
         val data: MutableList<Map<String, String>> = mutableListOf()
+
+        dataArrayList.clear()
 
         for (group in groups) {
             data.add(
@@ -111,7 +124,7 @@ class GroupSelectMenuActivity : DrawerBaseActivity() {
             )
         }
 
-        binding.groupSearchList.adapter = ListAdapter(this, dataArrayList)
+        listViewAdapter.notifyDataSetChanged()
 
         binding.groupSearchList.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
             val group = groups[position]
@@ -141,6 +154,12 @@ class GroupSelectMenuActivity : DrawerBaseActivity() {
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         startActivity(intent)
         finish()
+    }
+
+    private fun filterSearchText(text: String): Boolean {
+        val patternAsString: String = "^(?=.*[a-z])([0-9]*)([A-Z]*)(?=\\S+$).*$"
+        val pattern: Pattern = Pattern.compile(patternAsString)
+        return pattern.matcher(text).matches()
     }
 
     companion object {
