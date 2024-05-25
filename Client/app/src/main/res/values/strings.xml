@@ -36,5 +36,7 @@
     <string name="chapter_title">Chapter title</string>
     <string name="enter_group">Enter group</string>
     <string name="enter">Enter</string>
+    <string name="log_out">Log out</string>
+    <string name="enter_group_message">Enter password</string>
 
 </resources>

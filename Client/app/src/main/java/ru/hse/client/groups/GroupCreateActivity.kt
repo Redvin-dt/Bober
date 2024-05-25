@@ -2,32 +2,18 @@ package ru.hse.client.groups
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
-import okhttp3.Call
-import okhttp3.Callback
-import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.RequestBody
-import okhttp3.Response
 import ru.hse.client.R
 import ru.hse.client.databinding.ActivityGroupCreateBinding
 import ru.hse.client.entry.*
-import ru.hse.client.utility.user
-import ru.hse.server.proto.EntitiesProto
 
-import java.io.IOException
-import java.util.concurrent.CountDownLatch
 
 class GroupCreateActivity : AppCompatActivity() {
 

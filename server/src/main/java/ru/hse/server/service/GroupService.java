@@ -25,10 +25,12 @@ public class GroupService {
     static private final Logger logger = LoggerFactory.getLogger(GroupService.class);
     private final GroupRepository groupRepository;
     private final UserRepository userRepository;
+    private final AuthService authService;
 
-    public GroupService(GroupRepository groupRepository, @Qualifier("userDatabaseRepository") UserRepository userRepository) {
+    public GroupService(GroupRepository groupRepository, @Qualifier("userDatabaseRepository") UserRepository userRepository, AuthService authService) {
         this.groupRepository = groupRepository;
         this.userRepository = userRepository;
+        this.authService = authService;
     }
 
     public GroupModel createGroup(GroupModel groupModel) throws InvalidProtocolBufferException {
@@ -51,8 +53,13 @@ public class GroupService {
         return ProtoSerializer.getGroupInfo(result);
     }
 
-    public GroupModel enterGroup(String userLogin, GroupModel groupModel) throws InvalidProtocolBufferException,
+    public GroupModel enterGroup(String userLogin, GroupModel groupModel, String token) throws InvalidProtocolBufferException,
             EntityNotFoundException, AccessException, EntityUpdateException {
+
+        if (!authService.checkAccessToken(userLogin, token.substring("Bearer ".length()))){
+            throw new AccessException("user and token mismatch");
+        }
+
         if (!groupModel.hasId()) {
             throw new InvalidProtocolBufferException("invalid protocol buffer on entry group, group must have id");
         }

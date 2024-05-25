@@ -146,21 +146,25 @@ class GroupSelectMenuActivity : DrawerBaseActivity() {
                 return@OnItemClickListener
             }
 
-            val groupResponse = enterGroup(group, this@GroupSelectMenuActivity, okHttpClient)
+            val groupResponse = enterGroup(group, false, this@GroupSelectMenuActivity, okHttpClient)
 
             if (groupResponse == null) {
                 val intent = Intent(this, GroupEnterActivity::class.java)
+                val bundle = Bundle()
+                bundle.putLong("groupId", group.id)
+                bundle.putString("groupName", group.name)
+                intent.putExtras(bundle)
+                startActivity(intent)
+                finish()
+            } else {
+                val intent = Intent(this, GroupActivity::class.java)
+                val bundle = Bundle()
+                bundle.putSerializable("group", groupResponse)
+                intent.putExtras(bundle)
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 startActivity(intent)
                 finish()
             }
-
-            val intent = Intent(this, GroupActivity::class.java)
-            val bundle = Bundle()
-            bundle.putSerializable("group", groupResponse)
-            intent.putExtras(bundle)
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            startActivity(intent)
-            finish()
         }
     }
 

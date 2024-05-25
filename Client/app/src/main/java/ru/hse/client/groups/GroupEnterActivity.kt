@@ -4,12 +4,17 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import com.google.android.material.textfield.TextInputEditText
 import okhttp3.OkHttpClient
+import ru.hse.client.R
 import ru.hse.client.databinding.ActivityGroupEnterBinding
 import ru.hse.client.entry.hideKeyboard
+import ru.hse.client.entry.isNotValidPassword
 import ru.hse.client.utility.DrawerBaseActivity
 import ru.hse.server.proto.EntitiesProto
 
@@ -25,31 +30,90 @@ class GroupEnterActivity : DrawerBaseActivity() {
         setContentView(binding.root)
         allocateActivityTitle("GroupsEnter")
 
-        val nameEditText = binding.name // TODO: remove name
-        val passwordEditText = binding.password
+        val bundle = intent.extras
+        val groupId : Long?
+        val groupName : String?
 
-        nameEditText.setOnFocusChangeListener { v, hasFocus ->
+        if (bundle != null) {
+            groupId = bundle.getLong("groupId")
+            groupName = bundle.getString("groupName")
+        } else {
+            Log.e("Error", "group enter activity has not bundle")
+            Handler(Looper.getMainLooper()).post {
+                Toast.makeText(
+                        this@GroupEnterActivity,
+                        "Something wrong try again",
+                        Toast.LENGTH_SHORT
+                ).show()
+            }
+            finish()
+            return
+        }
+
+        if (groupName == null) {
+            Log.e("Error", "group enter activity has not id and name")
+            Handler(Looper.getMainLooper()).post {
+                Toast.makeText(
+                        this@GroupEnterActivity,
+                        "Something wrong try again",
+                        Toast.LENGTH_SHORT
+                ).show()
+            }
+            finish()
+            return
+        }
+
+        val passwordEditText = binding.password
+        val passwordLayout = binding.passwordBox
+
+        passwordEditText.setOnFocusChangeListener { v, hasFocus ->
             if (!hasFocus) {
                 hideKeyboard(v)
             }
         }
 
-        // TODO: add text watchers
+        val textWatcherForPassword: TextWatcher = object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
 
+            override fun onTextChanged(charSequence: CharSequence, start: Int, before: Int, count: Int) {
+                val passwordOriginal = charSequence.toString()
+                if (isNotValidPassword(passwordOriginal)) {
+                    passwordLayout.error = "Incorrect password"
+                } else {
+                    passwordLayout.boxStrokeColor = ContextCompat.getColor(this@GroupEnterActivity,
+                            R.color.green
+                    )
+                    passwordLayout.error = null
+                }
+            }
 
+            override fun afterTextChanged(editable: Editable) {
+            }
+        }
+        passwordEditText.addTextChangedListener(textWatcherForPassword)
 
         binding.enterGroupButton.setOnClickListener {
-            onClickButtonEnterGroup(nameEditText, passwordEditText)
+            onClickButtonEnterGroup(groupId, groupName, passwordEditText)
         }
     }
 
-    private fun onClickButtonEnterGroup(nameEditText : TextInputEditText, passwordEditText : TextInputEditText) {
-        val name = nameEditText.text.toString()
+    private fun onClickButtonEnterGroup(groupId : Long, groupName : String, passwordEditText : TextInputEditText) {
         val password = passwordEditText.text.toString()
 
-        val groupModel = EntitiesProto.GroupModel.newBuilder().setName(name).setPasswordHash(password).build()
+        if (isNotValidPassword(password)) {
+            Handler(Looper.getMainLooper()).post {
+                Toast.makeText(
+                        this@GroupEnterActivity,
+                        "Incorrect password",
+                        Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
 
-        val responseGroupModel = enterGroup(groupModel, this@GroupEnterActivity, okHttpClient)
+        val groupModel = EntitiesProto.GroupModel.newBuilder().setId(groupId).setName(groupName).setPasswordHash(password).build()
+
+        val responseGroupModel = enterGroup(groupModel, true, this@GroupEnterActivity, okHttpClient)
 
         if (responseGroupModel == null) {
             Log.e("Error", "failed to entry group")
