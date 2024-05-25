@@ -8,41 +8,18 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import okhttp3.*
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
-import okhttp3.internal.wait
 import okio.ByteString
 import ru.hse.client.R
+import ru.hse.client.utility.printMessageFromBadResponse
 import ru.hse.server.proto.EntitiesProto
 import java.io.IOException
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 
-
-fun printMessageFromBadResponse(message: CharSequence?, activity: Activity) { // TODO: do common utils for requests
-    if (message == null) {
-        Log.e("Error", "null response message")
-        Handler(Looper.getMainLooper()).post {
-            Toast.makeText(
-                    activity,
-                    "Something went wrong, try again",
-                    Toast.LENGTH_SHORT
-            ).show()
-        }
-        return
-    }
-    Log.e("Info", message.toString())
-    Handler(Looper.getMainLooper()).post {
-        Toast.makeText(
-                activity,
-                message,
-                Toast.LENGTH_SHORT
-        ).show()
-    }
-}
-
 fun getGroupsByPrefix(
         prefixName: String,
         activity: Activity,
-        okHttpClient: OkHttpClient) : List<EntitiesProto.GroupModel>? {
+        okHttpClient: OkHttpClient): List<EntitiesProto.GroupModel>? {
     val urlGetGroupByPrefix: String =
             ("http://" + ContextCompat.getString(activity, R.string.IP) + "/groups/groupByPrefixName").toHttpUrlOrNull()
                     ?.newBuilder()
@@ -64,7 +41,7 @@ fun getGroupsByPrefix(
                         "Something went wrong, try again",
                         Toast.LENGTH_SHORT
                 ).show()
-            } // TODO: check this in app
+            }
 
             countDownLatch.countDown()
         }
@@ -83,6 +60,6 @@ fun getGroupsByPrefix(
         }
     })
 
-    countDownLatch.await(5, TimeUnit.SECONDS) // TODO: mb set another timeout
+    countDownLatch.await(5, TimeUnit.SECONDS)
     return groupList
 }
