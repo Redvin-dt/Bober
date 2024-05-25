@@ -1,4 +1,4 @@
-package ru.hse.client.auth
+package ru.hse.client.entry
 
 import android.content.Intent
 import ru.hse.client.R
@@ -180,7 +180,7 @@ class SignUpActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            tryToRegisterUser(login, email, password, this@SignUpActivity, okHttpClient, loginLayout, emailLayout)
+            registerUser(login, email, password, this@SignUpActivity, okHttpClient, loginLayout, emailLayout)
 
         }
 
@@ -189,6 +189,9 @@ class SignUpActivity : AppCompatActivity() {
         haveAnAccountButton.setOnClickListener {
             val intent = Intent(this, SignInActivity::class.java)
             startActivity(intent)
+            val data: Intent = Intent()
+            setResult(RESULT_OK, data)
+            finish()
         }
     }
 

@@ -1,6 +1,7 @@
 package ru.hse.server;
 
 import ru.hse.server.repository.UserLocalRepository;
+import ru.hse.server.service.AuthService;
 import ru.hse.server.service.UserService;
 import ru.hse.server.controller.UserController;
 import ru.hse.server.proto.EntitiesProto.UserModel;
@@ -31,6 +32,8 @@ public class UserControllerTests {
 
     @MockBean
     private UserService userService;
+    @MockBean
+    private AuthService authService;
 
     private static UserModel user;
 

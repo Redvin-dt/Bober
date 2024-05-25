@@ -8,7 +8,7 @@ import ru.hse.server.proto.EntitiesProto
 
 class GroupActivity: DrawerBaseActivity() {
 
-    lateinit var binding: ActivityGroupBinding
+    private lateinit var binding: ActivityGroupBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
