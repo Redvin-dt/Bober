@@ -25,8 +25,10 @@ class User {
     }
 
     fun setUser(newUser: UserModel) {
+        Log.i("Info", "get user $newUser") // TODO: remove
         if (user == null) {
             user = newUser
+            Log.i("Info", "now user is $user") // TODO: remove
         } else {
             val builder = user!!.toBuilder()
 

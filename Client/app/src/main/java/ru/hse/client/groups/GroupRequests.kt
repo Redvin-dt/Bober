@@ -73,6 +73,7 @@ fun getGroupsByPrefix(
 
 fun enterGroup(
         group: EntitiesProto.GroupModel,
+        writeErrorMessage: Boolean,
         activity: Activity,
         okHttpClient: OkHttpClient
 ) : EntitiesProto.GroupModel? {
@@ -113,14 +114,22 @@ fun enterGroup(
                 val responseBody: ByteString? = response.body?.byteString()
                 entryGroupModel = EntitiesProto.GroupModel.parseFrom(responseBody?.toByteArray())
             } else {
-                printMessageFromBadResponse(response.body?.string(), activity) // TODO: set better message
+                if (writeErrorMessage) {
+                    Handler(Looper.getMainLooper()).post {
+                        Toast.makeText(
+                                activity,
+                                "Check password and try again",
+                                Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
             }
 
             countDownLatch.countDown()
         }
     })
 
-    countDownLatch.await(5, TimeUnit.SECONDS)
+    countDownLatch.await(10, TimeUnit.SECONDS)
     return entryGroupModel
 }
 

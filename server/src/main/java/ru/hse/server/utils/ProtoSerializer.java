@@ -34,7 +34,6 @@ public class ProtoSerializer {
                 .setId(user.getUserId())
                 .setLogin(user.getUserLogin())
                 .setEmail(user.getUserEmail())
-                .setPasswordHash(user.getPasswordHash())
                 .setMetaInfo(user.getMetaInfo())
                 .build();
     }

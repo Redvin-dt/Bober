@@ -1,5 +1,6 @@
 package ru.hse.server.service;
 
+import io.jsonwebtoken.Claims;
 import jakarta.annotation.Nonnull;
 import jakarta.security.auth.message.AuthException;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -49,4 +50,15 @@ public class AuthService {
 
         return jwtProvider.generateAccessToken(user);
     }
+
+    public Boolean checkAccessToken(String userLogin, String token) {
+        if (!jwtProvider.validateAccessToken(token)) {
+            return false;
+        }
+
+        Claims claims = jwtProvider.getClaims(token);
+        return claims.getSubject().equals(userLogin);
+    }
+
+
 }
