@@ -7,6 +7,7 @@ build/
 **/application.properties
 **/application-test.properties
 hibernate.cfg.xml
+application.properties
 
 ### STS ###
 .apt_generated

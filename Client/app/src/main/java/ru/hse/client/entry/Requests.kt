@@ -140,53 +140,7 @@ fun registerUser(
             if (response.isSuccessful) {
                 val responseBody: ByteString? = response.body?.byteString()
                 val registeredUser: UserModel = UserModel.parseFrom(responseBody?.toByteArray())
-                val URlGetUser: String =
-                    ("http://" + ContextCompat.getString(
-                        activity,
-                        R.string.IP
-                    ) + "/users/userByLogin").toHttpUrlOrNull()
-                        ?.newBuilder()
-                        ?.addQueryParameter("login", login)
-                        ?.build().toString()
-
-                val requestForGetGeneratedUser: Request = Request.Builder()
-                    .url(URlGetUser)
-                    .header("Authorization", "Bearer " + registeredUser.accessToken)
-                    .build()
-
-                okHttpClient.newCall(requestForGetGeneratedUser).enqueue(object : Callback {
-                    override fun onFailure(call: Call, e: IOException) {
-                        Log.e("Error", e.toString() + " " + e.message)
-                        Handler(Looper.getMainLooper()).post {
-                            Toast.makeText(
-                                activity,
-                                "$somethingWentWrongMessage with another login",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                    }
-
-                    override fun onResponse(call: Call, response: Response) {
-                        Log.i("Info", response.toString())
-                        if (response.isSuccessful) {
-                            val responseBody: ByteString? = response.body?.byteString()
-                            val registeredUser: UserModel =
-                                UserModel.parseFrom(responseBody?.toByteArray())
-                            Handler(Looper.getMainLooper()).post {
-                                Toast.makeText(
-                                    activity,
-                                    "User has been successfully created",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-                            user.setUser(registeredUser)
-                            user.setUserClientPassword(passwordHash)
-                            val data: Intent = Intent()
-                            activity.setResult(RESULT_OK, data)
-                            activity.finish()
-                        }
-                    }
-                })
+                user.setUser(registeredUser)
 
             } else {
                 val loginErrorMessage: String = "user with that login already exist"

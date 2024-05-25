@@ -31,7 +31,7 @@ public class AuthService {
 
         if (passwordEncoderService.matchPassword(userModel.getPasswordHash(), user.getPasswordHash())) {
             return ProtoSerializer
-                    .getUserInfo(user)
+                    .getProtoFromUser(user)
                     .toBuilder()
                     .setAccessToken(jwtProvider.generateAccessToken(user))
                     .build();
