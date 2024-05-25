@@ -82,12 +82,15 @@ class User {
 
         val requestForGetGeneratedUser: Request = Request.Builder()
             .url(URlGetUser)
-            .header("Authorization", "Bearer " + getUserToken())
+            .header("Authorization", "Bearer ${getUserToken()}")
             .build()
 
+        val countDownLatch = CountDownLatch(1)
+        Log.i("Info", "Request has been sent $requestForGetGeneratedUser")
         okHttpClient.newCall(requestForGetGeneratedUser).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
                 Log.e("Error", e.toString() + " " + e.message)
+                countDownLatch.countDown()
             }
 
             override fun onResponse(call: Call, response: Response) {
@@ -100,8 +103,10 @@ class User {
                 } else {
                     response.body?.let { Log.i("Error", it.string()) }
                 }
+                countDownLatch.countDown()
             }
         })
+        countDownLatch.await()
     }
 
     fun setUserByEmail(context: Context, email: String, token: String) {
@@ -116,9 +121,12 @@ class User {
             .header("Authorization", "Bearer ${token}")
             .build()
 
+        val countDownLatch = CountDownLatch(1)
+        Log.i("Info", "Request has been sent $requestForGetGeneratedUser")
         okHttpClient.newCall(requestForGetGeneratedUser).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
                 Log.e("Error", e.toString() + " " + e.message)
+                countDownLatch.countDown()
             }
 
             override fun onResponse(call: Call, response: Response) {
@@ -131,8 +139,10 @@ class User {
                 } else {
                     response.body?.let { Log.i("Error", it.string()) }
                 }
+                countDownLatch.countDown()
             }
         })
+        countDownLatch.await()
     }
 
     fun check_token_is_valid(context: Context, login: String, token: String): Boolean {

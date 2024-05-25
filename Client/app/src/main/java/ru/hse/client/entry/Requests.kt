@@ -19,6 +19,7 @@ import ru.hse.server.proto.EntitiesProto.UserModel
 import java.io.IOException
 import ru.hse.client.R
 import ru.hse.client.utility.user
+import java.util.concurrent.CountDownLatch
 
 fun printErrorAboutBadUser(activity: Activity, loginLayout: TextInputLayout, passwordLayout: TextInputLayout) {
     Log.e("Info", "no such user with this login")
@@ -95,6 +96,7 @@ fun logInUser(
         .post(requestBody)
         .build()
 
+    val countDownLatch = CountDownLatch(1)
     okHttpClient.newCall(requestForLogInUser).enqueue(object : Callback {
         override fun onFailure(call: Call, e: IOException) {
             Log.e("Error", e.toString() + " " + e.message)
@@ -105,6 +107,7 @@ fun logInUser(
                     Toast.LENGTH_SHORT
                 ).show()
             }
+            countDownLatch.countDown()
         }
 
         override fun onResponse(call: Call, response: Response) {
@@ -128,8 +131,12 @@ fun logInUser(
             } else {
                 printMessageFromBadResponse(response.body?.string(), activity)
             }
+            countDownLatch.countDown()
+
         }
     })
+    countDownLatch.await()
+
 }
 
 
@@ -160,6 +167,7 @@ fun registerUser(
         .post(requestBody)
         .build()
 
+    val countDownLatch = CountDownLatch(1)
     Log.i("Info", "Request has been sent $URlRegistration")
     val somethingWentWrongMessage: String = "Something went wrong, try again"
     okHttpClient.newCall(requestForRegisterUser).enqueue(object : Callback {
@@ -168,6 +176,7 @@ fun registerUser(
             Handler(Looper.getMainLooper()).post {
                 Toast.makeText(activity, somethingWentWrongMessage, Toast.LENGTH_SHORT).show()
             }
+            countDownLatch.countDown()
         }
 
         override fun onResponse(call: Call, response: Response) {
@@ -255,7 +264,9 @@ fun registerUser(
                     }
                 }
             }
+            countDownLatch.countDown()
         }
     })
+    countDownLatch.await()
 }
 
