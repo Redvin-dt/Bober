@@ -53,8 +53,8 @@ public class GroupService {
 
     public GroupModel enterGroup(String userLogin, GroupModel groupModel) throws InvalidProtocolBufferException,
             EntityNotFoundException, AccessException, EntityUpdateException {
-        if (!groupModel.hasId() || !groupModel.hasPasswordHash()) {
-            throw new InvalidProtocolBufferException("invalid protocol buffer on entry group");
+        if (!groupModel.hasId()) {
+            throw new InvalidProtocolBufferException("invalid protocol buffer on entry group, group must have id");
         }
 
         var user = getUserByLogin(userLogin);
@@ -62,6 +62,10 @@ public class GroupService {
 
         if (group.getUsersSet().contains(user)) {
             return ProtoSerializer.getProtoFromGroup(group);
+        }
+
+        if (!groupModel.hasPasswordHash()) {
+            throw new InvalidProtocolBufferException("invalid protocol buffer on entry group, you are not member of group, add password");
         }
 
         if (!group.getPasswordHash().equals(groupModel.getPasswordHash())) { // TODO: add hashing

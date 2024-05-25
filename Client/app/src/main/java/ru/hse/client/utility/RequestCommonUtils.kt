@@ -6,6 +6,9 @@ import android.os.Looper
 import android.util.Log
 import android.widget.Toast
 import com.google.android.material.textfield.TextInputLayout
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+
+val APPLICATION_PROTOBUF_MEDIA_TYPE = "application/x-protobuf".toMediaTypeOrNull();
 
 fun printErrorAboutBadUser(activity: Activity, loginLayout: TextInputLayout, passwordLayout: TextInputLayout) {
     Log.e("Info", "no such user with this login")

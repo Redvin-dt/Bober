@@ -39,7 +39,7 @@ public class UserService {
 
         var user = new User(userInfo.getLogin(), userInfo.getEmail(), passwordEncoderService.hashPassword(userInfo.getPasswordHash()));
         userRepository.save(user);
-        return ProtoSerializer.getUserInfo(user);
+        return ProtoSerializer.getProtoFromUser(user);
     }
 
     public UserModel getUserByID(Long id) throws EntityNotFoundException {

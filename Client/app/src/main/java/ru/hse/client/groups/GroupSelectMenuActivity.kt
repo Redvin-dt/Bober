@@ -28,7 +28,7 @@ class GroupSelectMenuActivity : DrawerBaseActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityGroupSelectMenuBinding.inflate(layoutInflater)
 
-        dataArrayList = ArrayList<ListData?>()
+        dataArrayList = ArrayList()
         listViewAdapter = ListAdapter(this, dataArrayList)
 
         setContentView(binding.root)
@@ -50,7 +50,7 @@ class GroupSelectMenuActivity : DrawerBaseActivity() {
         binding.groupSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
 
-                if (query != null) {
+                if (query != null && query != "") {
                     if (!filterSearchText(query)) {
                         Toast.makeText(this@GroupSelectMenuActivity, "Incorrect group name", Toast.LENGTH_LONG).show()
                         drawUserGroupList()
@@ -99,8 +99,16 @@ class GroupSelectMenuActivity : DrawerBaseActivity() {
 
     private fun drawUserGroupList() {
         val userGroups = user.getUserGroups()
-        drawGroupsList(userGroups)
 
+        val stringBuilder : StringBuilder = StringBuilder()
+
+        for (i in userGroups) {
+            stringBuilder.append(i.name)
+            stringBuilder.append(" ")
+        }
+
+        Log.i("Info", "userGroupList is $stringBuilder")
+        drawGroupsList(userGroups)
     }
 
     private fun drawGroupsList(groups: List<EntitiesProto.GroupModel>) {
@@ -138,9 +146,17 @@ class GroupSelectMenuActivity : DrawerBaseActivity() {
                 return@OnItemClickListener
             }
 
+            val groupResponse = enterGroup(group, this@GroupSelectMenuActivity, okHttpClient)
+
+            if (groupResponse == null) {
+                val intent = Intent(this, GroupEnterActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
+
             val intent = Intent(this, GroupActivity::class.java)
             val bundle = Bundle()
-            bundle.putSerializable("group", group)
+            bundle.putSerializable("group", groupResponse)
             intent.putExtras(bundle)
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             startActivity(intent)
