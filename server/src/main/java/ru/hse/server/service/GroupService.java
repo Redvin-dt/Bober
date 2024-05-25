@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.hse.database.entities.Group;
 import ru.hse.database.entities.User;
+import ru.hse.server.exception.AccessException;
 import ru.hse.server.exception.EntityUpdateException;
 import ru.hse.server.proto.EntitiesProto;
 import ru.hse.server.proto.EntitiesProto.GroupModel;
@@ -50,12 +51,23 @@ public class GroupService {
         return ProtoSerializer.getGroupInfo(result);
     }
 
-    public void enterGroup(UserModel user, GroupModel group) throws InvalidProtocolBufferException {
-        if (!group.hasName() || !group.hasPasswordHash() || !user.hasLogin()) {
+    public void enterGroup(Long userId, GroupModel groupModel) throws InvalidProtocolBufferException,
+            EntityNotFoundException, AccessException, EntityUpdateException {
+        if (!groupModel.hasId() || !groupModel.hasPasswordHash()) {
             throw new InvalidProtocolBufferException("invalid protocol buffer on entry group");
         }
 
-        
+        var user = getUserById(userId);
+        var group = getGroupById(groupModel.getId());
+
+        if (!group.getPasswordHash().equals(groupModel.getPasswordHash())) { // TODO: add hashing
+            throw new AccessException("invalid password for group");
+        }
+
+        group.addUser(user);
+        if (groupRepository.update(group) == null) {
+            throw new EntityUpdateException("can not update group");
+        }
     }
 
     public GroupModel findGroupById(Long id) throws EntityNotFoundException {

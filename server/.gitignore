@@ -6,6 +6,7 @@ build/
 !**/src/test/**/build/
 **/application.properties
 **/application-test.properties
+hibernate.cfg.xml
 
 ### STS ###
 .apt_generated
