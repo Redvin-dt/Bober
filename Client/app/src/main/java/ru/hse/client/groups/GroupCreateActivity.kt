@@ -27,6 +27,7 @@ import ru.hse.client.utility.user
 import ru.hse.server.proto.EntitiesProto
 
 import java.io.IOException
+import java.util.concurrent.CountDownLatch
 
 class GroupCreateActivity : AppCompatActivity() {
 
@@ -156,11 +157,11 @@ class GroupCreateActivity : AppCompatActivity() {
         val request: Request = Request.Builder()
                 .url(URlCreateGroup)
                 .post(requestBody)
-                .header("Authorization", "Bearer " + user.getUserToken())
+                .header("Authorization", "Bearer ${user.getUserToken()}")
                 .build()
 
         Log.i("Info", "Request has been sent $URlCreateGroup")
-
+        val countDownLatch = CountDownLatch(1)
         val somethingWentWrongMessage: String = "Something went wrong, try again"
         okHttpClient.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
@@ -168,6 +169,7 @@ class GroupCreateActivity : AppCompatActivity() {
                 Handler(Looper.getMainLooper()).post {
                     Toast.makeText(context, somethingWentWrongMessage, Toast.LENGTH_SHORT).show()
                 }
+                countDownLatch.countDown()
             }
 
             override fun onResponse(call: Call, response: Response) {
@@ -181,6 +183,8 @@ class GroupCreateActivity : AppCompatActivity() {
                         Toast.makeText(context, response.body?.string(), Toast.LENGTH_SHORT).show() // TODO: set error message to layout?
                     }
                 }
+                countDownLatch.countDown()
+
             }
         })
 
