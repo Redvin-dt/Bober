@@ -51,14 +51,18 @@ public class GroupService {
         return ProtoSerializer.getGroupInfo(result);
     }
 
-    public void enterGroup(Long userId, GroupModel groupModel) throws InvalidProtocolBufferException,
+    public GroupModel enterGroup(String userLogin, GroupModel groupModel) throws InvalidProtocolBufferException,
             EntityNotFoundException, AccessException, EntityUpdateException {
         if (!groupModel.hasId() || !groupModel.hasPasswordHash()) {
             throw new InvalidProtocolBufferException("invalid protocol buffer on entry group");
         }
 
-        var user = getUserById(userId);
+        var user = getUserByLogin(userLogin);
         var group = getGroupById(groupModel.getId());
+
+        if (group.getUsersSet().contains(user)) {
+            return ProtoSerializer.getProtoFromGroup(group);
+        }
 
         if (!group.getPasswordHash().equals(groupModel.getPasswordHash())) { // TODO: add hashing
             throw new AccessException("invalid password for group");
@@ -68,6 +72,8 @@ public class GroupService {
         if (groupRepository.update(group) == null) {
             throw new EntityUpdateException("can not update group");
         }
+
+        return ProtoSerializer.getProtoFromGroup(group);
     }
 
     public GroupModel findGroupById(Long id) throws EntityNotFoundException {
@@ -146,5 +152,15 @@ public class GroupService {
         }
 
         return group.get();
+    }
+
+    private User getUserByLogin(String userLogin) throws EntityNotFoundException {
+        var user = userRepository.findByUserLogin(userLogin);
+        if (user == null) {
+            logger.error("user with login={} not found", userLogin);
+            throw new EntityNotFoundException("user with login=" + userLogin + " does not exist");
+        }
+
+        return user;
     }
 }
