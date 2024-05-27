@@ -16,7 +16,7 @@
             android:title="@string/menu_deadlines" />
 
         <item android:id="@+id/nav_log_out"
-              android:icon="@drawable/deadline_icon"
+              android:icon="@drawable/logout_icon"
               android:title="@string/log_out" />
 
     </group>
