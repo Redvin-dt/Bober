@@ -3,8 +3,8 @@ package ru.hse.server.service;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.multipart.MultipartFile;
+import ru.hse.server.exception.DeleteFileException;
 import ru.hse.server.exception.FileValidationException;
 import ru.hse.server.repository.FileRepository;
 
@@ -29,12 +29,16 @@ public class FileService {
         }
 
         var additionalName = UUID.randomUUID().toString();
-        var newFileName = additionalName + "_" + file.getName();
+        var newFileName = additionalName + "_" + file.getOriginalFilename();
         fileRepository.save(file, newFileName);
         return newFileName;
     }
 
     public Resource getFile(String name) throws IOException {
         return fileRepository.get(name);
+    }
+
+    public void deleteFile(String name) throws IOException, DeleteFileException {
+        fileRepository.delete(name);
     }
 }
