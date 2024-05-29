@@ -4,9 +4,14 @@ import ru.hse.database.dao.DaoChapter;
 import ru.hse.database.dao.DaoGroup;
 import ru.hse.database.entities.*;
 import ru.hse.database.dao.DaoUser;
+import ru.hse.server.proto.EntitiesProto;
 import ru.hse.server.proto.EntitiesProto.UserModel;
 import ru.hse.server.proto.EntitiesProto.GroupModel;
 import ru.hse.server.proto.EntitiesProto.ChapterModel;
+import ru.hse.server.proto.EntitiesProto.QuestionModel;
+import ru.hse.server.proto.EntitiesProto.QuestionList;
+import ru.hse.server.proto.EntitiesProto.TestModel;
+import ru.hse.server.proto.EntitiesProto.TestList;
 import ru.hse.server.proto.EntitiesProto.GroupList;
 import ru.hse.server.proto.EntitiesProto.UserList;
 import ru.hse.server.proto.EntitiesProto.ChapterList;
@@ -19,7 +24,6 @@ public class ProtoSerializer {
         return GroupModel.newBuilder()
                 .setId(group.getGroupId())
                 .setName(group.getGroupName())
-                .setPasswordHash(group.getPasswordHash())
                 .setMetaInfo(group.getMetaInfo())
                 .setAdmin(getUserInfo(group.getAdmin()))
                 .build();
@@ -30,7 +34,6 @@ public class ProtoSerializer {
                 .setId(user.getUserId())
                 .setLogin(user.getUserLogin())
                 .setEmail(user.getUserEmail())
-                .setPasswordHash(user.getPasswordHash())
                 .setMetaInfo(user.getMetaInfo())
                 .build();
     }
@@ -40,6 +43,46 @@ public class ProtoSerializer {
                 .setId(chapter.getChapterId())
                 .setName(chapter.getChapterName())
                 .setMetaInfo(chapter.getMetaInfo())
+                .build();
+    }
+
+    static public QuestionModel getProtoFromQuestion(Question question) {
+        return QuestionModel.newBuilder()
+                .setId(question.getQuestionId())
+                .setQuestion(question.getQuestion())
+                .addAllAnswers(question.getAnswers())
+                .addAllRightAnswers(question.getRightAnswers())
+                .build();
+    }
+
+    static public TestModel getProtoFromTest(Test test) {
+        return TestModel.newBuilder()
+                .setId(test.getTestId())
+                .setName(test.getTestName())
+                .setQuestions(convertQuestionsToProto(test.getQuestions()))
+                .setPosition(test.getPosition())
+                .build();
+    }
+
+    static public QuestionList convertQuestionsToProto(List<Question> questions) {
+        List<QuestionModel> questionModels = new ArrayList<>();
+        for (Question question : questions) {
+            questionModels.add(getProtoFromQuestion(question));
+        }
+
+        return QuestionList.newBuilder()
+                .addAllQuestions(questionModels)
+                .build();
+    }
+
+    static public TestList convertTestsToProto(List<Test> tests) {
+        List<TestModel> testModels = new ArrayList<>();
+        for (Test test : tests) {
+            testModels.add(getProtoFromTest(test));
+        }
+
+        return TestList.newBuilder()
+                .addAllTests(testModels)
                 .build();
     }
 
@@ -104,6 +147,7 @@ public class ProtoSerializer {
                 .setTestData(chapter.getTestData())
                 .setMetaInfo(chapter.getMetaInfo())
                 .setGroup(getGroupInfo(DaoChapter.getGroupByChapter(chapter)))
+                .setTests(convertTestsToProto(chapter.getTests()))
                 .build();
     }
 }

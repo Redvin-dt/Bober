@@ -1,4 +1,4 @@
-package ru.hse.client.auth
+package ru.hse.client.entry
 
 import android.content.Intent
 import android.os.Bundle
@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
-import okhttp3.*
+import okhttp3.OkHttpClient
 import ru.hse.client.R
 
 
@@ -99,7 +99,7 @@ class SignInActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            tryToLogInUser(login, password, this@SignInActivity, okHttpClient, loginLayout, passwordLayout)
+            logInUser(login, password, this@SignInActivity, okHttpClient, loginLayout, passwordLayout)
 
         }
 
@@ -107,6 +107,9 @@ class SignInActivity : AppCompatActivity() {
         dontHaveAnAccountButton.setOnClickListener {
             val intent = Intent(this, SignUpActivity::class.java)
             startActivity(intent)
+            val data: Intent = Intent()
+            setResult(RESULT_OK, data)
+            finish()
         }
 
         val forgotPasswordButton: Button = findViewById(R.id.forgot_password)

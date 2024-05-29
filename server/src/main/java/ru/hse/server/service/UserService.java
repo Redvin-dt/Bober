@@ -17,11 +17,12 @@ import java.util.Optional;
 
 @Service
 public class UserService {
-
     private final UserRepository userRepository;
+    private final PasswordEncoderService passwordEncoderService;
 
-    UserService(@Qualifier("userDatabaseRepository") UserRepository userRepository) {
+    UserService(@Qualifier("userDatabaseRepository") UserRepository userRepository, PasswordEncoderService passwordEncoderService) {
         this.userRepository = userRepository;
+        this.passwordEncoderService = passwordEncoderService;
     }
 
     public UserModel registration(UserModel userInfo) throws EntityExistsException,
@@ -35,9 +36,10 @@ public class UserService {
         if (userRepository.findByUserEmail(userInfo.getEmail()) != null) {
             throw new EntityExistsException("user with that email already exist");
         }
-        var user = new User(userInfo.getLogin(), userInfo.getEmail(), userInfo.getPasswordHash());
+
+        var user = new User(userInfo.getLogin(), userInfo.getEmail(), passwordEncoderService.hashPassword(userInfo.getPasswordHash()));
         userRepository.save(user);
-        return ProtoSerializer.getUserInfo(user);
+        return ProtoSerializer.getProtoFromUser(user);
     }
 
     public UserModel getUserByID(Long id) throws EntityNotFoundException {

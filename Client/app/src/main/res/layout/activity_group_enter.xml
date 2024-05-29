@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                                   xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                   android:id="@+id/parent"
+                                                   android:layout_width="match_parent"
+                                                   android:layout_height="match_parent"
+                                                   android:background="@color/white"
+                                                   android:clickable="true"
+                                                   android:focusableInTouchMode="true">
+
+    <View
+            android:id="@+id/border"
+            android:layout_width="300sp"
+            android:layout_height="300sp"
+            android:background="@drawable/rounded_border"
+            android:backgroundTint="#2E7B31"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.6"/>
+
+    <TextView
+            android:id="@+id/group_label"
+            android:layout_width="250sp"
+            android:layout_height="50sp"
+            android:fontFamily="@font/roboto"
+            android:text="@string/enter_group_message"
+            android:textColor="@color/white"
+            android:textSize="30sp"
+            app:layout_constraintBottom_toBottomOf="@id/border"
+            app:layout_constraintEnd_toEndOf="@id/border"
+            app:layout_constraintHorizontal_bias="0.7"
+            app:layout_constraintStart_toStartOf="@id/border"
+            app:layout_constraintTop_toTopOf="@id/border"
+            app:layout_constraintVertical_bias="0.2"/>
+
+    <TextView
+            android:id="@+id/enter_group"
+            android:layout_width="wrap_content"
+            android:layout_height="50sp"
+            android:fontFamily="@font/opensansregular"
+            android:text="@string/enter_group"
+            android:textColor="@color/black"
+            android:textSize="33sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toStartOf="@id/border"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="70sp"/>
+
+
+    <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/password_box"
+            style="@style/TextInputLayoutStyle"
+            app:layout_constraintTop_toBottomOf="@id/group_label"
+            app:layout_constraintBottom_toTopOf="@id/enter_group_button"
+            app:layout_constraintEnd_toEndOf="@id/border"
+            app:layout_constraintVertical_bias="0.3"
+            app:layout_constraintStart_toStartOf="@id/border"
+            app:passwordToggleEnabled="true"
+            app:errorEnabled="true"
+            app:errorIconDrawable="@null"
+            app:layout_constraintHorizontal_bias="0.5">
+
+        <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/password"
+                style="@style/TextInputEditTextStyle"
+                android:hint="@string/password"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <Button
+            android:id="@+id/enter_group_button"
+            android:layout_width="230sp"
+            android:layout_height="61sp"
+            android:backgroundTint="@color/white"
+            android:text="@string/enter"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@id/border"
+            app:layout_constraintEnd_toEndOf="@id/border"
+            app:layout_constraintStart_toStartOf="@id/border"
+            app:layout_constraintHorizontal_bias="0.5"
+            android:layout_marginBottom="30sp"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
