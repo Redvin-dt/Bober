@@ -9,8 +9,11 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.hse.database.entities.Group;
 import ru.hse.database.entities.User;
+import ru.hse.server.exception.AccessException;
 import ru.hse.server.exception.EntityUpdateException;
+import ru.hse.server.proto.EntitiesProto;
 import ru.hse.server.proto.EntitiesProto.GroupModel;
+import ru.hse.server.proto.EntitiesProto.UserModel;
 import ru.hse.server.proto.EntitiesProto.GroupList;
 import ru.hse.server.repository.GroupRepository;
 import ru.hse.server.repository.UserRepository;
@@ -22,10 +25,12 @@ public class GroupService {
     static private final Logger logger = LoggerFactory.getLogger(GroupService.class);
     private final GroupRepository groupRepository;
     private final UserRepository userRepository;
+    private final AuthService authService;
 
-    public GroupService(GroupRepository groupRepository, @Qualifier("userDatabaseRepository") UserRepository userRepository) {
+    public GroupService(GroupRepository groupRepository, @Qualifier("userDatabaseRepository") UserRepository userRepository, AuthService authService) {
         this.groupRepository = groupRepository;
         this.userRepository = userRepository;
+        this.authService = authService;
     }
 
     public GroupModel createGroup(GroupModel groupModel) throws InvalidProtocolBufferException {
@@ -46,6 +51,40 @@ public class GroupService {
         var result = groupRepository.save(group);
         logger.info("group={} was saved", group);
         return ProtoSerializer.getGroupInfo(result);
+    }
+
+    public GroupModel enterGroup(String userLogin, GroupModel groupModel, String token) throws InvalidProtocolBufferException,
+            EntityNotFoundException, AccessException, EntityUpdateException {
+
+        if (!authService.checkAccessToken(userLogin, token.substring("Bearer ".length()))){
+            throw new AccessException("user and token mismatch");
+        }
+
+        if (!groupModel.hasId()) {
+            throw new InvalidProtocolBufferException("invalid protocol buffer on entry group, group must have id");
+        }
+
+        var user = getUserByLogin(userLogin);
+        var group = getGroupById(groupModel.getId());
+
+        if (group.getUsersSet().contains(user)) {
+            return ProtoSerializer.getProtoFromGroup(group);
+        }
+
+        if (!groupModel.hasPasswordHash()) {
+            throw new InvalidProtocolBufferException("invalid protocol buffer on entry group, you are not member of group, add password");
+        }
+
+        if (!group.getPasswordHash().equals(groupModel.getPasswordHash())) { // TODO: add hashing
+            throw new AccessException("invalid password for group");
+        }
+
+        group.addUser(user);
+        if (groupRepository.update(group) == null) {
+            throw new EntityUpdateException("can not update group");
+        }
+
+        return ProtoSerializer.getProtoFromGroup(group);
     }
 
     public GroupModel findGroupById(Long id) throws EntityNotFoundException {
@@ -124,5 +163,15 @@ public class GroupService {
         }
 
         return group.get();
+    }
+
+    private User getUserByLogin(String userLogin) throws EntityNotFoundException {
+        var user = userRepository.findByUserLogin(userLogin);
+        if (user == null) {
+            logger.error("user with login={} not found", userLogin);
+            throw new EntityNotFoundException("user with login=" + userLogin + " does not exist");
+        }
+
+        return user;
     }
 }

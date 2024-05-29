@@ -58,10 +58,6 @@
                 android:exported="true">
         </activity>
         <activity
-                android:name=".groups.GroupsActivity"
-                android:exported="true">
-        </activity>
-        <activity
                 android:name=".profile.ProfileActivity"
                 android:exported="true">
         </activity>
@@ -83,6 +79,10 @@
         </activity>
         <activity
                 android:name=".groups.GroupActivity"
+                android:exported="true">
+        </activity>
+        <activity
+                android:name=".groups.GroupEnterActivity"
                 android:exported="true">
         </activity>
     </application>

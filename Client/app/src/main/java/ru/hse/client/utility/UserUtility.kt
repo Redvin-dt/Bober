@@ -25,7 +25,21 @@ class User {
     }
 
     fun setUser(newUser: UserModel) {
-        user = newUser
+        Log.i("Info", "get user $newUser") // TODO: remove
+        if (user == null) {
+            user = newUser
+            Log.i("Info", "now user is $user") // TODO: remove
+        } else {
+            val builder = user!!.toBuilder()
+
+            for (fieldEntry in newUser.allFields) {
+                if (newUser.hasField(fieldEntry.key)) {
+                    builder.setField(fieldEntry.key, newUser.getField(fieldEntry.key));
+                }
+            }
+
+            user = builder.build();
+        }
 
         if (newUser.hasUserOfGroups()) {
             val groupListProto = newUser.userOfGroups

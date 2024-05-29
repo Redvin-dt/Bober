@@ -4,10 +4,14 @@ import com.google.protobuf.InvalidProtocolBufferException;
 import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.hse.server.exception.AccessException;
+import ru.hse.server.exception.EntityUpdateException;
 import ru.hse.server.proto.EntitiesProto.GroupModel;
+import ru.hse.server.service.AuthService;
 import ru.hse.server.service.GroupService;
 
 @RestController
@@ -70,6 +74,26 @@ public class GroupController {
         } catch (Exception e) {
             logger.error("unexpected error", e);
             return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PostMapping(value = "/enter", consumes = {MediaType.APPLICATION_PROTOBUF_VALUE}, produces = {MediaType.APPLICATION_PROTOBUF_VALUE, MediaType.TEXT_PLAIN_VALUE})
+    public ResponseEntity enterGroup(@RequestBody GroupModel group, @RequestParam String userLogin,  @RequestHeader(HttpHeaders.AUTHORIZATION) String authToken) {
+        try {
+            var groupProto = groupService.enterGroup(userLogin, group, authToken);
+            return ResponseEntity.ok().body(groupProto);
+        } catch (InvalidProtocolBufferException e) {
+            logger.error("invalid protocol buffer in enter request", e);
+            return ResponseEntity.badRequest().body("invalid protobuf, error: " + e.getMessage());
+        } catch (AccessException e) {
+            logger.error("failed to access group");
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (EntityNotFoundException e) {
+            logger.error("failed while find user or group in enter request", e);
+            return ResponseEntity.badRequest().body("invalid user login or group id");
+        } catch (Exception e) {
+            logger.error("unexpected error in enter request", e);
+            return ResponseEntity.badRequest().body("unexpected error");
         }
     }
 
