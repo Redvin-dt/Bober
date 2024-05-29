@@ -24,7 +24,6 @@ public class ProtoSerializer {
         return GroupModel.newBuilder()
                 .setId(group.getGroupId())
                 .setName(group.getGroupName())
-                .setPasswordHash(group.getPasswordHash())
                 .setMetaInfo(group.getMetaInfo())
                 .setAdmin(getUserInfo(group.getAdmin()))
                 .build();
@@ -35,7 +34,6 @@ public class ProtoSerializer {
                 .setId(user.getUserId())
                 .setLogin(user.getUserLogin())
                 .setEmail(user.getUserEmail())
-                .setPasswordHash(user.getPasswordHash())
                 .setMetaInfo(user.getMetaInfo())
                 .build();
     }

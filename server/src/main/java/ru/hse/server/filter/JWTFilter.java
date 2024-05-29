@@ -40,9 +40,7 @@ public class JWTFilter extends OncePerRequestFilter {
                                     @Nonnull FilterChain filterChain) throws ServletException, IOException {
         String token = getTokenFromRequest(request);
 
-        System.out.println(token);
         if (token != null && jwtProviderService.validateAccessToken(token)) {
-            System.out.println("token correct");
             final Claims claims = jwtProviderService.getClaims(token);
 
             final Authentication jwtTokenInfo = JWTUtils.generate(claims);

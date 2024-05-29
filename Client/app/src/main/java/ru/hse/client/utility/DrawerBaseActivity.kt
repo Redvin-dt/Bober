@@ -11,6 +11,7 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
 import ru.hse.client.R
+import ru.hse.client.auth.SingletonController
 import ru.hse.client.groups.DeadlinesActivity
 import ru.hse.client.groups.GroupSelectMenuActivity
 import ru.hse.client.profile.ProfileActivity
@@ -55,6 +56,10 @@ open class DrawerBaseActivity: AppCompatActivity(), NavigationView.OnNavigationI
                 val intent = Intent(this, DeadlinesActivity::class.java)
                 startActivity(intent)
                 overridePendingTransition(0, 0)
+            }
+            R.id.nav_log_out -> {
+                val authManager = SingletonController.getInstance().getManager()
+                authManager.logOut()
             }
         }
 

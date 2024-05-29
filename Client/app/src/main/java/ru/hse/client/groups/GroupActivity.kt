@@ -21,10 +21,13 @@ class GroupActivity: DrawerBaseActivity() {
             group = bundle.getSerializable("group") as EntitiesProto.GroupModel
         }
 
+
+
         if (group != null) {
             Log.i("INFO", group.name)
         } else {
             Log.e("ERROR", "ERROR")
+            // TODO: go to groups select and throw error
         }
 
         allocateActivityTitle(group!!.name.toString())
