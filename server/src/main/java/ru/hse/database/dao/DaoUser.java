@@ -28,9 +28,8 @@ public class DaoUser {
     }
 
     static public User getUserById(long id) {
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            return session.get(User.class, id);
-        }
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        return session.get(User.class, id);
     }
 
     static public User getUserByLogin(String login) throws NotUniqueUserLoginException {
@@ -116,6 +115,26 @@ public class DaoUser {
             session.getTransaction().commit();
         } catch (IllegalStateException e) {
             logger.error("Error while merging user with id " + user.getUserId(), e);
+        }
+    }
+
+    static public void addUserToGroup(User user, Group group) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        try {
+            session.beginTransaction();
+
+            Set<User> users = DaoGroup.getUsersOfGroup(group);
+
+            users.add(user);
+
+            group.setUsersSet(users);
+
+            session.merge(user);
+            session.merge(group);
+
+            session.getTransaction().commit();
+        } catch (IllegalStateException e) {
+            logger.error("Error while erasing user {} from group {}", user.getUserId(), +group.getGroupId(), e);
         }
     }
 

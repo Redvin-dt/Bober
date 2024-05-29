@@ -9,6 +9,7 @@ build/
 .externalNativeBuild
 .cxx
 local.properties
+!**/src/main/assets/*
 
 ### IntelliJ IDEA ###
 .idea

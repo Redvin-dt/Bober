@@ -4,6 +4,7 @@ import jakarta.annotation.Nonnull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
+import ru.hse.database.dao.DaoGroup;
 import ru.hse.database.entities.User;
 import ru.hse.database.dao.DaoUser;
 
@@ -14,6 +15,16 @@ import java.util.Optional;
 @Repository
 public class UserDatabaseRepository implements UserRepository {
     Logger logger = LoggerFactory.getLogger(UserRepository.class);
+
+    @Override
+    public User update(User user) {
+        if (DaoUser.getUserById(user.getUserId()) == null) {
+            return null;
+        }
+
+        DaoUser.createOrUpdateUser(user);
+        return user;
+    }
 
     @Override
     public User findByUserLogin(String login) {

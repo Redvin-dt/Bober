@@ -8,7 +8,7 @@ import ru.hse.server.proto.EntitiesProto
 
 class GroupActivity: DrawerBaseActivity() {
 
-    lateinit var binding: ActivityGroupBinding
+    private lateinit var binding: ActivityGroupBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,10 +21,13 @@ class GroupActivity: DrawerBaseActivity() {
             group = bundle.getSerializable("group") as EntitiesProto.GroupModel
         }
 
+
+
         if (group != null) {
             Log.i("INFO", group.name)
         } else {
             Log.e("ERROR", "ERROR")
+            // TODO: go to groups select and throw error
         }
 
         allocateActivityTitle(group!!.name.toString())
