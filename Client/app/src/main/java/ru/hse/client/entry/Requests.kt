@@ -141,6 +141,9 @@ fun registerUser(
                 val responseBody: ByteString? = response.body?.byteString()
                 val registeredUser: UserModel = UserModel.parseFrom(responseBody?.toByteArray())
                 user.setUser(registeredUser)
+                val intent = Intent(activity, GroupSelectMenuActivity::class.java)
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                startActivity(activity, intent, null)
 
             } else {
                 val loginErrorMessage: String = "user with that login already exist"
