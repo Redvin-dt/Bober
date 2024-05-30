@@ -29,6 +29,15 @@ public class GroupRepository implements CrudRepository<Group, Long> {
         return list;
     }
 
+    public <S extends Group> S update(@Nonnull S group) {
+        if (DaoGroup.getGroupById(group.getGroupId()) == null) {
+            return null;
+        }
+
+        DaoGroup.createOrUpdateGroup(group);
+        return group;
+    }
+
     @Override
     @Nonnull
     public Optional<Group> findById(@Nonnull Long id) {

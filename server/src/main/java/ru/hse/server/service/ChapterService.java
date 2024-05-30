@@ -1,11 +1,14 @@
 package ru.hse.server.service;
 
+import ru.hse.database.entities.Question;
+import ru.hse.database.entities.Test;
 import ru.hse.server.proto.EntitiesProto;
 import ru.hse.server.proto.EntitiesProto.ChapterModel;
 import ru.hse.server.proto.EntitiesProto.GroupModel;
 import ru.hse.database.entities.Chapter;
 import ru.hse.server.repository.ChapterRepository;
 import ru.hse.server.repository.GroupRepository;
+import ru.hse.server.repository.TestRepository;
 import ru.hse.server.utils.ProtoSerializer;
 
 import com.google.protobuf.InvalidProtocolBufferException;
@@ -18,6 +21,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -25,9 +30,11 @@ public class ChapterService {
     static private final Logger logger = LoggerFactory.getLogger(ChapterService.class);
     private final ChapterRepository chapterRepository;
     private final GroupRepository groupRepository;
-    public ChapterService(ChapterRepository chapterRepository, @Qualifier("groupRepository") GroupRepository groupRepository) {
+    private final TestRepository testRepository;
+    public ChapterService(ChapterRepository chapterRepository, @Qualifier("groupRepository") GroupRepository groupRepository, @Qualifier("testRepository") TestRepository testRepository) {
         this.chapterRepository = chapterRepository;
         this.groupRepository = groupRepository;
+        this.testRepository = testRepository;
     }
 
     public ChapterModel createChapter(ChapterModel chapterModel) throws EntityExistsException,
@@ -51,11 +58,46 @@ public class ChapterService {
 
         Chapter chapter = new Chapter(chapterModel.getName(), group.get());
 
+        if (!chapterModel.hasText()) {
+            throw new InvalidProtocolBufferException("invalid protobuf text for chapter creation, require text");
+        }
+        chapter.setTextOfChapter(chapterModel.getText());
+
+        if (chapterModel.hasMetaInfo()) {
+            chapter.setMetaInfo(chapter.getMetaInfo());
+        }
+
         chapterRepository.save(chapter);
+
+        if (chapterModel.hasTests()) {
+            for (var test : chapterModel.getTests().getTestsList()) {
+                Test chapterTest = getTest(test, chapter);
+                testRepository.save(chapterTest);
+            }
+        }
 
         logger.info("chapter={} was saved", chapter);
 
         return ProtoSerializer.getChapterInfo(chapter);
+    }
+
+    private static Test getTest(EntitiesProto.TestModel test, Chapter chapter) throws InvalidProtocolBufferException {
+        if (!test.hasName() || !test.hasPosition() || !test.hasQuestions()) {
+            throw new InvalidProtocolBufferException("invalid protobuf test in chapter creation");
+        }
+        List<Question> questionList = new ArrayList<>();
+        Test chapterTest = new Test(test.getName(), test.getPosition(), chapter);
+        for (var questionModel : test.getQuestions().getQuestionsList()) {
+            if (!questionModel.hasQuestion()
+                    || questionModel.getRightAnswersCount() == 0 || questionModel.getAnswersCount() == 0) {
+                throw new InvalidProtocolBufferException("invalid protobuf question for test in chapter creation");
+            }
+            Question question = new Question(questionModel.getQuestion(),
+                    questionModel.getRightAnswersList(),questionModel.getAnswersList(), chapterTest);
+            questionList.add(question);
+        }
+        chapterTest.setQuestions(questionList);
+        return chapterTest;
     }
 
     public ChapterModel getChapterByID(Long id) throws EntityNotFoundException {

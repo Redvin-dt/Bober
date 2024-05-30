@@ -7,6 +7,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import ru.hse.server.exception.DeleteFileException;
 import ru.hse.server.exception.FileValidationException;
 import ru.hse.server.service.FileService;
 
@@ -50,6 +51,23 @@ public class FileController {
         } catch (IOException e) {
             logger.error("Can not get file with fileName={}, error message: {}", fileName, e.getMessage());
             return ResponseEntity.badRequest().body(new ByteArrayResource(e.getMessage().getBytes()));
+        } catch (Exception e) {
+            logger.error("Unexpected error", e);
+            return ResponseEntity.badRequest().body(new ByteArrayResource(e.getMessage().getBytes()));
+        }
+    }
+
+    @DeleteMapping
+    public ResponseEntity deleteFile(@RequestParam String fileName) {
+        try {
+            fileService.deleteFile(fileName);
+            return ResponseEntity.ok().body("successfully delete file " + fileName);
+        } catch (IOException e) {
+            logger.error("Can not get file with fileName={}, error message: {}", fileName, e.getMessage());
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (DeleteFileException e) {
+            logger.error("Can not dlete file with fileName={}, error message: {}", fileName, e.getMessage());
+            return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
             logger.error("Unexpected error", e);
             return ResponseEntity.badRequest().body(new ByteArrayResource(e.getMessage().getBytes()));
