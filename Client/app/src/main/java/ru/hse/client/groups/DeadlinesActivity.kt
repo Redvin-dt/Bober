@@ -5,7 +5,7 @@ import ru.hse.client.databinding.ActivityDeadlinesBinding
 import ru.hse.client.utility.DrawerBaseActivity
 
 class DeadlinesActivity: DrawerBaseActivity() {
-    lateinit var binding: ActivityDeadlinesBinding
+    private lateinit var binding: ActivityDeadlinesBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDeadlinesBinding.inflate(layoutInflater)

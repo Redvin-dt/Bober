@@ -11,14 +11,14 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
 import ru.hse.client.R
+import ru.hse.client.auth.SingletonController
 import ru.hse.client.groups.DeadlinesActivity
 import ru.hse.client.groups.GroupSelectMenuActivity
 import ru.hse.client.profile.ProfileActivity
 
 open class DrawerBaseActivity: AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
-
-    lateinit var drawerLayout: DrawerLayout
+    private lateinit var drawerLayout: DrawerLayout
 
     override fun setContentView(view: View) {
         drawerLayout = layoutInflater.inflate(R.layout.activity_drawer_base, null) as DrawerLayout
@@ -57,12 +57,16 @@ open class DrawerBaseActivity: AppCompatActivity(), NavigationView.OnNavigationI
                 startActivity(intent)
                 overridePendingTransition(0, 0)
             }
+            R.id.nav_log_out -> {
+                val authManager = SingletonController.getInstance().getManager()
+                authManager.logOut()
+            }
         }
 
         return false
     }
 
     protected fun allocateActivityTitle(titleString: String) {
-        supportActionBar?.setTitle(titleString)
+        supportActionBar?.title = titleString
     }
 }

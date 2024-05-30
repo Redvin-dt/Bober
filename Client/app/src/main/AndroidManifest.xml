@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           xmlns:tools="http://schemas.android.com/tools">
-
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.ADD_ACCOUNTS" />
+    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
+    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
 
     <application
             android:allowBackup="true"
@@ -17,22 +17,44 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/Theme.Client"
-            android:usesCleartextTraffic="true"
-            tools:targetApi="31">
+            tools:targetApi="31"
+            android:usesCleartextTraffic="true">
         <activity
-                android:name=".chapters.ChapterUploadActivity"
-                android:exported="true"/>
-        <activity
-                android:name=".auth.SignUpActivity"
+                android:name=".auth.MainActivity"
                 android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
-
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
         <activity
-                android:name=".auth.SignInActivity"
+                android:name=".auth.AuthenticatorActivity"
+                android:exported="true">
+        </activity>
+
+        <service
+                android:name=".auth.AuthenticatorService"
+                android:exported="true"/>
+
+        <service
+                android:name=".auth.AuthenticatorActivity"
+                android:exported="false" >
+            <intent-filter>
+                <action android:name="android.accounts.AccountAuthenticator" />
+            </intent-filter>
+
+            <meta-data
+                    android:name="android.accounts.AccountAuthenticator"
+                    android:resource="@xml/authenticator" />
+        </service>
+
+        <activity
+                android:name=".entry.SignInActivity"
+                android:exported="true">
+        </activity>
+        <activity
+                android:name=".entry.SignUpActivity"
                 android:exported="true">
         </activity>
         <activity
@@ -48,10 +70,6 @@
                 android:exported="true">
         </activity>
         <activity
-                android:name=".MainActivity"
-                android:exported="true">
-        </activity>
-        <activity
                 android:name=".groups.GroupSelectMenuActivity"
                 android:exported="true">
         </activity>
@@ -62,6 +80,13 @@
         <activity
                 android:name=".groups.GroupActivity"
                 android:exported="true">
+        </activity>
+        <activity
+                android:name=".groups.GroupEnterActivity"
+                android:exported="true">
+        </activity>
+        <activity android:name=".chapters.ChapterUploadActivity"
+                  android:exported="false">
         </activity>
     </application>
 

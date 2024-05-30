@@ -1,14 +1,23 @@
-package ru.hse.client.auth
+package ru.hse.client.entry
 
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.util.Patterns
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import java.io.IOException
+import java.security.spec.KeySpec
+import java.util.*
 import java.util.regex.Matcher
 import java.util.regex.Pattern
+import javax.crypto.SecretKey
+import javax.crypto.SecretKeyFactory
+import javax.crypto.spec.PBEKeySpec
+import ru.hse.client.auth.MainActivity
+
 
 fun isNotValidEmail(target: CharSequence?): Boolean {
     return if (target == null) {
@@ -118,5 +127,31 @@ fun Activity.hideKeyboard() {
 fun Context.hideKeyboard(view: View) {
     val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
     inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+}
+
+object Util {
+    @Throws(IOException::class)
+    fun getProperty(key: String?, context: Context): String {
+        val properties: Properties = Properties()
+
+        val assetManager = context.assets
+        val inputStream = assetManager.open("app.properties")
+        properties.load(inputStream)
+        return properties.getProperty(key)
+    }
+}
+
+@OptIn(ExperimentalStdlibApi::class)
+fun generateHash(password: String, context: Context): String {
+    val secretKey = Util.getProperty("SECRET_KEY", context)
+    val algorithm = Util.getProperty("ALGORITHM", context)
+    val iterations = Util.getProperty("ITERATIONS", context).toInt()
+    val keyLength = Util.getProperty("KEY_LENGTH", context).toInt()
+    val combined = secretKey.toByteArray()
+    val factory: SecretKeyFactory = SecretKeyFactory.getInstance(algorithm)
+    val spec: KeySpec = PBEKeySpec(password.toCharArray(), combined, iterations, keyLength)
+    val key: SecretKey = factory.generateSecret(spec)
+    val hash: ByteArray = key.encoded
+    return hash.toHexString()
 }
 
