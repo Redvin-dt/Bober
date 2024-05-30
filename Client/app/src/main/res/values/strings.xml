@@ -9,7 +9,7 @@
     <string name="email">"Email"</string>
     <string name="registration_text">Register your account</string>
     <string name="password_confirm">Confirm password</string>
-    <string name="IP">192.168.0.101:8080</string>
+    <string name="IP">192.168.0.102:8080</string>
     <string name="log_in_text">Log in to your account</string>
     <string name="forgot_password">Forgot password?</string>
     <string name="have_an_account">Have an account?</string>
