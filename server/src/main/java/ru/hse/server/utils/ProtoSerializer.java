@@ -17,7 +17,9 @@ import ru.hse.server.proto.EntitiesProto.UserList;
 import ru.hse.server.proto.EntitiesProto.ChapterList;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ProtoSerializer {
     static public GroupModel getGroupInfo(Group group) {
@@ -77,6 +79,7 @@ public class ProtoSerializer {
 
     static public TestList convertTestsToProto(List<Test> tests) {
         List<TestModel> testModels = new ArrayList<>();
+        tests = tests.stream().sorted(Comparator.comparing(Test::getPosition)).collect(Collectors.toList());
         for (Test test : tests) {
             testModels.add(getProtoFromTest(test));
         }
