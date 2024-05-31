@@ -58,11 +58,6 @@ public class ChapterService {
 
         Chapter chapter = new Chapter(chapterModel.getName(), group.get());
 
-        if (!chapterModel.hasText()) {
-            throw new InvalidProtocolBufferException("invalid protobuf text for chapter creation, require text");
-        }
-        chapter.setTextOfChapter(chapterModel.getText());
-
         if (chapterModel.hasMetaInfo()) {
             chapter.setMetaInfo(chapter.getMetaInfo());
         }

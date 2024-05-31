@@ -87,17 +87,24 @@ class User {
         return clientHashedPassword
     }
 
+    fun getUserMetaInfo(): String? {
+        if (user == null) {
+            return "";
+        }
+        return user!!.metaInfo
+    }
+
     fun setUserByLogin(context: Context, login: String) {
         val URlGetUser: String =
-            ("http://" + context.resources.getString(R.string.IP) + "/users/userByLogin").toHttpUrlOrNull()
-                ?.newBuilder()
-                ?.addQueryParameter("login", login)
-                ?.build().toString()
+                ("http://" + context.resources.getString(R.string.IP) + "/users/userByLogin").toHttpUrlOrNull()
+                        ?.newBuilder()
+                        ?.addQueryParameter("login", login)
+                        ?.build().toString()
 
         val requestForGetGeneratedUser: Request = Request.Builder()
-            .url(URlGetUser)
-            .header("Authorization", "Bearer ${getUserToken()}")
-            .build()
+                .url(URlGetUser)
+                .header("Authorization", "Bearer ${getUserToken()}")
+                .build()
 
         val countDownLatch = CountDownLatch(1)
         Log.i("Info", "Request has been sent $requestForGetGeneratedUser")
@@ -112,7 +119,7 @@ class User {
                 if (response.isSuccessful) {
                     val responseBody: ByteString? = response.body?.byteString()
                     val registeredUser: EntitiesProto.UserModel =
-                        EntitiesProto.UserModel.parseFrom(responseBody?.toByteArray())
+                            EntitiesProto.UserModel.parseFrom(responseBody?.toByteArray())
                     setUser(registeredUser)
                 } else {
                     response.body?.let { Log.i("Error", it.string()) }
@@ -125,15 +132,15 @@ class User {
 
     fun setUserByEmail(context: Context, email: String, token: String) {
         val URlGetUser: String =
-            ("http://" + context.resources.getString(R.string.IP) + "/users/userByEmail").toHttpUrlOrNull()
-                ?.newBuilder()
-                ?.addQueryParameter("email", email)
-                ?.build().toString()
+                ("http://" + context.resources.getString(R.string.IP) + "/users/userByEmail").toHttpUrlOrNull()
+                        ?.newBuilder()
+                        ?.addQueryParameter("email", email)
+                        ?.build().toString()
 
         val requestForGetGeneratedUser: Request = Request.Builder()
-            .url(URlGetUser)
-            .header("Authorization", "Bearer ${token}")
-            .build()
+                .url(URlGetUser)
+                .header("Authorization", "Bearer ${token}")
+                .build()
 
         val countDownLatch = CountDownLatch(1)
         Log.i("Info", "Request has been sent $requestForGetGeneratedUser")
@@ -148,7 +155,7 @@ class User {
                 if (response.isSuccessful) {
                     val responseBody: ByteString? = response.body?.byteString()
                     val registeredUser: EntitiesProto.UserModel =
-                        EntitiesProto.UserModel.parseFrom(responseBody?.toByteArray())
+                            EntitiesProto.UserModel.parseFrom(responseBody?.toByteArray())
                     setUser(registeredUser)
                 } else {
                     response.body?.let { Log.i("Error", it.string()) }
@@ -161,15 +168,15 @@ class User {
 
     fun check_token_is_valid(context: Context, login: String, token: String): Boolean {
         val URlGetUser: String =
-            ("http://" + context.resources.getString(R.string.IP) + "/users/userByLogin").toHttpUrlOrNull()
-                ?.newBuilder()
-                ?.addQueryParameter("login", login)
-                ?.build().toString()
+                ("http://" + context.resources.getString(R.string.IP) + "/users/userByLogin").toHttpUrlOrNull()
+                        ?.newBuilder()
+                        ?.addQueryParameter("login", login)
+                        ?.build().toString()
 
         val requestForGetGeneratedUser: Request = Request.Builder()
-            .url(URlGetUser)
-            .header("Authorization", "Bearer $token")
-            .build()
+                .url(URlGetUser)
+                .header("Authorization", "Bearer $token")
+                .build()
 
         var answer: Boolean = false
         okHttpClient.newCall(requestForGetGeneratedUser).enqueue(object : Callback {
@@ -190,21 +197,21 @@ class User {
 
     fun updateUserFromServer(context: Context, login: String, password: String, email: String) {
         val user_: EntitiesProto.UserModel =
-            EntitiesProto.UserModel.newBuilder().setLogin(login).setEmail(email).setPasswordHash(password).build()
+                EntitiesProto.UserModel.newBuilder().setLogin(login).setEmail(email).setPasswordHash(password).build()
 
         val requestBody: RequestBody =
-            RequestBody.create("application/x-protobuf".toMediaTypeOrNull(), user_.toByteArray())
+                RequestBody.create("application/x-protobuf".toMediaTypeOrNull(), user_.toByteArray())
 
         val URlRegistration: String =
-            ("http://" + context.resources.getString(R.string.IP) + "/users/login").toHttpUrlOrNull()
-                ?.newBuilder()
-                ?.build()
-                .toString()
+                ("http://" + context.resources.getString(R.string.IP) + "/users/login").toHttpUrlOrNull()
+                        ?.newBuilder()
+                        ?.build()
+                        .toString()
 
         val requestForLogIn: Request = Request.Builder()
-            .url(URlRegistration)
-            .post(requestBody)
-            .build()
+                .url(URlRegistration)
+                .post(requestBody)
+                .build()
 
         val countDownLatch = CountDownLatch(1)
         okHttpClient.newCall(requestForLogIn).enqueue(object : Callback {
@@ -218,7 +225,7 @@ class User {
                 if (response.isSuccessful) {
                     val responseBody: ByteString? = response.body?.byteString()
                     val registeredUser: EntitiesProto.UserModel =
-                        EntitiesProto.UserModel.parseFrom(responseBody?.toByteArray())
+                            EntitiesProto.UserModel.parseFrom(responseBody?.toByteArray())
                     setUser(registeredUser)
                 } else {
                     response.body?.let { Log.i("Error", it.string()) }
