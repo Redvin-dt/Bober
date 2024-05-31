@@ -39,7 +39,7 @@ public class FileService {
         }
 
         var chapter = chapterOption.get();
-        chapter.setTestData(fileName);
+        chapter.setTextFile(fileName);
         chapterRepository.update(chapter);
     }
 
