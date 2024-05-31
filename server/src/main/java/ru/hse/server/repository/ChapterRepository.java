@@ -1,6 +1,7 @@
 package ru.hse.server.repository;
 
 import jakarta.annotation.Nonnull;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import ru.hse.database.dao.DaoChapter;
@@ -13,9 +14,17 @@ import java.util.Optional;
 @Repository
 public class ChapterRepository implements CrudRepository<Chapter, Long> {
 
+    public <S extends Chapter> S update(@Nonnull S chapter) {
+        DaoChapter.createOrUpdateChapter(chapter);
+        return chapter;
+    }
+
     @Override
     @Nonnull
-    public <S extends Chapter> S save(@Nonnull S chapter) {
+    public <S extends Chapter> S save(@Nonnull S chapter) throws EntityNotFoundException {
+        if (DaoChapter.getChapterById(chapter.getChapterId()) == null) {
+            throw new EntityNotFoundException("chapter not found while try to update");
+        }
         DaoChapter.createOrUpdateChapter(chapter);
         return chapter;
     }
