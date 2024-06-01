@@ -12,4 +12,7 @@
     <color name="cyan">#2CC3C3</color>
     <color name="lavanda">#8692F7</color>
     <color name="light_gray">#ABABAB</color>
+    <color name="orange">#ED6A41</color>
+    <color name="focused">#70B71D</color>
+    <color name="dark_gray">#4D4C4C</color>
 </resources>

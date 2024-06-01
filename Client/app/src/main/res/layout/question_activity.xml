@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="25sp"
+        android:layout_marginStart="25sp"
+        android:layout_marginVertical="10sp"
+        android:layout_marginHorizontal="10sp"
+        android:layout_gravity="center_horizontal"
+        app:cardCornerRadius="20sp"
+        app:cardElevation="8sp"
+        android:backgroundTint="@color/white"
+        tools:context=".chapters.QuestionActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <Spinner
+                android:id="@+id/spinner_number"
+                android:layout_width="85sp"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/question_text_layout"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintVertical_bias="0.05"
+        />
+
+        <Spinner
+                android:id="@+id/spinner_type"
+                android:layout_width="118sp"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@id/question_text_layout"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintHorizontal_bias="1"
+                app:layout_constraintVertical_bias="0.05"
+        />
+
+        <TextView
+                android:id="@+id/question_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/question"
+                android:textSize="18sp"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@id/question_text_layout"
+                app:layout_constraintStart_toStartOf="@id/question_text_layout"
+                app:layout_constraintTop_toBottomOf="@id/spinner_number"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintVertical_bias="0.02"
+                android:layout_centerHorizontal="true"
+        />
+
+        <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/question_text_layout"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/question_number"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintVertical_bias="0"
+                style="@style/TextInputLayoutStyleForQuestion"
+        >
+
+            <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/question_text"
+                    android:hint="@string/question_text"
+                    style="@style/TextInputEditTextStyleForQuestion"
+            />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+            <ListView
+                android:id="@+id/listView"
+                android:layout_width="match_parent"
+                android:layout_height="400sp"
+                tools:listitem="@layout/answer_list_item"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/question_text_layout"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintVertical_bias="0"
+                android:divider="@android:color/transparent"
+                android:dividerHeight="10sp">
+            </ListView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

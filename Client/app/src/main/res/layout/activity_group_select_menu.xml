@@ -36,6 +36,7 @@
             android:divider="@android:color/transparent"
             android:dividerHeight="10sp"
             app:layout_constraintHorizontal_bias="0.0"/>
+
     <Button
             android:id="@+id/create_group_button"
             android:layout_width="wrap_content"

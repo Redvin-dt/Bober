@@ -22,20 +22,12 @@
         <activity
                 android:name=".auth.MainActivity"
                 android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
         </activity>
 
         <activity
                 android:name=".auth.AuthenticatorActivity"
                 android:exported="true">
         </activity>
-
-        <service
-                android:name=".auth.AuthenticatorService"
-                android:exported="true"/>
 
         <service
                 android:name=".auth.AuthenticatorActivity"
@@ -87,6 +79,16 @@
         </activity>
         <activity android:name=".chapters.ChapterUploadActivity"
                   android:exported="false">
+        </activity>
+        <activity android:name=".chapters.CreateTestActivity"
+                  android:exported="false">
+        </activity>
+        <activity android:name=".chapters.QuestionActivity"
+                  android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
         </activity>
     </application>
 

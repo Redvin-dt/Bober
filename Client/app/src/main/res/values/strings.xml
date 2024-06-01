@@ -9,7 +9,7 @@
     <string name="email">"Email"</string>
     <string name="registration_text">Register your account</string>
     <string name="password_confirm">Confirm password</string>
-    <string name="IP">192.168.0.106:8080</string>
+    <string name="IP">192.168.111.193:8080</string>
     <string name="log_in_text">Log in to your account</string>
     <string name="forgot_password">Forgot password?</string>
     <string name="have_an_account">Have an account?</string>
@@ -42,5 +42,16 @@
     <string name="enter">Enter</string>
     <string name="log_out">Log out</string>
     <string name="enter_group_message">Enter password</string>
+    <string name="test_number_of">Test number ? of ?</string>
+    <string name="question">Question ?</string>
+    <string name="question_text">Question text</string>
+    <string name="answer">Answer ?</string>
+    <string-array name="number_of_answers">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
 
 </resources>

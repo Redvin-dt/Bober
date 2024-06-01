@@ -5,19 +5,25 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.text.TextUtils.isEmpty
 import android.text.method.ScrollingMovementMethod
 import android.util.Log
+import android.widget.Toast
 import ru.hse.client.databinding.ActivityUploadChapterBinding
 import ru.hse.client.utility.DrawerBaseActivity
 import ru.hse.server.proto.EntitiesProto
+import ru.hse.server.proto.EntitiesProto.ChapterModel
+import ru.hse.server.proto.EntitiesProto.UserModel
 import java.io.*
-
+import kotlin.math.abs
 
 class ChapterUploadActivity : DrawerBaseActivity() {
 
     private lateinit var binding: ActivityUploadChapterBinding
     private lateinit var filepath: Uri
-    private lateinit var chapter: EntitiesProto.ChapterModel
+    private var testStartPositions: ArrayList<Int> = ArrayList<Int>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,6 +32,7 @@ class ChapterUploadActivity : DrawerBaseActivity() {
 
         binding.chooseFileButton.setOnClickListener {
             Log.d("chooser", "0")
+            testStartPositions.clear()
             startFileChooser()
         }
 
@@ -39,10 +46,52 @@ class ChapterUploadActivity : DrawerBaseActivity() {
             addTest()
         }
 
+        binding.uploadFileButton.setOnClickListener {
+            Log.d("upload", "0")
+            val intent = Intent(this, CreateTestActivity::class.java)
+            intent.putExtra("startPositions", testStartPositions)
+            startActivity(intent)
+        }
+
     }
 
     private fun addTest() {
-        TODO("Not yet implemented")
+        if (isEmpty(binding.preview.text)) {
+            Handler(Looper.getMainLooper()).post {
+                Toast.makeText(
+                    this,
+                    "To begin, select a file",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+            return
+        } else {
+            val positionStart = binding.preview.selectionStart
+            val positionEnd = binding.preview.selectionEnd
+
+            if (positionEnd != positionStart) {
+                Handler(Looper.getMainLooper()).post {
+                    Toast.makeText(
+                        this,
+                        "Please select the location after which the test should start",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+                return
+            }
+            Log.i("info", "cursor pos $positionStart")
+            if (testStartPositions.stream().anyMatch { abs(it - positionStart) < 20 }) {
+                Handler(Looper.getMainLooper()).post {
+                    Toast.makeText(
+                        this,
+                        "Distance between tests is too small (less than 20 characters)",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+                return
+            }
+            testStartPositions.add(positionStart)
+        }
     }
 
     private fun showHelpInfo() {
