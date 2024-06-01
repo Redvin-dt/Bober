@@ -80,7 +80,7 @@ class GroupSelectMenuActivity : DrawerBaseActivity() {
 
         binding.groupSearchView.setOnCloseListener {
             drawUserGroupList()
-            false;
+            false
         }
 
         drawUserGroupList()

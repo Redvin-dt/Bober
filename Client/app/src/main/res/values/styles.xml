@@ -50,5 +50,24 @@
         <item name="cornerSize">50%</item>
     </style>
 
+    <style name="TextInputLayoutStyleForQuestion" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="android:layout_width">230sp</item>
+        <item name="android:layout_height">60sp</item>
+        <item name="android:textColorHint">@color/dark_gray</item>
+        <item name="boxStrokeColor">@color/edittext_border_color</item>
+        <item name="hintTextColor">@color/focused</item>
+        <item name="cursorErrorColor">@color/black</item>
+    </style>
+
+    <style name="TextInputEditTextStyleForQuestion" parent="ThemeOverlay.MaterialComponents.TextInputEditText.OutlinedBox.Dense">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textCursorDrawable">@null</item>
+    </style>
+
+
+
 
 </resources>
