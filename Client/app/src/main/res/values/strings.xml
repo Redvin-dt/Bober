@@ -53,5 +53,11 @@
         <item>4</item>
         <item>5</item>
     </string-array>
+    <string name="default_login">login</string>
+    <string name="default_meta_info">meta info</string>
+    <string name="default_email">email</string>
+    <string name="statisticButton">Statistic</string>
+    <string name="invites_button">Invites</string>
+    <string name="log_out_button_text">Log out</string>
 
 </resources>
