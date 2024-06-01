@@ -40,11 +40,10 @@ message TestList {
 message ChapterModel {
   optional int64 id = 1;
   optional string name = 2;
-  optional string text = 3;
-  optional string testData = 4;
-  optional string metaInfo = 5;
-  optional GroupModel group = 6;
-  optional TestList tests = 7;
+  optional string textFile = 3;
+  optional string metaInfo = 4;
+  optional GroupModel group = 5;
+  optional TestList tests = 6;
 }
 
 message GroupModel {

@@ -24,11 +24,8 @@ public class Chapter {
     @Column(name = "name")
     private String chapterName;
 
-    @Column(name = "text")
-    private String textOfChapter = "";
-
-    @Column(name = "test_data")
-    private String testData = "";
+    @Column(name = "text_file")
+    private String textFile = "";
 
     @Column(name = "meta_info")
     private String metaInfo = "";
