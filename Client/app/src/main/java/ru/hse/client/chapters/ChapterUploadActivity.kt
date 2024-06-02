@@ -23,7 +23,7 @@ class ChapterUploadActivity : DrawerBaseActivity() {
 
     private lateinit var binding: ActivityUploadChapterBinding
     private lateinit var filepath: Uri
-    private var testStartPositions: ArrayList<Int> = ArrayList<Int>()
+    private var testStartPositions: ArrayList<Int> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,23 +31,23 @@ class ChapterUploadActivity : DrawerBaseActivity() {
         setContentView(binding.root)
 
         binding.chooseFileButton.setOnClickListener {
-            Log.d("chooser", "0")
+            Log.d(this.localClassName, "chooseFileButton pressed")
             testStartPositions.clear()
             startFileChooser()
         }
 
         binding.helpButton.setOnClickListener {
-            Log.d("help", "0")
+            Log.d(this.localClassName, "helpButton pressed")
             showHelpInfo()
         }
 
         binding.addTest.setOnClickListener {
-            Log.d("add test", "0")
+            Log.d(this.localClassName, "addTestButton pressed")
             addTest()
         }
 
         binding.uploadFileButton.setOnClickListener {
-            Log.d("upload", "0")
+            Log.d(this.localClassName, "uploadFileButton pressed")
             val intent = Intent(this, CreateTestActivity::class.java)
             intent.putExtra("startPositions", testStartPositions)
             startActivity(intent)
@@ -125,29 +125,6 @@ class ChapterUploadActivity : DrawerBaseActivity() {
             istream.close()
             binding.preview.setText(text)
         }
-    }
-
-    private fun readText(uri: Uri): String {
-        val f: File = File(uri.toString())
-        var inputStream: FileInputStream? = null
-        try {
-            inputStream = FileInputStream(f)
-        } catch (e: FileNotFoundException) {
-            e.printStackTrace()
-        }
-        val byteArrayOutputStream = ByteArrayOutputStream()
-        var i: Int
-        try {
-            i = inputStream!!.read()
-            while (i != -1) {
-                byteArrayOutputStream.write(i)
-                i = inputStream!!.read()
-            }
-            inputStream!!.close()
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
-        return byteArrayOutputStream.toString()
     }
 
 }
