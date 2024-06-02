@@ -25,11 +25,11 @@ public class FileController {
     }
 
     @PostMapping
-    public ResponseEntity<String> loadFile(@RequestParam MultipartFile file) {
+    public ResponseEntity<String> loadFileToChapter(@RequestParam MultipartFile file, @RequestParam Long chapterId) {
         try {
-            var response = ResponseEntity.ok().body(fileService.save(file));
+            fileService.addFileToChapter(file, chapterId);
             logger.info("File {} successful loaded", file.getOriginalFilename());
-            return response;
+            return ResponseEntity.ok().body("File " + file.getOriginalFilename() + " saved to chapter " + chapterId);
         } catch (IOException e) {
             logger.error("Can not load file {}, error message: {}", file.getOriginalFilename(), e.getMessage());
             return ResponseEntity.badRequest().body(e.getMessage());
