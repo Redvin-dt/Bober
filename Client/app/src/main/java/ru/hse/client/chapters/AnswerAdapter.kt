@@ -14,6 +14,8 @@ import ru.hse.client.R
 class AnswerAdapter(context: Context, dataArrayList: ArrayList<AnswerData>) :
     ArrayAdapter<AnswerData>(context, R.layout.answer_list_item, dataArrayList) {
 
+    private val itemsPadding = 40F
+
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
 
         var view = convertView
@@ -22,16 +24,15 @@ class AnswerAdapter(context: Context, dataArrayList: ArrayList<AnswerData>) :
         if (view == null) {
             view = LayoutInflater.from(context).inflate(R.layout.answer_list_item, parent, false)
         }
-        val answer = view!!.findViewById<com.google.android.material.textfield.TextInputEditText>(R.id.answer)
+        val answer =
+            view!!.findViewById<com.google.android.material.textfield.TextInputEditText>(R.id.answer)
         val isCorrect = view.findViewById<CheckBox>(R.id.checkBox)
         if (listAnswerData != null) {
             answer.hint = listAnswerData.answer
-        }
-        if (listAnswerData != null) {
             isCorrect.isChecked = listAnswerData.isCorrect
         }
 
-        view.translationY = 40F
+        view.translationY = itemsPadding
 
         return view
     }

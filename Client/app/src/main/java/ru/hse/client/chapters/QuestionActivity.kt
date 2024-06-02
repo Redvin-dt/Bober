@@ -16,7 +16,10 @@ class QuestionActivity: DrawerBaseActivity() {
     private lateinit var listOfAnswers: ListView
     private lateinit var answerData: AnswerData
     private lateinit var answerAdapter: AnswerAdapter
-    private  var dataArrayList: ArrayList<AnswerData> = ArrayList()
+    private var dataArrayList: ArrayList<AnswerData> = ArrayList()
+    private val listOfAnswersHints = listOf("Answer 1", "Answer 2", "Answer 3", "Answer 4", "Answer 5")
+    private val listOfAnswersNumbers = listOf("1", "2", "3", "4", "5")
+    private val listOfTypes = listOf("multiple", "one")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,8 +35,7 @@ class QuestionActivity: DrawerBaseActivity() {
     private fun initAnswersList() {
         position = 0
         listOfAnswers = binding.listView
-        val list = listOf("Answer 1", "Answer 2", "Answer 3", "Answer 4", "Answer 5")
-        for (number in list) {
+        for (number in listOfAnswersHints) {
             answerData = AnswerData(number, false)
             dataArrayList.add(answerData)
         }
@@ -46,11 +48,10 @@ class QuestionActivity: DrawerBaseActivity() {
 
     private fun initSpinners() {
         val spinnerNumberOfTests: Spinner = binding.spinnerNumber
-        val listNumbers = listOf("1", "2", "3", "4", "5")
         ArrayAdapter(
             this,
             R.layout.selected_item,
-            listNumbers
+            listOfAnswersNumbers
         ).also { adapter ->
             adapter.setDropDownViewResource(R.layout.dropdown_item)
             spinnerNumberOfTests.adapter = adapter
@@ -59,6 +60,7 @@ class QuestionActivity: DrawerBaseActivity() {
         spinnerNumberOfTests.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 val selectedItem = parent?.getItemAtPosition(position).toString()
+                TODO("Not yet implemented")
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -68,11 +70,10 @@ class QuestionActivity: DrawerBaseActivity() {
         }
 
         val spinnerTestType: Spinner = binding.spinnerType
-        val listTypesItems = listOf("multiple", "one")
         ArrayAdapter(
             this,
             R.layout.selected_item,
-            listTypesItems
+            listOfTypes
         ).also { adapter ->
             adapter.setDropDownViewResource(R.layout.dropdown_item)
             spinnerTestType.adapter = adapter
@@ -81,6 +82,7 @@ class QuestionActivity: DrawerBaseActivity() {
         spinnerTestType.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 val selectedItem = parent?.getItemAtPosition(position).toString()
+                TODO("Not yet implemented")
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
