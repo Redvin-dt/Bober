@@ -1,10 +1,12 @@
 package ru.hse.client.groups
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import ru.hse.client.databinding.ActivityGroupBinding
 import ru.hse.client.utility.DrawerBaseActivity
 import ru.hse.server.proto.EntitiesProto
+import ru.hse.client.chapters.ChapterUploadActivity
 
 class GroupActivity: DrawerBaseActivity() {
 
@@ -35,6 +37,18 @@ class GroupActivity: DrawerBaseActivity() {
         binding.groupTitle.text = group.name.toString()
         binding.groupAdmin.text = group.admin.login.toString()
 
+
+        binding.newChapterButton.setOnClickListener {
+            newChapterButtonPressed()
+        }
+
+    }
+
+    private fun newChapterButtonPressed() {
+        val intent = Intent(this@GroupActivity, ChapterUploadActivity::class.java)
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        startActivity(intent)
+        finish()
     }
 
 }
