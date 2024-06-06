@@ -149,7 +149,7 @@ class QuestionBody(questionNumber: String, binding: ActivityCreateTestBinding, c
                 val currentNumberOfAnswers = id + 1
                 if (currentNumberOfAnswers < numberOfAnswers) {
                     while (currentNumberOfAnswers.toInt() != dataArrayList.size) {
-                        answerAdapter.removeItem(dataArrayList.size - 1)
+                        dataArrayList.removeAt(dataArrayList.size - 1)
                     }
                     mBinding.listView.adapter = answerAdapter
                     numberOfAnswers = currentNumberOfAnswers.toInt()
@@ -218,8 +218,8 @@ class QuestionBody(questionNumber: String, binding: ActivityCreateTestBinding, c
         }
         state.putString("question type", questionType.toString())
         state.putInt("correct answer numbers", correctAnswerNumbers.size)
-        for (number in correctAnswerNumbers) {
-            state.putInt("correct answer $number", number)
+        for (number in 0..<correctAnswerNumbers.size) {
+            state.putInt("correct answer $number", correctAnswerNumbers[number])
         }
         return state
     }
@@ -230,7 +230,7 @@ class QuestionBody(questionNumber: String, binding: ActivityCreateTestBinding, c
         mQuestionNumber = state.getString("question number")!!
         mBinding.questionNumber.text = mQuestionNumber
 
-        dataArrayList.clear()
+        dataArrayList = ArrayList()
         numberOfAnswers = state.getInt("number of answers")
         for (position in 0..<numberOfAnswers) {
             val currentAnswerData: Bundle? = state.getBundle("answer $position")
@@ -249,6 +249,16 @@ class QuestionBody(questionNumber: String, binding: ActivityCreateTestBinding, c
         mBinding.listView.adapter = answerAdapter
         mBinding.listView.isClickable = true
 
+        correctAnswerNumbers = LinkedList()
+        val numberOfCorrectAnswers = state.getInt("correct answer numbers")
+        for (position in 0..<numberOfCorrectAnswers) {
+            val number = state.getInt("correct answer $position")
+            correctAnswerNumbers.add(number)
+        }
+
+        answerAdapter.setOnCheckboxCheckedListener(this@QuestionBody)
+
+        initSpinners()
         if (state.getString("question type") == "MULTIPLE") {
             questionType = QuestionType.MULTIPLE
             mBinding.spinnerType.setSelection(0)
@@ -256,16 +266,7 @@ class QuestionBody(questionNumber: String, binding: ActivityCreateTestBinding, c
             questionType = QuestionType.SINGLE
             mBinding.spinnerType.setSelection(1)
         }
-        correctAnswerNumbers.clear()
-        val numberOfCorrectAnswers = state.getInt("correct answer numbers")
-        for (position in 0..<numberOfCorrectAnswers) {
-            val number = state.getInt("correct answer $position")
-            correctAnswerNumbers.add(number)
-        }
-
-        // mBinding.spinnerNumber.setSelection(numberOfAnswers - 1)
-        answerAdapter.setOnCheckboxCheckedListener(this@QuestionBody)
-
+        mBinding.spinnerNumber.setSelection(numberOfAnswers - 1)
     }
 
     override fun onCheckBoxChecked(position: Int, isChecked: Boolean) {
@@ -284,6 +285,7 @@ class QuestionBody(questionNumber: String, binding: ActivityCreateTestBinding, c
         } else {
             correctAnswerNumbers.addLast(position)
         }
+        answerAdapter.notifyDataSetChanged()
     }
 
 }
