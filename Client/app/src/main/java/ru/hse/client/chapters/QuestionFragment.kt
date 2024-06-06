@@ -8,12 +8,12 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.Spinner
+import androidx.fragment.app.Fragment
 import ru.hse.client.R
 import ru.hse.client.databinding.QuestionActivityBinding
-import ru.hse.client.utility.DrawerBaseActivity
 import java.util.LinkedList
 
-class QuestionActivity : DrawerBaseActivity(), AnswerAdapter.OnCheckBoxListener {
+class QuestionFragment : Fragment(R.layout.question_activity), AnswerAdapter.OnCheckBoxListener {
     private lateinit var binding: QuestionActivityBinding
     private var numberOfAnswers: Int = 0
     private var correctAnswerNumbers: LinkedList<Int> = LinkedList()
@@ -31,10 +31,10 @@ class QuestionActivity : DrawerBaseActivity(), AnswerAdapter.OnCheckBoxListener 
     private val listOfAnswersNumbers = listOf("1", "2", "3", "4", "5")
     private val listOfTypes = listOf("multiple", "single")
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        Log.d("HUI", "HUI")
+        super.onViewCreated(view, savedInstanceState)
         binding = QuestionActivityBinding.inflate(layoutInflater)
-        setContentView(binding.root)
 
         initAnswersList()
 
@@ -49,7 +49,7 @@ class QuestionActivity : DrawerBaseActivity(), AnswerAdapter.OnCheckBoxListener 
             AnswerData(listOfAnswersHints[0], false, Editable.Factory.getInstance().newEditable(""))
         dataArrayList.add(answerData)
 
-        answerAdapter = AnswerAdapter(this, dataArrayList)
+        answerAdapter = AnswerAdapter(activity!!, dataArrayList)
         binding.listView.adapter = answerAdapter
         binding.listView.isClickable = true
         answerAdapter.setOnCheckboxCheckedListener(this)
@@ -77,7 +77,7 @@ class QuestionActivity : DrawerBaseActivity(), AnswerAdapter.OnCheckBoxListener 
     private fun initSpinners() {
         val spinnerNumberOfTests: Spinner = binding.spinnerNumber
         ArrayAdapter(
-            this,
+            activity!!,
             R.layout.selected_item,
             listOfAnswersNumbers
         ).also { adapter ->
@@ -122,7 +122,7 @@ class QuestionActivity : DrawerBaseActivity(), AnswerAdapter.OnCheckBoxListener 
 
         val spinnerTestType: Spinner = binding.spinnerType
         ArrayAdapter(
-            this,
+            activity!!,
             R.layout.selected_item,
             listOfTypes
         ).also { adapter ->

@@ -1,6 +1,7 @@
 package ru.hse.client.chapters
 
 import android.content.Context
+import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -8,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.CheckBox
+import com.google.android.material.appbar.AppBarLayout.LiftOnScrollListener
 import com.google.android.material.textfield.TextInputEditText
 import ru.hse.client.R
 
@@ -32,12 +34,14 @@ class AnswerAdapter(context: Context, private val dataArrayList: MutableList<Ans
             conditionMap[position]?.let { checkBox.setChecked(it) }
         } else {
             checkBox.isChecked = listAnswerData.isCorrect
+            conditionMap[position] = listAnswerData.isCorrect
         }
 
         if (enteredTextMap.containsKey(position)) {
             textWidget.setText(enteredTextMap[position])
         } else {
             textWidget.text = listAnswerData.answer
+            enteredTextMap[position] = listAnswerData.answer.toString()
         }
 
         checkBox.setOnCheckedChangeListener { _, isChecked ->
@@ -66,6 +70,12 @@ class AnswerAdapter(context: Context, private val dataArrayList: MutableList<Ans
 
     override fun getItemId(position: Int): Long {
         return position.toLong()
+    }
+    fun getAnswerDataByPosition(position: Int): Bundle {
+        val state = Bundle()
+        state.putString("answer text", enteredTextMap[position])
+        state.putBoolean("checkBox state", conditionMap[position]!!)
+        return state
     }
 
     fun removeItem(position: Int) {

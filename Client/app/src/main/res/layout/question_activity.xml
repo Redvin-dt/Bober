@@ -12,8 +12,7 @@
         android:layout_gravity="center_horizontal"
         app:cardCornerRadius="20sp"
         app:cardElevation="8sp"
-        android:backgroundTint="@color/white"
-        tools:context=".chapters.QuestionActivity">
+        android:backgroundTint="@color/white">
 
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -78,6 +77,11 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
+        <ScrollView
+            android:id="@+id/scrollView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fillViewport="true">
 
             <ListView
                 android:id="@+id/listView"
@@ -93,6 +97,8 @@
                 android:divider="@android:color/transparent"
                 android:dividerHeight="10sp">
             </ListView>
+
+        </ScrollView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
