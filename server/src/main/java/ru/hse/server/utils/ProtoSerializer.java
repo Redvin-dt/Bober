@@ -128,6 +128,7 @@ public class ProtoSerializer {
                 .setMetaInfo(user.getMetaInfo())
                 .setAdminOfGroups(convertGroupsToProto(DaoUser.getGroupsByAdmin(user)))
                 .setUserOfGroups(convertGroupsToProto(new ArrayList<>(DaoUser.getGroupsOfUser(user))))
+                .setInvitations(convertGroupsToProto(user.getInvitations().stream().toList()))
                 .build();
     }
 

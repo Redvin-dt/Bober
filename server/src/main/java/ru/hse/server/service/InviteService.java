@@ -58,12 +58,12 @@ public class InviteService {
         var user = getUser(userId);
         var group = getGroup(groupId);
 
-        var admin = group.getAdmin();
+        //var admin = group.getAdmin();
 ;
-        if (user.equals(admin)) {
-            logger.error("user has to be admin of group to invite other members");
-            throw new AccessException("user has to be admin of group to invite other members");
-        }
+        //if (user.equals(admin)) {
+        //    logger.error("user has to be admin of group to invite other members");
+        //    throw new AccessException("user has to be admin of group to invite other members");
+        //}
 
         user.addInvitation(group);
         updateEntities(user, group);
