@@ -38,7 +38,7 @@ public class ChapterController {
         }
     }
 
-    @GetMapping(produces = {MediaType.APPLICATION_PROTOBUF_VALUE, MediaType.TEXT_PLAIN_VALUE})
+    @GetMapping(value = "/chapterById", produces = {MediaType.APPLICATION_PROTOBUF_VALUE, MediaType.TEXT_PLAIN_VALUE})
     public ResponseEntity getChapter(@RequestParam Long id) {
         try {
             var chapter = chapterService.getChapterByID(id);
