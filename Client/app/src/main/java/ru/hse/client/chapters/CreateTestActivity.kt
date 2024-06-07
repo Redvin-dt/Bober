@@ -149,7 +149,10 @@ class QuestionBody(questionNumber: String, binding: ActivityCreateTestBinding, c
                 val currentNumberOfAnswers = id + 1
                 if (currentNumberOfAnswers < numberOfAnswers) {
                     while (currentNumberOfAnswers.toInt() != dataArrayList.size) {
-                        dataArrayList.removeAt(dataArrayList.size - 1)
+                        answerAdapter.removeItem(dataArrayList.lastIndex)
+                        if (correctAnswerNumbers.contains(dataArrayList.size)) {
+                            correctAnswerNumbers.remove(dataArrayList.size);
+                        }
                     }
                     mBinding.listView.adapter = answerAdapter
                     numberOfAnswers = currentNumberOfAnswers.toInt()

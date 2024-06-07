@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,7 +17,7 @@ import ru.hse.client.R
 class AnswerAdapter(context: Context, private val dataArrayList: MutableList<AnswerData>) :
     ArrayAdapter<AnswerData>(context, R.layout.answer_list_item, dataArrayList) {
 
-    private val itemsPadding = 40F
+    private val itemsPadding = 10F
     private val enteredTextMap = mutableMapOf<Int, String>()
     private val conditionMap = mutableMapOf<Int, Boolean>()
 
@@ -60,6 +61,8 @@ class AnswerAdapter(context: Context, private val dataArrayList: MutableList<Ans
         })
 
         view.translationY = itemsPadding
+
+        //view.translationY = -itemsPadding
 
         return view
     }
