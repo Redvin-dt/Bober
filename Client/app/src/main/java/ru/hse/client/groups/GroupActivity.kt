@@ -8,19 +8,16 @@ import android.util.Log
 import android.widget.AdapterView
 import android.widget.Toast
 import okhttp3.OkHttpClient
-import ru.hse.client.R
 import ru.hse.client.databinding.ActivityGroupBinding
 import ru.hse.client.utility.DrawerBaseActivity
 import ru.hse.server.proto.EntitiesProto
 import ru.hse.client.chapters.ChapterUploadActivity
 import ru.hse.client.chapters.ReadingChapterActivity
-import ru.hse.client.utility.user
 
 class GroupActivity: DrawerBaseActivity() {
 
     private lateinit var binding: ActivityGroupBinding
-    var group: EntitiesProto.GroupModel? = null
-    var chapters: EntitiesProto.ChapterList? = null
+    private var group: EntitiesProto.GroupModel? = null
     private lateinit var dataArrayList: ArrayList<ListChapterData?>
     private lateinit var listViewAdapter: ListChapterAdapter
     private var okHttpClient = OkHttpClient()
@@ -40,9 +37,9 @@ class GroupActivity: DrawerBaseActivity() {
         listViewAdapter = ListChapterAdapter(this, dataArrayList)
 
         if (group != null) {
-            Log.i("INFO", group!!.name)
+            Log.i("GroupActivity", group!!.name)
         } else {
-            Log.e("ERROR", "Null group in GroupActivity")
+            Log.e("GroupActivity", "Null group in GroupActivity")
             finish()
             return
         }
@@ -61,21 +58,21 @@ class GroupActivity: DrawerBaseActivity() {
     }
 
     private fun drawGroupChapterList() {
-        chapters = group?.chapters
-        Log.e("CHAPTERS", chapters?.chaptersList?.size.toString())
+        val chapters: EntitiesProto.ChapterList? = group?.chapters
+        Log.e("GroupActivity", chapters?.chaptersList?.size.toString())
         if (chapters == null) {
             return
         }
 
         val stringBuilder : StringBuilder = StringBuilder()
 
-        for (i in chapters!!.chaptersList) {
+        for (i in chapters.chaptersList) {
             stringBuilder.append(i.name)
             stringBuilder.append(" ")
         }
 
-        Log.i("Info", "Chapters of group are $stringBuilder")
-        drawChapterList(chapters!!.chaptersList)
+        Log.i("GroupActivity", "Chapters of group are $stringBuilder")
+        drawChapterList(chapters.chaptersList)
     }
 
     private fun drawChapterList(chapters: List<EntitiesProto.ChapterModel>) {

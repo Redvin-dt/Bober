@@ -23,8 +23,7 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, GroupSelectMenuActivity::class.java)
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             ContextCompat.startActivity(this, intent, null)
-        }
-         else {
+        } else {
             val intent = Intent(this, SignInActivity::class.java)
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             startActivityForResult(intent, 100)

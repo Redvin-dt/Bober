@@ -17,9 +17,9 @@ class ReadingChapterActivity : DrawerBaseActivity() {
     private lateinit var titleTextView: TextView
     private lateinit var startTestButton: Button
     private var currentTest: Int = 0
-    var chapter: EntitiesProto.ChapterModel? = null
-    var tests: EntitiesProto.TestList? = null
-    var text: String = ""
+    private var chapter: EntitiesProto.ChapterModel? = null
+    private var tests: EntitiesProto.TestList? = null
+    private var text: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -35,31 +35,24 @@ class ReadingChapterActivity : DrawerBaseActivity() {
         val bundle = intent.extras
 
         if (bundle != null) {
-            Log.e("ERROR", "ERROR chapter is getted")
+            Log.e("ReadingChapterActivity", "Got chapter")
             chapter = bundle.getSerializable("chapter") as EntitiesProto.ChapterModel
             text = bundle.getSerializable("text") as String
         }
 
         if (chapter != null) {
-            Log.i("INFO", chapter!!.name)
+            Log.i("ReadingChapterActivity", chapter!!.name)
         } else {
-            Log.e("ERROR", "ERROR chapter is empty")
+            Log.e("ReadingChapterActivity", "ERROR chapter is empty")
+            finish()
+            return
         }
 
 
-        tests = chapter?.tests
+        tests = chapter!!.tests
 
-        Log.e("TEXT:", text)
-        if (tests?.testsList?.size!! > currentTest) {
-            chapterTextView.text = tests?.getTests(currentTest)?.position?.let { text.subSequence(0, it.toInt()) }
-        } else {
-            chapterTextView.text = text
-        }
-        if (chapter != null) {
-            titleTextView.text = chapter!!.name
-        } else {
-            Log.e("ERROR", "Chapter has no name")
-        }
+        changeReadableText()
+        Log.i("ReadingChapterActivity", "TEXT:$text")
 
         startTestButton.setOnClickListener {
             if (startTestButton.visibility != View.INVISIBLE && tests != null && tests!!.testsList.size > currentTest) {
@@ -81,16 +74,21 @@ class ReadingChapterActivity : DrawerBaseActivity() {
             }
         }
     }
+
+    private fun changeReadableText() {
+        if (tests?.testsList?.size!! > currentTest) {
+            chapterTextView.text = tests?.getTests(currentTest)?.position?.let { text.subSequence(0, it.toInt()) }
+        } else {
+            startTestButton.visibility = View.INVISIBLE
+            chapterTextView.text = text
+        }
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 100 && resultCode == RESULT_OK) {
             currentTest++
-            if (tests?.testsList?.size!! > currentTest) {
-                chapterTextView.text = tests?.getTests(currentTest)?.position?.let { text.subSequence(0, it.toInt()) }
-            } else {
-                startTestButton.visibility = View.INVISIBLE
-                chapterTextView.text = text
-            }
+            changeReadableText()
         }
     }
 }
