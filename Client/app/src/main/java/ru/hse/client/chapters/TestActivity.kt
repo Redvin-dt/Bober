@@ -64,8 +64,6 @@ class TestActivity : DrawerBaseActivity(){
         questionTextView.text = questions.getQuestions(currentQuestion - 1).question
 
         answerButton.setOnClickListener {
-            Log.i("Text: ", answerEditText.text.toString())
-            Log.i("Right Answers: ", rightAnswersQuantity.toString())
             if (checkAnswer(questions.getQuestions(currentQuestion - 1), answerEditText.text.toString())) {
                 rightAnswersQuantity++
             }
