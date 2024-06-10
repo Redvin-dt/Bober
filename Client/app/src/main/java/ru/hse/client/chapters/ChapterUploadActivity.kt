@@ -2,27 +2,31 @@ package ru.hse.client.chapters
 
 import android.app.Activity
 import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.text.InputType
 import android.text.TextUtils.isEmpty
-import android.text.method.ScrollingMovementMethod
 import android.util.Log
+import android.view.MotionEvent
+import android.view.View
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
+import ru.hse.client.R
 import ru.hse.client.databinding.ActivityUploadChapterBinding
+import ru.hse.client.entry.hideKeyboard
 import ru.hse.client.utility.DrawerBaseActivity
-import ru.hse.server.proto.EntitiesProto
-import ru.hse.server.proto.EntitiesProto.ChapterModel
-import ru.hse.server.proto.EntitiesProto.UserModel
-import java.io.*
-import kotlin.math.abs
 
 class ChapterUploadActivity : DrawerBaseActivity() {
 
     private lateinit var binding: ActivityUploadChapterBinding
     private lateinit var filepath: Uri
+    private lateinit var text: String
     private var testStartPositions: ArrayList<Int> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,15 +48,25 @@ class ChapterUploadActivity : DrawerBaseActivity() {
         binding.addTest.setOnClickListener {
             Log.d(this.localClassName, "addTestButton pressed")
             addTest()
+            val intent = Intent(this, TestManagerActivity::class.java)
+            intent.putExtra(
+                "text",
+                binding.preview.text.toString().subSequence(
+                    if (testStartPositions.size == 1) 0 else testStartPositions[testStartPositions.size - 2],
+                    testStartPositions.last()
+                ),
+            )
+            intent.putExtra("test number", testStartPositions.size)
+            startActivity(intent)
         }
 
         binding.uploadFileButton.setOnClickListener {
             Log.d(this.localClassName, "uploadFileButton pressed")
-            val intent = Intent(this, CreateTestActivity::class.java)
-            intent.putExtra("startPositions", testStartPositions)
+            val intent = Intent(this, TestManagerActivity::class.java)
+            intent.putExtra("text", binding.preview.text.toString())
+            intent.putExtra("test number", testStartPositions)
             startActivity(intent)
         }
-
     }
 
     private fun addTest() {
@@ -79,8 +93,8 @@ class ChapterUploadActivity : DrawerBaseActivity() {
                 }
                 return
             }
-            Log.i("info", "cursor pos $positionStart")
-            if (testStartPositions.stream().anyMatch { abs(it - positionStart) < 20 }) {
+            Log.i(this.localClassName, "cursor pos $positionStart")
+            if (testStartPositions.isNotEmpty() && positionStart - testStartPositions.last() <= 20) {
                 Handler(Looper.getMainLooper()).post {
                     Toast.makeText(
                         this,
@@ -121,7 +135,7 @@ class ChapterUploadActivity : DrawerBaseActivity() {
         if (requestCode == 111 && resultCode == Activity.RESULT_OK && data != null) {
             filepath = data.data!!
             val istream = contentResolver.openInputStream(filepath)
-            val text = istream!!.bufferedReader().use { it.readText() }
+            text = istream!!.bufferedReader().use { it.readText() }
             istream.close()
             binding.preview.setText(text)
         }

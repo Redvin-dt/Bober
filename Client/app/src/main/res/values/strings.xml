@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Client</string>
+    <string name="app_name">Bober</string>
     <string name="sign_in">Sign in</string>
     <string name="sign_up">Sign up</string>
     <string name="welcome">Welcome!</string>
@@ -9,7 +9,7 @@
     <string name="email">"Email"</string>
     <string name="registration_text">Register your account</string>
     <string name="password_confirm">Confirm password</string>
-    <string name="IP">192.168.111.193:8080</string>
+    <string name="IP">192.168.0.103:8080</string>
     <string name="log_in_text">Log in to your account</string>
     <string name="forgot_password">Forgot password?</string>
     <string name="have_an_account">Have an account?</string>
@@ -59,5 +59,10 @@
     <string name="statisticButton">Statistic</string>
     <string name="invites_button">Invites</string>
     <string name="log_out_button_text">Log out</string>
+    <string name="text_for_test">Text for Test ?</string>
+    <string name="create_test">Create test</string>
+    <string name="test_name">Test name</string>
+    <string name="test_created">Test created</string>
+    <string name="go_back">Go back</string>
 
 </resources>

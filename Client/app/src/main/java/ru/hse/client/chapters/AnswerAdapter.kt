@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.CheckBox
+import androidx.core.view.setPadding
 import com.google.android.material.appbar.AppBarLayout.LiftOnScrollListener
 import com.google.android.material.textfield.TextInputEditText
 import ru.hse.client.R
@@ -17,7 +18,7 @@ import ru.hse.client.R
 class AnswerAdapter(context: Context, private val dataArrayList: MutableList<AnswerData>) :
     ArrayAdapter<AnswerData>(context, R.layout.answer_list_item, dataArrayList) {
 
-    private val itemsPadding = 10F
+    private val itemsPadding = 20F
     private val enteredTextMap = mutableMapOf<Int, String>()
     private val conditionMap = mutableMapOf<Int, Boolean>()
 
@@ -61,8 +62,6 @@ class AnswerAdapter(context: Context, private val dataArrayList: MutableList<Ans
         })
 
         view.translationY = itemsPadding
-
-        //view.translationY = -itemsPadding
 
         return view
     }
