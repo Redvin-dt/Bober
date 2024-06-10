@@ -5,7 +5,10 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+<<<<<<< HEAD
 import android.text.method.ScrollingMovementMethod
+=======
+>>>>>>> 37e1117 (update ui and small fixes)
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
@@ -61,7 +64,6 @@ class TestManagerActivity: DrawerBaseActivity() {
             data.putExtra("go back button pressed", true)
             finish()
         }
-
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
