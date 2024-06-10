@@ -357,7 +357,7 @@ class QuestionBody(questionNumber: String, binding: ActivityCreateTestBinding, c
         return false
     }
 
-    fun toQuestionModel(): QuestionModel {
+   S fun toQuestionModel(): QuestionModel {
         val correctAnswerNumbersLong = ArrayList<Long>()
         for (number in correctAnswerNumbers) {
             correctAnswerNumbersLong.add(number.toLong())
