@@ -14,12 +14,13 @@
             android:layout_height="wrap_content"
             android:text="@string/choose"
             android:textSize="18sp"
+            android:textColor="@color/white"
             app:backgroundTint="@color/lavanda"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintVertical_bias="0.08"
+            app:layout_constraintVertical_bias="0.05"
             app:layout_constraintHorizontal_bias="0.2"
     />
 
@@ -29,16 +30,17 @@
             android:layout_height="wrap_content"
             android:text="@string/upload"
             android:textSize="18sp"
+            android:textColor="@color/white"
             app:backgroundTint="@color/lavanda"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintVertical_bias="0.08"
+            app:layout_constraintVertical_bias="0.05"
             app:layout_constraintHorizontal_bias="0.8"
     />
 
-    <com.google.android.material.textfield.TextInputEditText
+    <EditText
             android:id="@+id/preview"
             android:layout_width="350sp"
             android:layout_height="0sp"
@@ -49,8 +51,9 @@
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginTop="10sp"
             android:layout_marginBottom="65sp"
+            android:scrollbars="vertical"
             android:background="@drawable/bordered_image"
-    />
+        />
 
     <ImageButton
             android:id="@+id/help_button"

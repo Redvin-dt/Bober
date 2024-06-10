@@ -2,6 +2,7 @@ package ru.hse.client.chapters
 
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -36,14 +37,15 @@ import ru.hse.client.databinding.ActivityCreateTestBinding
 import ru.hse.client.databinding.QuestionActivityBinding
 import ru.hse.client.entry.hideKeyboard
 import ru.hse.client.utility.DrawerBaseActivity
+import ru.hse.server.proto.EntitiesProto
 import java.util.LinkedList
 
 
 class CreateTestActivity : DrawerBaseActivity() {
 
     private lateinit var binding: ActivityCreateTestBinding
-    private lateinit var startPositions: ArrayList<Int>
-    private var currentPosition = 0
+    private lateinit var testName: String
+    private var currentTestNumber: Int = -1
     private lateinit var questionManager: QuestionManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,26 +53,64 @@ class CreateTestActivity : DrawerBaseActivity() {
         binding = ActivityCreateTestBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        //startPositions = intent.extras?.get("startPositions") as ArrayList<Int>
-        startPositions = ArrayList()
-        binding.logo.text = "Test #${currentPosition} of ${startPositions.size}"
+        testName = intent.extras?.get("test name") as String
+        binding.testName.text = testName
 
         questionManager = QuestionManager(binding, this)
         questionManager.addNewQuestion()
 
         binding.addButton.setOnClickListener {
-            questionManager.addNewQuestion()
+            if (questionManager.checkQuestionFilled()) {
+                questionManager.addNewQuestion()
+            } else {
+                printErrorAboutNotFullQuestion()
+            }
         }
 
         binding.prevButton.setOnClickListener {
-            questionManager.toPreviousQuestion()
+            if (questionManager.checkQuestionFilled()) {
+                questionManager.toPreviousQuestion()
+            } else {
+                printErrorAboutNotFullQuestion()
+            }
         }
 
         binding.nextButton.setOnClickListener {
-            questionManager.toNextQuestion()
+            if (questionManager.checkQuestionFilled()) {
+                questionManager.toNextQuestion()
+            } else {
+                printErrorAboutNotFullQuestion()
+            }
+        }
+
+        binding.testCreated.setOnClickListener {
+            if (questionManager.checkQuestionFilled()) {
+                questionManager.toNextQuestion()
+            } else {
+                createQuestionProto()
+            }
         }
 
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
+    }
+
+    private fun createQuestionProto() {
+        val questionList = questionManager.getQuestionsList()
+        val data: Intent = Intent()
+        this.setResult(RESULT_OK, data)
+        data.putExtra("test data in protobuf", questionList.toByteArray())
+        this.finish()
+    }
+
+    private fun printErrorAboutNotFullQuestion() {
+        Handler(Looper.getMainLooper()).post {
+            Toast.makeText(
+                this,
+                "Fill in all the fields to move on to another question",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+        return
     }
 
     private fun Activity.hideKeyboard() {
@@ -291,6 +331,24 @@ class QuestionBody(questionNumber: String, binding: ActivityCreateTestBinding, c
         answerAdapter.notifyDataSetChanged()
     }
 
+    fun checkQuestionFilled(): Boolean {
+        if (correctAnswerNumbers.isEmpty() || mBinding.questionText.text.toString().isEmpty()) {
+            return false
+        }
+        for (answerNumber in 0..<numberOfAnswers) {
+            if (answerAdapter.getAnswerDataByPosition(answerNumber).getString("answer text")
+                    .toString().isNotEmpty()
+            ) {
+                return true
+            }
+        }
+        return false
+    }
+
+    private fun toQuestionModel(): EntitiesProto.QuestionModel? {
+        return null
+    }
+
 }
 
 class QuestionManager(binding: ActivityCreateTestBinding, context: Context) {
@@ -348,6 +406,18 @@ class QuestionManager(binding: ActivityCreateTestBinding, context: Context) {
                 ).show()
             }
         }
+    }
+
+    fun checkQuestionFilled(): Boolean {
+        return questionBodies[currentQuestionIndex].checkQuestionFilled()
+    }
+
+    fun getQuestionsList(): EntitiesProto.QuestionList {
+        val questionsList: EntitiesProto.QuestionList = EntitiesProto.QuestionList.newBuilder().build()
+        for (questionBody in questionBodies) {
+
+        }
+        return questionsList
     }
 
 }

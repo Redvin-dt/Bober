@@ -9,21 +9,71 @@
     tools:context=".chapters.CreateTestActivity">
 
     <TextView
-        android:id="@+id/logo"
+        android:id="@+id/test_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:orientation="vertical"
         android:text="@string/test_number_of"
         android:textColor="@color/black"
-        android:textSize="27sp" />
+        android:textSize="27sp"
+        android:layout_marginVertical="5sp"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/buttons_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/test_name">
+
+        <ImageButton
+            android:id="@+id/prev_button"
+            android:layout_width="40sp"
+            android:layout_height="40sp"
+            android:layout_alignParentStart="true"
+            android:background="@drawable/roundcorner"
+            android:backgroundTint="@color/lavanda"
+            android:src="@drawable/navigate_before"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.3"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/add_button"
+            android:layout_width="40sp"
+            android:layout_height="40sp"
+            android:layout_alignParentStart="true"
+            android:background="@drawable/roundcorner"
+            android:backgroundTint="@color/lavanda"
+            android:src="@drawable/baseline_add_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/next_button"
+            android:layout_width="40sp"
+            android:layout_height="40sp"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/roundcorner"
+            android:backgroundTint="@color/lavanda"
+            android:src="@drawable/navigate_next"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.7"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.cardview.widget.CardView
         android:id="@+id/question_body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@id/buttons_layout"
-        android:layout_below="@id/logo"
+        android:layout_below="@id/buttons_layout"
         android:layout_gravity="center_horizontal"
         android:layout_marginHorizontal="10sp"
         android:layout_marginVertical="10sp"
@@ -35,7 +85,8 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:gravity="center">
 
             <Spinner
                 android:id="@+id/spinner_number"
@@ -95,7 +146,7 @@
             <ListView
                 android:id="@+id/listView"
                 android:layout_width="match_parent"
-                android:layout_height="400sp"
+                android:layout_height="350sp"
                 android:divider="@android:color/transparent"
                 android:dividerHeight="10sp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -105,7 +156,10 @@
                 app:layout_constraintTop_toBottomOf="@id/question_text_layout"
                 app:layout_constraintVertical_bias="0"
                 tools:listitem="@layout/answer_list_item"
-                android:paddingBottom="25dp"
+                android:foregroundGravity="center_horizontal"
+                android:paddingBottom="18sp"
+                android:paddingStart="10sp"
+                android:paddingEnd="10sp"
                 android:clipToPadding="false">
 
             </ListView>
@@ -114,56 +168,15 @@
 
     </androidx.cardview.widget.CardView>
 
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/buttons_layout"
-        android:layout_width="match_parent"
+    <Button
+        android:id="@+id/test_created"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="10sp">
-
-        <ImageButton
-            android:id="@+id/prev_button"
-            android:layout_width="55sp"
-            android:layout_height="55sp"
-            android:layout_alignParentStart="true"
-            android:background="@drawable/roundcorner"
-            android:backgroundTint="@color/lavanda"
-            android:src="@drawable/navigate_before"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.25"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageButton
-            android:id="@+id/add_button"
-            android:layout_width="55sp"
-            android:layout_height="55sp"
-            android:layout_alignParentStart="true"
-            android:background="@drawable/roundcorner"
-            android:backgroundTint="@color/lavanda"
-            android:src="@drawable/baseline_add_24"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageButton
-            android:id="@+id/next_button"
-            android:layout_width="55sp"
-            android:layout_height="55sp"
-            android:layout_alignParentEnd="true"
-            android:background="@drawable/roundcorner"
-            android:backgroundTint="@color/lavanda"
-            android:src="@drawable/navigate_next"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.75"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
+        android:layout_below="@id/question_body"
+        android:layout_centerHorizontal="true"
+        android:orientation="vertical"
+        android:text="@string/test_created"
+        android:backgroundTint="@color/lavanda"
+        android:textSize="20sp"
+        android:textColor="@color/white"/>
 </RelativeLayout>
