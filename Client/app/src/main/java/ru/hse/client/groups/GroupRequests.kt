@@ -133,6 +133,66 @@ fun enterGroup(
     return entryGroupModel
 }
 
+fun getChapter(
+    chapter: EntitiesProto.ChapterModel,
+    writeErrorMessage: Boolean,
+    activity: Activity,
+    okHttpClient: OkHttpClient
+) : EntitiesProto.ChapterModel? {
+    val urlChapterGet : String = ("http://" + ContextCompat.getString(activity, R.string.IP) + "/chapters/chapterById").toHttpUrlOrNull()
+        ?.newBuilder()
+        ?.addQueryParameter("id", chapter.id.toString())
+        ?.build().toString()
+
+    val requestForGetGroups: Request =
+        Request.Builder()
+            .url(urlChapterGet)
+            .header("Authorization", "Bearer " + user.getUserToken())
+            .build()
+
+
+    var getChapterModel : EntitiesProto.ChapterModel? = null
+
+    val countDownLatch = CountDownLatch(1);
+    okHttpClient.newCall(requestForGetGroups).enqueue(object : Callback {
+        override fun onFailure(call: Call, e: IOException) {
+            Log.e("Error", e.toString() + " " + e.message)
+            Handler(Looper.getMainLooper()).post {
+                Toast.makeText(
+                    activity,
+                    "Something wrong try again",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+
+            countDownLatch.countDown()
+        }
+
+        override fun onResponse(call: Call, response: Response) {
+            Log.i("Info", response.toString())
+            if (response.isSuccessful) {
+                val responseBody: ByteString? = response.body?.byteString()
+                getChapterModel = EntitiesProto.ChapterModel.parseFrom(responseBody?.toByteArray())
+            } else {
+                if (writeErrorMessage) {
+                    Handler(Looper.getMainLooper()).post {
+                        Toast.makeText(
+                            activity,
+                            "Check connection, try again",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            }
+
+            countDownLatch.countDown()
+        }
+    })
+
+    countDownLatch.await(10, TimeUnit.SECONDS)
+    return getChapterModel
+}
+
 fun createGroupRequest(groupName: String, groupPassword: String, activity: Activity, okHttpClient: OkHttpClient){
     val URlCreateGroup: String =
             ("http://" + ContextCompat.getString(activity, R.string.IP) + "/groups").toHttpUrlOrNull()
