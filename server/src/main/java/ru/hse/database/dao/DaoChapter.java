@@ -13,9 +13,8 @@ public class DaoChapter {
     static Logger logger = LoggerFactory.getLogger(DaoChapter.class);
 
     static public Chapter getChapterById(long id) {
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            return session.get(Chapter.class, id);
-        }
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        return session.get(Chapter.class, id);
     }
 
     static public Group getGroupByChapter(Chapter chapter) {
