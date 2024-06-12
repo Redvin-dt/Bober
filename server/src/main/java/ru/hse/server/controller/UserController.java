@@ -3,6 +3,8 @@ package ru.hse.server.controller;
 import jakarta.security.auth.message.AuthException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.client.HttpClientErrorException;
+import ru.hse.server.exception.AccessException;
+import ru.hse.server.exception.EntityUpdateException;
 import ru.hse.server.proto.EntitiesProto.UserModel;
 import ru.hse.server.service.AuthService;
 import ru.hse.server.service.UserService;
@@ -56,6 +58,22 @@ public class UserController {
         } catch (AuthException e) {
             logger.error("incorrect user info, request login user={}", user, e);
             return ResponseEntity.status(UNAUTHORIZED_STATUS).body(e.getMessage());
+        }
+    }
+
+    @PostMapping(value = "/userPassedTest", produces = {MediaType.APPLICATION_PROTOBUF_VALUE})
+    public ResponseEntity userPassedTest(@RequestParam Long userId, @RequestParam Long testId,
+                                         @RequestParam Long chapterId, @RequestParam String testName,
+                                         @RequestParam String chapterName, @RequestParam Long rightAns, @RequestParam Long questNum) {
+        try {
+            userService.addPassedTestToUser(testId, chapterId, testName, chapterName, userId, rightAns, questNum);
+            return ResponseEntity.ok().body(userService.getUserByID(userId));
+        } catch (EntityNotFoundException e) {
+            logger.error("error while adding test to user", e);
+            return ResponseEntity.badRequest().body("error while adding test to user, error message: " + e.getMessage());
+        } catch (Exception e) {
+            logger.error("unexpected error", e);
+            return ResponseEntity.internalServerError().body("unexpected error: " + e.getMessage());
         }
     }
 
