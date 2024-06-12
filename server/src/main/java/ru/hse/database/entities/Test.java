@@ -27,11 +27,11 @@ public class Test {
     @Column(name = "position")
     private long position;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "chapter_host")
     private Chapter chapterHost;
 
-    @OneToMany(mappedBy = "testHost", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "testHost", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Question> questions = new ArrayList<>();
 
     public Test(String name, Long position, Chapter chapter) {

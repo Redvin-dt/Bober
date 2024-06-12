@@ -1,5 +1,7 @@
 package ru.hse.server.service;
 
+import ru.hse.database.dao.DaoPassedTest;
+import ru.hse.database.entities.PassedTest;
 import ru.hse.server.proto.EntitiesProto.UserModel;
 import ru.hse.database.entities.User;
 import ru.hse.server.repository.UserRepository;
@@ -72,5 +74,14 @@ public class UserService {
             throw new EntityNotFoundException("user with that id not found");
         }
         userRepository.deleteById(id);
+    }
+
+    public void addPassedTestToUser(Long testId, Long chapterId, String testName, String chapterName, Long userId, Long rightAns, Long questNum) throws EntityNotFoundException {
+        Optional<User> userOptional = userRepository.findById(userId);
+        if (userOptional.isEmpty()) {
+            throw new EntityNotFoundException("user with that id not found");
+        }
+        PassedTest passedTest = new PassedTest(testName, chapterName, testId, chapterId, userOptional.get(), rightAns, questNum);
+        DaoPassedTest.createOrUpdatePassedTest(passedTest);
     }
 }
