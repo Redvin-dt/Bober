@@ -17,6 +17,20 @@ message TestModel {
   optional QuestionList questions = 4;
 }
 
+message PassedTestModel {
+  optional int64 id = 1;
+  optional int64 testId = 2;
+  optional int64 chapterId = 3;
+  optional string testName = 4;
+  optional string chapterName = 5;
+  optional int64 rightAnswers = 6;
+  optional int64 questionsNumber = 7;
+}
+
+message PassedTestList {
+  repeated PassedTestModel passedTests = 1;
+}
+
 message ChapterList {
   repeated ChapterModel chapters = 1;
 }
@@ -70,4 +84,5 @@ message UserModel {
   optional GroupList adminOfGroups = 7;
   optional GroupList userOfGroups = 8;
   optional GroupList invitations = 9;
+  optional PassedTestList passedTests = 10;
 }
