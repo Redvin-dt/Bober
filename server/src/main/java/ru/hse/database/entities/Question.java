@@ -30,7 +30,7 @@ public class Question {
     @Column(name = "right_answer")
     public List<Long> rightAnswers = new ArrayList<>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "test_host")
     private Test testHost;
 
