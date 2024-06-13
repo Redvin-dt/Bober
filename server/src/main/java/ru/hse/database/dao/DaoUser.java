@@ -28,8 +28,9 @@ public class DaoUser {
     }
 
     static public User getUserById(long id) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        return session.get(User.class, id);
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.get(User.class, id);
+        }
     }
 
     static public User getUserByLogin(String login) throws NotUniqueUserLoginException {
@@ -90,22 +91,24 @@ public class DaoUser {
     }
 
     static public Set<Group> getGroupsOfUser(User user) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        user = session.get(User.class, user.getUserId());
-        session.beginTransaction();
-        Set<Group> groups = user.getGroupsUserSet();
-        session.getTransaction().commit();
-        return groups;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            user = session.get(User.class, user.getUserId());
+            session.beginTransaction();
+            Set<Group> groups = user.getGroupsUserSet();
+            session.getTransaction().commit();
+            return groups;
+        }
     }
 
     static public List<Group> getGroupsByAdmin(User user) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        user = session.get(User.class, user.getUserId());
-        session.beginTransaction();
-        List<Group> groups = user.getGroupsAdmin();
-        session.getTransaction().commit();
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            user = session.get(User.class, user.getUserId());
+            session.beginTransaction();
+            List<Group> groups = user.getGroupsAdmin();
+            session.getTransaction().commit();
 
-        return groups;
+            return groups;
+        }
     }
 
     static public void createOrUpdateUser(User user) {
@@ -119,8 +122,7 @@ public class DaoUser {
     }
 
     static public void addUserToGroup(User user, Group group) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        try {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             session.beginTransaction();
 
             Set<User> users = DaoGroup.getUsersOfGroup(group);
@@ -139,8 +141,7 @@ public class DaoUser {
     }
 
     static public void deleteUserFromGroup(User user, Group group) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        try {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             session.beginTransaction();
 
             Set<User> users = DaoGroup.getUsersOfGroup(group);
