@@ -14,6 +14,7 @@ import ru.hse.server.proto.EntitiesProto.GroupModel
 import ru.hse.client.chapters.ChapterUploadActivity
 import ru.hse.client.chapters.ReadingChapterActivity
 import ru.hse.client.chapters.getChapter
+import ru.hse.server.proto.EntitiesProto
 
 class GroupActivity: DrawerBaseActivity() {
 
