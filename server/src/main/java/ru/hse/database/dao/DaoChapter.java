@@ -13,19 +13,21 @@ public class DaoChapter {
     static Logger logger = LoggerFactory.getLogger(DaoChapter.class);
 
     static public Chapter getChapterById(long id) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        return session.get(Chapter.class, id);
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.get(Chapter.class, id);
+        }
     }
 
     static public Group getGroupByChapter(Chapter chapter) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        chapter = session.get(Chapter.class, chapter.getChapterId());
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            chapter = session.get(Chapter.class, chapter.getChapterId());
 
-        session.beginTransaction();
-        Group group = chapter.getGroupHost();
-        session.getTransaction().commit();
+            session.beginTransaction();
+            Group group = chapter.getGroupHost();
+            session.getTransaction().commit();
 
-        return group;
+            return group;
+        }
     }
 
 

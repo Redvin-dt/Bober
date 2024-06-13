@@ -25,7 +25,7 @@ public class HibernateUtil implements Closeable {
     }
 
     @Override
-    public void close() throws IOException {
+    public void close() {
         getSessionFactory().close();
     }
 }

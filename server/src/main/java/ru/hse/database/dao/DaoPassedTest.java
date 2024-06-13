@@ -3,26 +3,24 @@ package ru.hse.database.dao;
 import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.hse.database.entities.PassedTest;
 import ru.hse.database.entities.Question;
 import ru.hse.database.entities.Test;
-import ru.hse.database.entities.User;
 import ru.hse.database.utils.HibernateUtil;
 
-import javax.management.Query;
 import java.util.List;
 
-public class DaoTest {
-    static Logger logger = LoggerFactory.getLogger(DaoTest.class);
+public class DaoPassedTest {
+    static Logger logger = LoggerFactory.getLogger(DaoPassedTest.class);
 
-    static public Test getTestById(long id) {
+    static public PassedTest getPassedTestById(long id) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            return session.get(Test.class, id);
+            return session.get(PassedTest.class, id);
         }
     }
-    static public void createOrUpdateTest(Test test, List<Question> questions) {
+    static public void createOrUpdatePassedTest(PassedTest test) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             session.beginTransaction();
-            test.setQuestions(questions);
             session.merge(test);
             session.getTransaction().commit();
         } catch (IllegalStateException e) {
@@ -30,7 +28,7 @@ public class DaoTest {
         }
     }
 
-    static public void deleteTest(Test test) {
+    static public void deleteTest(PassedTest test) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             session.beginTransaction();
             session.remove(test);
