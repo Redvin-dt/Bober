@@ -78,16 +78,6 @@ class ChapterUploadActivity : DrawerBaseActivity() {
         binding.addTest.setOnClickListener {
             Log.d(this.localClassName, "addTestButton pressed")
             addTest()
-            val intent = Intent(this, TestManagerActivity::class.java)
-            intent.putExtra(
-                "text",
-                binding.preview.text.toString().subSequence(
-                    if (testStartPositions.size == 1) 0 else testStartPositions[testStartPositions.size - 2],
-                    testStartPositions.last()
-                ),
-            )
-            intent.putExtra("test number", testStartPositions.size)
-            startActivity(intent)
         }
 
         binding.uploadFileButton.setOnClickListener {

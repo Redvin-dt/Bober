@@ -18,11 +18,10 @@ import ru.hse.client.chapters.getChapter
 class GroupActivity: DrawerBaseActivity() {
 
     private lateinit var binding: ActivityGroupBinding
-    private var group: EntitiesProto.GroupModel? = null
     private lateinit var dataArrayList: ArrayList<ListChapterData?>
     private lateinit var listViewAdapter: ListChapterAdapter
     private var okHttpClient = OkHttpClient()
-
+    private var group: GroupModel? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityGroupBinding.inflate(layoutInflater)
