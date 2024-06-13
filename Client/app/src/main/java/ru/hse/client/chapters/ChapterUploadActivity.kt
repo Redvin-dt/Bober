@@ -100,7 +100,6 @@ class ChapterUploadActivity : DrawerBaseActivity() {
             } else {
                 Log.d(this.localClassName, "uploadFileButton pressed")
                 val chapterModel = ChapterModel.newBuilder()
-                    .setId(group.chapters.chaptersList.size.toLong())
                     .setName(binding.chapterName.text.toString())
                     .setTextFile(text)
                     .setTests(testListBuilder)
