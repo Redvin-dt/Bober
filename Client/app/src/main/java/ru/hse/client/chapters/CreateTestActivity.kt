@@ -35,7 +35,6 @@ import androidx.lifecycle.ReportFragment.Companion.reportFragment
 import com.google.android.material.textfield.TextInputEditText
 import ru.hse.client.R
 import ru.hse.client.databinding.ActivityCreateTestBinding
-import ru.hse.client.databinding.QuestionActivityBinding
 import ru.hse.client.entry.hideKeyboard
 import ru.hse.client.utility.DrawerBaseActivity
 import ru.hse.server.proto.EntitiesProto
@@ -107,7 +106,6 @@ class CreateTestActivity : DrawerBaseActivity() {
     private fun createQuestionProto() {
         val questionList = questionManager.getQuestionsList()
         val testModel = TestModel.newBuilder()
-            .setId(currentTestNumber.toLong())
             .setName(testName)
             .setPosition(testStartPosition.toLong())
             .setQuestions(questionList)
@@ -374,7 +372,6 @@ class QuestionBody(questionNumber: String, binding: ActivityCreateTestBinding, c
         }
 
         return QuestionModel.newBuilder()
-            .setId(mQuestionNumber.toLong())
             .setQuestion(mBinding.questionText.text.toString())
             .addAllRightAnswers(correctAnswerNumbersLong)
             .addAllAnswers(answers).build()

@@ -24,20 +24,28 @@ class AuthenticationManager(context: Context) {
         for (account: Account in accounts) {
             if (mAccountManager.getUserData(account, "is_account_active") == "true") {
                 mAccount = account
-                updateToken()
-                return true
+                if (updateToken()) {
+                    return true
+                } else {
+                    mAccountManager.setUserData(account, "is_account_active", "false")
+                    return false
+                }
             }
         }
         return false
     }
 
-    private fun updateToken() {
+    private fun updateToken() : Boolean {
         val login: String = mAccountManager.getUserData(mAccount, "username")
         val password: String = mAccountManager.getUserData(mAccount, "password")
         val email: String = mAccount.name
 
         user.updateUserFromServer(mContext, login, password, email)
+        if (!user.isUserHasLogin()) {
+            return false
+        }
         mAccountManager.setAuthToken(mAccount, AUTHENTICATION_TOKEN_TYPE, user.getUserToken())
+        return true
     }
 
     fun createAccount() {
