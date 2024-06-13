@@ -38,7 +38,11 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintVertical_bias="0" />
+        app:layout_constraintVertical_bias="0"
+        android:scrollHorizontally="true"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:singleLine="true"
+        />
 
     <TextView
         android:id="@+id/preview"
@@ -52,39 +56,38 @@
         android:layout_marginTop="5sp"
         android:layout_marginBottom="65sp"
         android:background="@drawable/bordered_image"
-        android:scrollbars="vertical"
         />
 
     <Button
-        android:id="@+id/create_test"
+        android:id="@+id/create_test_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/create_test"
-        android:textSize="19sp"
+        android:textSize="17sp"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/preview"
-        app:layout_constraintHorizontal_bias="0.25"
+        app:layout_constraintHorizontal_bias="0.5"
         android:backgroundTint="@color/lavanda">
 
     </Button>
 
-    <Button
-        android:id="@+id/go_back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/go_back"
-        android:textSize="19sp"
-        android:textColor="@color/white"
+    <ImageButton
+        android:id="@+id/go_back_button"
+        android:src="@drawable/keyboard_backspace"
+        android:layout_width="45sp"
+        android:layout_height="45sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/preview"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/preview"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintHorizontal_bias="0.75"
-        android:backgroundTint="@color/lavanda">
+        app:layout_constraintHorizontal_bias="1"
+        app:layout_constraintVertical_bias="0.5"
+        android:background="@drawable/roundcorner"
+        android:backgroundTint="@color/red"
+        />
 
-    </Button>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

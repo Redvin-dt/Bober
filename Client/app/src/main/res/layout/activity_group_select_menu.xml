@@ -43,6 +43,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:text="@string/create_group"
+            android:textSize="15sp"
+            android:textColor="@color/white"
             android:backgroundTint="@color/lavanda"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

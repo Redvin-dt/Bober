@@ -5,6 +5,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.text.method.ScrollingMovementMethod
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
@@ -19,7 +20,8 @@ class TestManagerActivity: DrawerBaseActivity() {
 
     private lateinit var binding: ActivityTestManagerBinding
     private lateinit var textForCurrentTest: String
-    private var currentTestNumber: Int = 0
+    private var currentTestNumber: Int = -1
+    private var testStartPosition: Int = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,11 +30,13 @@ class TestManagerActivity: DrawerBaseActivity() {
 
         textForCurrentTest = intent.extras?.get("text") as String
         currentTestNumber = intent.extras?.get("test number") as Int
+        testStartPosition = intent.extras?.get("test start position") as Int
 
         binding.testNumber.text = "Text for Test ${currentTestNumber}"
         binding.preview.text = textForCurrentTest
+        binding.preview.movementMethod = ScrollingMovementMethod()
 
-        binding.createTest.setOnClickListener {
+        binding.createTestButton.setOnClickListener {
             if (binding.testName.text.toString().isEmpty()) {
                 Handler(Looper.getMainLooper()).post {
                     Toast.makeText(
@@ -45,34 +49,29 @@ class TestManagerActivity: DrawerBaseActivity() {
                 val intent = Intent(this, CreateTestActivity::class.java)
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 intent.putExtra("test name", binding.testName.text.toString())
+                intent.putExtra("test number", currentTestNumber)
+                intent.putExtra("test start position", testStartPosition)
                 startActivityForResult(intent, 211)
             }
         }
 
+        binding.goBackButton.setOnClickListener {
+            val data: Intent = Intent()
+            setResult(RESULT_OK, data)
+            data.putExtra("go back button pressed", true)
+            finish()
+        }
 
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == 211 && resultCode == RESULT_OK) {
-            val currentTestInBytes = data!!.extras!!.getByteArray("test data in protobuf")
-            val currentTestProto = EntitiesProto.TestModel.parseFrom(currentTestInBytes)
-
-
-            /*if (currentTestNumber == testStartPositions.size - 1) {
-                // Upload to server
-            } else {
-                binding.testNumber.text = "Text for Test ${currentTestNumber + 1}"
-                binding.preview.text = partsOfTextForTests[currentTestNumber]
-
-                binding.createTest.setOnClickListener {
-                    val intent = Intent(this, CreateTestActivity::class.java)
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                    intent.extras!!.putInt("new test number", currentTestNumber + 1)
-                    intent.extras!!.putInt("number of tests", testStartPositions.size)
-                    startActivityForResult(intent, 211)
-                }
-            }*/
+        if (requestCode == 211 && resultCode == RESULT_OK && data != null) {
+            val currentTestInBytes = data.extras!!.getByteArray("test model")
+            val intent: Intent = Intent()
+            setResult(RESULT_OK, intent)
+            intent.putExtra("test model", currentTestInBytes)
+            finish()
         }
     }
 
