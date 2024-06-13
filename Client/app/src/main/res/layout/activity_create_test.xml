@@ -176,7 +176,7 @@
         android:layout_below="@id/question_body"
         android:layout_centerHorizontal="true"
         android:orientation="vertical"
-        android:text="@string/test_created"
+        android:text="@string/create_test"
         android:backgroundTint="@color/lavanda"
         android:textSize="18sp"
         android:textColor="@color/white"/>
