@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" xmlns:tools="http://schemas.android.com/tools"
+                tools:context=".tests.ChapterActivity">
+
+    <!-- Заголовок страницы -->
+    <TextView
+            android:background="@drawable/bordered_image"
+            android:id="@+id/titleTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Заголовок страницы"
+            android:textSize="24sp"
+            android:gravity="center"
+            android:padding="16dp" />
+
+    <!-- Текстовое поле для чтения текста -->
+    <TextView
+            android:id="@+id/contentTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/titleTextView"
+            android:layout_above="@id/startTestButton"
+            android:padding="16dp"
+            android:text="Текст для отображения пользователю"
+            android:textSize="24sp"
+            android:scrollbars="vertical" />
+
+    <!-- Кнопка "Пройти тест" -->
+    <Button
+            android:id="@+id/startTestButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Пройти тест"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="16dp"
+    />
+
+</RelativeLayout>

@@ -89,6 +89,11 @@
         </activity>
         <activity android:name=".chapters.TestManagerActivity"
             android:exported="true" >
+        <activity android:name=".chapters.ReadingChapterActivity"
+                  android:exported="true">
+        </activity>
+        <activity android:name=".chapters.TestActivity"
+                  android:exported="true">
         </activity>
     </application>
 
