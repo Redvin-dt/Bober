@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.text.Editable
+import android.text.TextUtils
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -38,6 +39,10 @@ import ru.hse.client.databinding.QuestionActivityBinding
 import ru.hse.client.entry.hideKeyboard
 import ru.hse.client.utility.DrawerBaseActivity
 import ru.hse.server.proto.EntitiesProto
+import ru.hse.server.proto.EntitiesProto.QuestionList
+import ru.hse.server.proto.EntitiesProto.QuestionModel
+import ru.hse.server.proto.EntitiesProto.TestModel
+import java.util.Arrays
 import java.util.LinkedList
 
 
@@ -46,6 +51,7 @@ class CreateTestActivity : DrawerBaseActivity() {
     private lateinit var binding: ActivityCreateTestBinding
     private lateinit var testName: String
     private var currentTestNumber: Int = -1
+    private var testStartPosition: Int = -1
     private lateinit var questionManager: QuestionManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,7 +59,11 @@ class CreateTestActivity : DrawerBaseActivity() {
         binding = ActivityCreateTestBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        testName = intent.extras?.get("test name") as String
+        testName = intent.extras!!.get("test name") as String
+        currentTestNumber = intent.extras!!.get("test number") as Int
+        testStartPosition = intent.extras!!.get("test start position") as Int
+        binding.testName.maxLines = 1
+        binding.testName.ellipsize = TextUtils.TruncateAt.END
         binding.testName.text = testName
 
         questionManager = QuestionManager(binding, this)
@@ -85,9 +95,9 @@ class CreateTestActivity : DrawerBaseActivity() {
 
         binding.testCreated.setOnClickListener {
             if (questionManager.checkQuestionFilled()) {
-                questionManager.toNextQuestion()
-            } else {
                 createQuestionProto()
+            } else {
+                printErrorAboutNotFullQuestion()
             }
         }
 
@@ -96,10 +106,16 @@ class CreateTestActivity : DrawerBaseActivity() {
 
     private fun createQuestionProto() {
         val questionList = questionManager.getQuestionsList()
+        val testModel = TestModel.newBuilder()
+            .setId(currentTestNumber.toLong())
+            .setName(testName)
+            .setPosition(testStartPosition.toLong())
+            .setQuestions(questionList)
+            .build()
         val data: Intent = Intent()
-        this.setResult(RESULT_OK, data)
-        data.putExtra("test data in protobuf", questionList.toByteArray())
-        this.finish()
+        setResult(RESULT_OK, data)
+        data.putExtra("test model", testModel.toByteArray())
+        finish()
     }
 
     private fun printErrorAboutNotFullQuestion() {
@@ -131,7 +147,7 @@ class QuestionBody(questionNumber: String, binding: ActivityCreateTestBinding, c
     private var mBinding: ActivityCreateTestBinding = binding
     private var mContext: Context = context
     private var numberOfAnswers: Int = 0
-    private var correctAnswerNumbers: LinkedList<Int> = LinkedList()
+    private var correctAnswerNumbers: MutableList<Int> = LinkedList()
 
     private enum class QuestionType {
         SINGLE, MULTIPLE
@@ -150,7 +166,7 @@ class QuestionBody(questionNumber: String, binding: ActivityCreateTestBinding, c
     init {
         initAnswersList()
         initSpinners()
-        mBinding.questionNumber.text = mQuestionNumber
+        mBinding.questionNumber.text = "Question #${mQuestionNumber}"
         mBinding.questionText.text = Editable.Factory.getInstance().newEditable("")
     }
 
@@ -239,7 +255,7 @@ class QuestionBody(questionNumber: String, binding: ActivityCreateTestBinding, c
                 } else {
                     questionType = QuestionType.SINGLE
                     while (correctAnswerNumbers.size > 1) {
-                        val positionOfRemovedCheckBox = correctAnswerNumbers.first
+                        val positionOfRemovedCheckBox = correctAnswerNumbers.first()
                         correctAnswerNumbers.removeFirst()
                         answerAdapter.updateCheckboxState(positionOfRemovedCheckBox, false)
                     }
@@ -319,15 +335,13 @@ class QuestionBody(questionNumber: String, binding: ActivityCreateTestBinding, c
         }
         if (questionType == QuestionType.SINGLE) {
             while (correctAnswerNumbers.size > 0) {
-                val positionOfRemovedCheckBox = correctAnswerNumbers.first
+                val positionOfRemovedCheckBox = correctAnswerNumbers.first()
                 correctAnswerNumbers.removeFirst()
                 answerAdapter.updateCheckboxState(positionOfRemovedCheckBox, false)
             }
             answerAdapter.updateCheckboxState(position, true)
-            correctAnswerNumbers.addLast(position)
-        } else {
-            correctAnswerNumbers.addLast(position)
         }
+        correctAnswerNumbers.add(position)
         answerAdapter.notifyDataSetChanged()
     }
 
@@ -345,8 +359,25 @@ class QuestionBody(questionNumber: String, binding: ActivityCreateTestBinding, c
         return false
     }
 
-    private fun toQuestionModel(): EntitiesProto.QuestionModel? {
-        return null
+    fun toQuestionModel(): QuestionModel {
+        val correctAnswerNumbersLong = ArrayList<Long>()
+        for (number in correctAnswerNumbers) {
+            correctAnswerNumbersLong.add(number.toLong())
+        }
+
+        val answers = ArrayList<String>()
+        for (answerNumber in 0..<numberOfAnswers) {
+            answers.add(
+                answerAdapter.getAnswerDataByPosition(answerNumber).getString("answer text")
+                    .toString()
+            )
+        }
+
+        return QuestionModel.newBuilder()
+            .setId(mQuestionNumber.toLong())
+            .setQuestion(mBinding.questionText.text.toString())
+            .addAllRightAnswers(correctAnswerNumbersLong)
+            .addAllAnswers(answers).build()
     }
 
 }
@@ -361,7 +392,7 @@ class QuestionManager(binding: ActivityCreateTestBinding, context: Context) {
     fun addNewQuestion() {
         if (currentQuestionIndex == -1) {
             val newQuestionBody =
-                QuestionBody("Question #1", mBinding, mContext)
+                QuestionBody("1", mBinding, mContext)
             questionBodies.add(newQuestionBody)
             questionBundles.add(Bundle())
             currentQuestionIndex = 0
@@ -370,7 +401,7 @@ class QuestionManager(binding: ActivityCreateTestBinding, context: Context) {
 
         questionBundles[currentQuestionIndex] = questionBodies[currentQuestionIndex].saveState()
         val newQuestionBody =
-            QuestionBody("Question #${questionBodies.size + 1}", mBinding, mContext)
+            QuestionBody("${questionBodies.size + 1}", mBinding, mContext)
         questionBodies.add(newQuestionBody)
         questionBundles.add(Bundle())
         currentQuestionIndex = questionBodies.size - 1
@@ -412,12 +443,13 @@ class QuestionManager(binding: ActivityCreateTestBinding, context: Context) {
         return questionBodies[currentQuestionIndex].checkQuestionFilled()
     }
 
-    fun getQuestionsList(): EntitiesProto.QuestionList {
-        val questionsList: EntitiesProto.QuestionList = EntitiesProto.QuestionList.newBuilder().build()
+    fun getQuestionsList(): QuestionList {
+        val questionsListBuilder: QuestionList.Builder =
+            QuestionList.newBuilder()
         for (questionBody in questionBodies) {
-
+            questionsListBuilder.addQuestions(questionBody.toQuestionModel())
         }
-        return questionsList
+        return questionsListBuilder.build()
     }
 
 }

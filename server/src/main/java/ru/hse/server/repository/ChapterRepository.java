@@ -15,6 +15,9 @@ import java.util.Optional;
 public class ChapterRepository implements CrudRepository<Chapter, Long> {
 
     public <S extends Chapter> S update(@Nonnull S chapter) {
+        if (DaoChapter.getChapterById(chapter.getChapterId()) == null) {
+            throw new EntityNotFoundException("chapter not found while try to update");
+        }
         DaoChapter.createOrUpdateChapter(chapter);
         return chapter;
     }
@@ -22,9 +25,6 @@ public class ChapterRepository implements CrudRepository<Chapter, Long> {
     @Override
     @Nonnull
     public <S extends Chapter> S save(@Nonnull S chapter) throws EntityNotFoundException {
-        if (DaoChapter.getChapterById(chapter.getChapterId()) == null) {
-            throw new EntityNotFoundException("chapter not found while try to update");
-        }
         DaoChapter.createOrUpdateChapter(chapter);
         return chapter;
     }
