@@ -13,6 +13,7 @@ import ru.hse.client.utility.DrawerBaseActivity
 import ru.hse.server.proto.EntitiesProto
 import ru.hse.client.chapters.ChapterUploadActivity
 import ru.hse.client.chapters.ReadingChapterActivity
+import ru.hse.client.chapters.getChapter
 
 class GroupActivity: DrawerBaseActivity() {
 
