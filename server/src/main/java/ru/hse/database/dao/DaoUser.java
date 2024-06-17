@@ -36,18 +36,18 @@ public class DaoUser {
     static public User getUserByLogin(String login) throws NotUniqueUserLoginException {
         Query<User> query;
         List<User> users;
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
 
-            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-            CriteriaQuery<User> criteria = criteriaBuilder.createQuery(User.class);
+        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+        CriteriaQuery<User> criteria = criteriaBuilder.createQuery(User.class);
 
-            Root<User> root = criteria.from(User.class);
+        Root<User> root = criteria.from(User.class);
 
-            criteria.select(root).where(criteriaBuilder.equal(root.get("userLogin"), login));
+        criteria.select(root).where(criteriaBuilder.equal(root.get("userLogin"), login));
 
-            query = session.createQuery(criteria);
-            users = query.getResultList();
-        }
+        query = session.createQuery(criteria);
+        users = query.getResultList();
+
 
         if (users.isEmpty()) {
             return null;
@@ -65,18 +65,18 @@ public class DaoUser {
     static public User getUserByEmail(String email) throws NotUniqueUserLoginException {
         Query<User> query;
         List<User> users;
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
 
-            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-            CriteriaQuery<User> criteria = criteriaBuilder.createQuery(User.class);
+        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+        CriteriaQuery<User> criteria = criteriaBuilder.createQuery(User.class);
 
-            Root<User> root = criteria.from(User.class);
+        Root<User> root = criteria.from(User.class);
 
-            criteria.select(root).where(criteriaBuilder.equal(root.get("userEmail"), email));
+        criteria.select(root).where(criteriaBuilder.equal(root.get("userEmail"), email));
 
-            query = session.createQuery(criteria);
-            users = query.getResultList();
-        }
+        query = session.createQuery(criteria);
+        users = query.getResultList();
+
         if (users.isEmpty()) {
             return null;
         }
