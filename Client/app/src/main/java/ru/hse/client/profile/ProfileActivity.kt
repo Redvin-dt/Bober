@@ -5,7 +5,9 @@ import android.os.Bundle
 import androidx.core.content.ContextCompat
 import ru.hse.client.auth.SingletonController
 import ru.hse.client.databinding.ActivityProfileBinding
+import ru.hse.client.groups.GroupActivity
 import ru.hse.client.groups.GroupSelectMenuActivity
+import ru.hse.client.groups.InvitesActivity
 import ru.hse.client.utility.DrawerBaseActivity
 import ru.hse.client.utility.user
 
@@ -31,7 +33,7 @@ class ProfileActivity: DrawerBaseActivity() {
         }
 
         binding.inviteButton.setOnClickListener {
-            // TODO: set invites
+            goToInvites()
         }
 
         binding.logOutButton.setOnClickListener {
@@ -40,7 +42,14 @@ class ProfileActivity: DrawerBaseActivity() {
         }
     }
 
-    fun goToGroupSelect() {
+    private fun goToInvites() {
+        val intent = Intent(this, InvitesActivity::class.java)
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        startActivity(intent)
+        finish()
+    }
+
+    private fun goToGroupSelect() {
         val intent = Intent(this, GroupSelectMenuActivity::class.java)
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         ContextCompat.startActivity(this, intent, null)

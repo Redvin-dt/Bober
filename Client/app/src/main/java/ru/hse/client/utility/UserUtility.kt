@@ -245,6 +245,22 @@ class User {
 
         setUserByLogin(activity, getUserLogin())
     }
+
+    fun isUserHasInvites() : Boolean {
+        return user!!.hasInvitations()
+    }
+
+    fun getUserInvites() : List<GroupModel> {
+        return user!!.invitations.groupsList.toList()
+    }
+
+    fun isUserHasId() : Boolean {
+        return user!!.hasId()
+    }
+
+    fun getId() : Long {
+        return user!!.id
+    }
 }
 
 var user: User = User()
