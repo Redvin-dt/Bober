@@ -10,19 +10,19 @@ import android.widget.Toast
 import okhttp3.OkHttpClient
 import ru.hse.client.databinding.ActivityGroupBinding
 import ru.hse.client.utility.DrawerBaseActivity
-import ru.hse.server.proto.EntitiesProto
+import ru.hse.server.proto.EntitiesProto.GroupModel
 import ru.hse.client.chapters.ChapterUploadActivity
 import ru.hse.client.chapters.ReadingChapterActivity
 import ru.hse.client.chapters.getChapter
+import ru.hse.server.proto.EntitiesProto
 
 class GroupActivity: DrawerBaseActivity() {
 
     private lateinit var binding: ActivityGroupBinding
-    private var group: EntitiesProto.GroupModel? = null
     private lateinit var dataArrayList: ArrayList<ListChapterData?>
     private lateinit var listViewAdapter: ListChapterAdapter
     private var okHttpClient = OkHttpClient()
-
+    private var group: GroupModel? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityGroupBinding.inflate(layoutInflater)
@@ -32,7 +32,7 @@ class GroupActivity: DrawerBaseActivity() {
         dataArrayList = ArrayList()
 
         if (bundle != null) {
-            group = bundle.getSerializable("group") as EntitiesProto.GroupModel
+            group = bundle.getSerializable("group") as GroupModel
         }
 
         listViewAdapter = ListChapterAdapter(this, dataArrayList)
@@ -134,8 +134,8 @@ class GroupActivity: DrawerBaseActivity() {
     private fun newChapterButtonPressed() {
         val intent = Intent(this@GroupActivity, ChapterUploadActivity::class.java)
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        intent.putExtra("group info", group!!.toByteArray())
         startActivity(intent)
-        finish()
     }
 
     companion object {

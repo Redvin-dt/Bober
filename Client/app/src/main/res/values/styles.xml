@@ -20,6 +20,9 @@
         <item name="android:outlineAmbientShadowColor">@color/white</item>
         <item name="android:textSize">16sp</item>
         <item name="android:outlineSpotShadowColor">@color/white</item>
+        <item name="android:scrollHorizontally">true</item>
+        <item name="android:marqueeRepeatLimit">marquee_forever</item>
+        <item name="singleLine">true</item>
     </style>
     <style name="SwitchButton">
         <item name="android:layout_width"> wrap_content</item>
