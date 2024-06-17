@@ -89,10 +89,10 @@
                   android:exported="false">
         </activity>
         <activity android:name=".chapters.CreateTestActivity"
-                  android:exported="false">
-        </activity>
-        <activity android:name=".chapters.QuestionActivity"
                   android:exported="true">
+        </activity>
+        <activity android:name=".chapters.TestManagerActivity"
+            android:exported="true" >
         </activity>
         <activity android:name=".chapters.ReadingChapterActivity"
                   android:exported="true">

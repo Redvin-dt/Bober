@@ -11,6 +11,7 @@ import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okio.ByteString
 import ru.hse.client.R
+import ru.hse.client.entry.generateHash
 import ru.hse.client.utility.APPLICATION_PROTOBUF_MEDIA_TYPE
 import ru.hse.client.utility.printMessageFromBadResponse
 import ru.hse.client.utility.user
@@ -147,9 +148,9 @@ fun createGroupRequest(groupName: String, groupPassword: String, activity: Activ
     }
 
     val userList: EntitiesProto.UserList = EntitiesProto.UserList.newBuilder().addUsers(user.getUserModel()).build()
-
+    val groupHashedPassword = generateHash(groupPassword, activity)
     val group: EntitiesProto.GroupModel =
-            EntitiesProto.GroupModel.newBuilder().setName(groupName).setPasswordHash(groupPassword).setAdmin(user.getUserModel()).setUsers(userList).build()
+            EntitiesProto.GroupModel.newBuilder().setName(groupName).setPasswordHash(groupHashedPassword).setAdmin(user.getUserModel()).setUsers(userList).build()
 
     val requestBody: RequestBody =
             RequestBody.create("application/x-protobuf".toMediaTypeOrNull(), group.toByteArray())

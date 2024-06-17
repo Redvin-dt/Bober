@@ -1,6 +1,9 @@
 package ru.hse.client.chapters
 
-class AnswerData (
-    var answer: String,
+import android.text.Editable
+
+class AnswerData(
+    var hint: String,
     var isCorrect: Boolean,
+    var answer: Editable
 )
