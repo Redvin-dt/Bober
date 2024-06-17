@@ -15,6 +15,7 @@ import ru.hse.server.proto.EntitiesProto.TestList;
 import ru.hse.server.proto.EntitiesProto.GroupList;
 import ru.hse.server.proto.EntitiesProto.UserList;
 import ru.hse.server.proto.EntitiesProto.ChapterList;
+import ru.hse.server.proto.EntitiesProto.PassedTestModel;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -66,6 +67,18 @@ public class ProtoSerializer {
                 .build();
     }
 
+    static public PassedTestModel getProtoFromPassedTest(PassedTest test) {
+        return PassedTestModel.newBuilder()
+                .setId(test.getTestId())
+                .setTestId(test.getTestId())
+                .setChapterId(test.getChapterId())
+                .setTestName(test.getTestName())
+                .setChapterName(test.getChapterName())
+                .setRightAnswers(test.getRightAnswers())
+                .setQuestionsNumber(test.getQuestionsNumber())
+                .build();
+    }
+
     static public QuestionList convertQuestionsToProto(List<Question> questions) {
         List<QuestionModel> questionModels = new ArrayList<>();
         for (Question question : questions) {
@@ -86,6 +99,17 @@ public class ProtoSerializer {
 
         return TestList.newBuilder()
                 .addAllTests(testModels)
+                .build();
+    }
+
+    static public EntitiesProto.PassedTestList convertPassedTestsToProto(List<PassedTest> passedTests) {
+        List<PassedTestModel> testModels = new ArrayList<>();
+        for (PassedTest test : passedTests) {
+            testModels.add(getProtoFromPassedTest(test));
+        }
+
+        return EntitiesProto.PassedTestList.newBuilder()
+                .addAllPassedTests(testModels)
                 .build();
     }
 
@@ -129,6 +153,7 @@ public class ProtoSerializer {
                 .setAdminOfGroups(convertGroupsToProto(DaoUser.getGroupsByAdmin(user)))
                 .setUserOfGroups(convertGroupsToProto(new ArrayList<>(DaoUser.getGroupsOfUser(user))))
                 .setInvitations(convertGroupsToProto(user.getInvitations().stream().toList()))
+                .setPassedTests(convertPassedTestsToProto(user.getPassedTests()))
                 .build();
     }
 
