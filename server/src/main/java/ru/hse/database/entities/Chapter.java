@@ -30,7 +30,7 @@ public class Chapter {
     @Column(name = "meta_info")
     private String metaInfo = "";
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "group_host")
     private Group groupHost;
 

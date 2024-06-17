@@ -19,14 +19,15 @@ public class DaoChapter {
     }
 
     static public Group getGroupByChapter(Chapter chapter) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        chapter = session.get(Chapter.class, chapter.getChapterId());
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            chapter = session.get(Chapter.class, chapter.getChapterId());
 
-        session.beginTransaction();
-        Group group = chapter.getGroupHost();
-        session.getTransaction().commit();
+            session.beginTransaction();
+            Group group = chapter.getGroupHost();
+            session.getTransaction().commit();
 
-        return group;
+            return group;
+        }
     }
 
 

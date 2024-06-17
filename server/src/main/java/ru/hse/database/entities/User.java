@@ -34,14 +34,18 @@ public class User {
     @Column(name = "meta_info")
     private String metaInfo = "";
 
-    @OneToMany(mappedBy = "admin", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "admin", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Group> groupsAdmin = new ArrayList<>();
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "userHost", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private List<PassedTest> passedTests = new ArrayList<>();
+
+
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "users_groups", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "group_id", referencedColumnName = "id"))
     private Set<Group> groupsUserSet = new HashSet<Group>();
 
-    @ManyToMany(cascade =  CascadeType.ALL)
+    @ManyToMany(cascade =  CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "users_invitations",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "group_id", referencedColumnName = "id"))
     private Set<Group> invitations = new HashSet<>();
