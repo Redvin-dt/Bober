@@ -53,6 +53,11 @@
         <item name="cornerSize">50%</item>
     </style>
 
+    <style name="roundImageBook">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">40%</item>
+    </style>
+
     <style name="TextInputLayoutStyleForQuestion" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="android:layout_width">230sp</item>
         <item name="android:layout_height">60sp</item>
