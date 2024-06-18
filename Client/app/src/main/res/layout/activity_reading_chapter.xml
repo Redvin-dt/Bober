@@ -1,41 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" xmlns:tools="http://schemas.android.com/tools"
-                tools:context=".tests.ChapterActivity">
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        tools:context=".chapters.ReadingChapterActivity">
 
-    <!-- Заголовок страницы -->
     <TextView
-            android:background="@drawable/bordered_image"
             android:id="@+id/titleTextView"
-            android:layout_width="match_parent"
+            android:layout_width="250sp"
             android:layout_height="wrap_content"
-            android:text="Заголовок страницы"
-            android:textSize="24sp"
-            android:gravity="center"
-            android:padding="16dp" />
+            android:hint="@string/chapter_name"
+            android:textSize="25sp"
+            android:layout_marginTop="5sp"
+            android:textAlignment="center"
+            android:textColorHint="@color/gray"
+            android:textColor="@color/black"
+            android:textCursorDrawable="@null"
+            android:backgroundTint="@color/gray"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintVertical_bias="0.02"
+            android:scrollHorizontally="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:singleLine="true"
+    />
 
-    <!-- Текстовое поле для чтения текста -->
+
     <TextView
             android:id="@+id/contentTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/titleTextView"
-            android:layout_above="@id/startTestButton"
-            android:padding="16dp"
-            android:text="Текст для отображения пользователю"
-            android:textSize="24sp"
-            android:scrollbars="vertical" />
+            android:layout_width="350sp"
+            android:layout_height="0sp"
+            android:textColor="@color/black"
+            app:layout_constraintTop_toBottomOf="@id/titleTextView"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="5sp"
+            android:layout_marginBottom="65sp"
+            android:background="@drawable/bordered_image"
+    />
 
-    <!-- Кнопка "Пройти тест" -->
+
+    <ImageButton
+            android:id="@+id/prev_button"
+            android:layout_width="50sp"
+            android:layout_height="50sp"
+            android:textSize="16sp"
+            android:layout_alignParentStart="true"
+            android:background="@drawable/roundcorner"
+            android:backgroundTint="@color/lavanda"
+            android:src="@drawable/navigate_before"
+            android:layout_marginTop="5dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/contentTextView"
+            app:layout_constraintEnd_toStartOf="@id/startTestButton"
+    />
+
+    <ImageButton
+            android:id="@+id/next_button"
+            android:layout_width="50sp"
+            android:layout_height="50sp"
+            android:layout_alignParentStart="true"
+            android:background="@drawable/roundcorner"
+            android:backgroundTint="@color/lavanda"
+            android:src="@drawable/navigate_next"
+            android:layout_marginTop="5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/contentTextView"
+            app:layout_constraintStart_toEndOf="@id/startTestButton"
+    />
+
+
     <Button
             android:id="@+id/startTestButton"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Пройти тест"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="16dp"
-    />
+            android:layout_height="50dp"
+            android:backgroundTint="@color/lavanda"
+            app:layout_constraintTop_toTopOf="@id/next_button"
+            app:layout_constraintBottom_toBottomOf="@id/next_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:text="@string/start_test"
+            android:textSize="22sp"
+            app:layout_constraintVertical_bias="1.0"/>
 
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
