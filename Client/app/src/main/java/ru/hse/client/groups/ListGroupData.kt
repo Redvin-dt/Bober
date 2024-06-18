@@ -1,6 +1,6 @@
 package ru.hse.client.groups
 
-class ListData (
+class ListGroupData (
     var name: String,
     var admin: String,
     var image: Int
