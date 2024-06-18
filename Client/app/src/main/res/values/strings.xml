@@ -72,4 +72,6 @@
     <string name="start_test">start test</string>
     <string name="previous">previous</string>
     <string name="next">next</string>
+    <string name="answer_but">answer</string>
+    <string name="_1">1</string>
 </resources>
