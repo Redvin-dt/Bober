@@ -6,7 +6,7 @@
                 android:layout_height="match_parent"
                 android:background="@color/white"
                 android:orientation="vertical"
-                tools:context=".chapters.CreateTestActivity">
+                tools:context=".chapters.TestActivity">
 
     <TextView
             android:id="@+id/test_name"
@@ -42,13 +42,13 @@
                 android:gravity="center">
 
             <TextView
-                    android:id="@+id/question_number"
+                    android:id="@+id/questionNumberTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
                     android:text="@string/question"
                     android:textColor="@color/black"
-                    android:textSize="18sp"
+                    android:textSize="25sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@id/question_text_layout"
                     app:layout_constraintHorizontal_bias="0.5"
@@ -63,30 +63,32 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/question_number"
+                    app:layout_constraintTop_toBottomOf="@id/questionNumberTextView"
+                    android:layout_height="100dp"
                     app:layout_constraintVertical_bias="0">
 
-                <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/question_text"
+                <TextView
+                        android:id="@+id/questionTextView"
                         style="@style/TextInputEditTextStyleForQuestion"
+                        android:textSize="20sp"
                         android:hint="@string/question_text" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
 
             <ListView
-                    android:id="@+id/listView"
+                    android:id="@+id/answersListView"
                     android:layout_width="match_parent"
-                    android:layout_height="350sp"
+                    android:layout_height="400sp"
                     android:divider="@android:color/transparent"
                     android:dividerHeight="10sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
+                    tools:listitem="@layout/answer_test_list_item"
                     app:layout_constraintTop_toBottomOf="@id/question_text_layout"
                     app:layout_constraintVertical_bias="0"
-                    tools:listitem="@layout/answer_list_item"
                     android:foregroundGravity="center_horizontal"
                     android:paddingBottom="18sp"
                     android:paddingStart="10sp"
@@ -99,14 +101,27 @@
 
     </androidx.cardview.widget.CardView>
 
+    <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/answer"
+            style="@style/TextInputLayoutStyleForQuestion"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/question_body">
+
+        <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/answerEditText"
+                style="@style/TextInputEditTextStyleForQuestion"
+                android:hint="@string/question_text" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
     <Button
-            android:id="@+id/test_created"
+            android:id="@+id/answerButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/question_body"
+            android:layout_below="@id/answer"
             android:layout_centerHorizontal="true"
             android:orientation="vertical"
-            android:text="@string/test_created"
+            android:text="@string/answer_but"
             android:backgroundTint="@color/lavanda"
             android:textSize="18sp"
             android:textColor="@color/white"/>

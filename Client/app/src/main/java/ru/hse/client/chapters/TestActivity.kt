@@ -8,6 +8,9 @@ import android.widget.*
 import okhttp3.OkHttpClient
 import ru.hse.client.R
 import ru.hse.client.databinding.ActivityTestBinding
+import ru.hse.client.groups.GroupActivity
+import ru.hse.client.groups.ListChapterAdapter
+import ru.hse.client.groups.ListChapterData
 import ru.hse.client.utility.DrawerBaseActivity
 import ru.hse.server.proto.EntitiesProto
 import ru.hse.server.proto.EntitiesProto.QuestionList
@@ -16,13 +19,15 @@ import ru.hse.server.proto.EntitiesProto.QuestionModel
 class TestActivity : DrawerBaseActivity(){
     private lateinit var questionNumberTextView: TextView
     private lateinit var questionTextView: TextView
+    private lateinit var testNameTextView: TextView
     private lateinit var answersListView: ListView
     private lateinit var answerEditText: EditText
     private lateinit var answerButton: Button
     private lateinit var binding: ActivityTestBinding
+    private lateinit var listViewAdapter: ListAnswerAdapter
     private var currentQuestion: Int = 1
     private var rightAnswersQuantity: Int = 0
-    private val dataArrayList = ArrayList<String?>()
+    private val dataArrayList = ArrayList<ListTestData?>()
     private var test: EntitiesProto.TestModel? = null
     private var chapter: EntitiesProto.ChapterModel? = null
     private var okHttpClient = OkHttpClient()
@@ -34,9 +39,11 @@ class TestActivity : DrawerBaseActivity(){
         binding = ActivityTestBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        testNameTextView = findViewById(R.id.test_name)
         questionNumberTextView = findViewById(R.id.questionNumberTextView)
         questionTextView = findViewById(R.id.questionTextView)
         answersListView = findViewById(R.id.answersListView)
+        listViewAdapter = ListAnswerAdapter(this, dataArrayList)
         answerEditText = findViewById(R.id.answerEditText)
         answerButton = findViewById(R.id.answerButton)
         val bundle = intent.extras
@@ -49,6 +56,7 @@ class TestActivity : DrawerBaseActivity(){
 
         if (test != null) {
             Log.i("TestActivity", test!!.name)
+            testNameTextView.text = test!!.name
         } else {
             Log.e("TestActivity", "ERROR test is empty")
             finish()
@@ -93,13 +101,20 @@ class TestActivity : DrawerBaseActivity(){
         val data: MutableList<Map<String, String>> = mutableListOf()
         val answers = question.answersList
         dataArrayList.clear()
-        for (ans in answers) {
+        for ((numAnswer, answer) in question.answersList.withIndex()) {
             dataArrayList.add(
-                ans
+                ListTestData(
+                    numAnswer,
+                   answer,
+                )
             )
         }
+        listViewAdapter.notifyDataSetChanged()
 
-        binding.answersListView.adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, dataArrayList.toArray())
+        listViewAdapter = ListAnswerAdapter(this, dataArrayList)
+        binding.answersListView.adapter = listViewAdapter
+
+        // binding.answersListView.adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, dataArrayList.toArray())
     }
 
     private fun checkAnswer(question: QuestionModel, text:String): Boolean {
