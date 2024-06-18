@@ -24,7 +24,7 @@ class TestActivity : DrawerBaseActivity(){
     private lateinit var answerEditText: EditText
     private lateinit var answerButton: Button
     private lateinit var binding: ActivityTestBinding
-    private lateinit var listViewAdapter: ListAnswerAdapter
+    private lateinit var listViewAdapter: AnswerAdapter
     private var currentQuestion: Int = 1
     private var rightAnswersQuantity: Int = 0
     private val dataArrayList = ArrayList<ListTestData?>()
