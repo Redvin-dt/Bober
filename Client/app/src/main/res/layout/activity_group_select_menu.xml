@@ -35,7 +35,11 @@
             app:layout_constraintStart_toStartOf="parent"
             android:divider="@android:color/transparent"
             android:dividerHeight="10sp"
-            app:layout_constraintHorizontal_bias="0.0"/>
+            app:layout_constraintHorizontal_bias="0.0"
+            android:paddingStart="7sp"
+            android:paddingEnd="7sp"
+            android:clipToPadding="false"
+        />
 
     <Button
             android:id="@+id/create_group_button"
