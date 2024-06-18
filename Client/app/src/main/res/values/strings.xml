@@ -58,7 +58,9 @@
     <string name="default_email">email</string>
     <string name="statisticButton">Statistic</string>
     <string name="invites_button">Invites</string>
-    <string name="log_out_button_text">Log out</string>
+    <string name="log_out_button_text">Log out</string
+    <string name="acceptButtonDiscription">accept</string>
+    <string name="cancel_button_description">decline</string>
     <string name="num">Num</string>
     <string name="chapter_tests_num">Num</string>
     <string name="text_for_test">Text for Test ?</string>

@@ -20,6 +20,7 @@ import java.io.IOException
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 
+
 fun getGroupsByPrefix(
         prefixName: String,
         activity: Activity,
@@ -187,4 +188,100 @@ fun createGroupRequest(groupName: String, groupPassword: String, activity: Activ
     })
 
     countDownLatch.await()
+}
+
+fun acceptInvite(groupId: Long, activity: Activity, okHttpClient: OkHttpClient) : Boolean {
+    val URlCreateGroup: String =
+            ("http://" + ContextCompat.getString(activity, R.string.IP) + "/invitations/accept/user").toHttpUrlOrNull()
+                    ?.newBuilder()
+                    ?.addQueryParameter("groupId", groupId.toString())
+                    ?.addQueryParameter("userId", user.getId().toString())
+                    ?.build()
+                    .toString()
+
+    val requestBody: RequestBody = RequestBody.create(null, ByteArray(0))
+
+    val request: Request = Request.Builder()
+            .url(URlCreateGroup)
+            .post(requestBody)
+            .header("Authorization", "Bearer " + user.getUserToken())
+            .build()
+
+    Log.i("GroupRequest", "Request has been sent $URlCreateGroup")
+
+    val somethingWentWrongMessage: String = "Something went wrong, try again"
+    val countDownLatch = CountDownLatch(1)
+    var isSuccess = false
+    okHttpClient.newCall(request).enqueue(object : Callback {
+        override fun onFailure(call: Call, e: IOException) {
+            Log.e("GroupRequest", e.toString() + " " + e.message)
+            Handler(Looper.getMainLooper()).post {
+                Toast.makeText(activity, somethingWentWrongMessage, Toast.LENGTH_SHORT).show()
+            }
+            countDownLatch.countDown()
+        }
+
+        override fun onResponse(call: Call, response: Response) {
+            Log.i("Info", response.toString())
+            if (response.isSuccessful) {
+                isSuccess = true
+                Log.i("GroupRequest", "user accept invite")
+            } else {
+                Handler(Looper.getMainLooper()).post {
+                    Toast.makeText(activity, response.body?.string(), Toast.LENGTH_SHORT).show()
+                }
+            }
+            countDownLatch.countDown()
+        }
+    })
+
+    countDownLatch.await()
+    return isSuccess
+}
+
+fun declineInvite(groupId: Long, activity: Activity, okHttpClient: OkHttpClient) : Boolean {
+    val URlCreateGroup: String =
+            ("http://" + ContextCompat.getString(activity, R.string.IP) + "/invitations/decline/user").toHttpUrlOrNull()
+                    ?.newBuilder()
+                    ?.build()
+                    .toString()
+
+    val requestBody: RequestBody = RequestBody.create(null, ByteArray(0))
+
+    val request: Request = Request.Builder()
+            .url(URlCreateGroup)
+            .post(requestBody)
+            .header("Authorization", "Bearer " + user.getUserToken())
+            .build()
+
+    Log.i("GroupRequest", "Request has been sent $URlCreateGroup")
+
+    val somethingWentWrongMessage: String = "Something went wrong, try again"
+    val countDownLatch = CountDownLatch(1)
+    var isSuccess = false
+    okHttpClient.newCall(request).enqueue(object : Callback {
+        override fun onFailure(call: Call, e: IOException) {
+            Log.e("GroupRequest", e.toString() + " " + e.message)
+            Handler(Looper.getMainLooper()).post {
+                Toast.makeText(activity, somethingWentWrongMessage, Toast.LENGTH_SHORT).show()
+            }
+            countDownLatch.countDown()
+        }
+
+        override fun onResponse(call: Call, response: Response) {
+            Log.i("Info", response.toString())
+            if (response.isSuccessful) {
+                isSuccess = true
+                Log.i("GroupRequest", "user decline invite")
+            } else {
+                Handler(Looper.getMainLooper()).post {
+                    Toast.makeText(activity, response.body?.string(), Toast.LENGTH_SHORT).show()
+                }
+            }
+            countDownLatch.countDown()
+        }
+    })
+
+    countDownLatch.await()
+    return isSuccess
 }
