@@ -88,6 +88,10 @@
             android:exported="true" >
         </activity>
         <activity
+            android:name=".groups.InvitesActivity"
+            android:exported="true">
+        </activity>
+        <activity
             android:name=".chapters.ChapterUploadActivity"
             android:exported="false" >
         </activity>
