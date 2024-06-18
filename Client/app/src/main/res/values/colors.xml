@@ -15,4 +15,5 @@
     <color name="orange">#ED6A41</color>
     <color name="focused">#70B71D</color>
     <color name="dark_gray">#4D4C4C</color>
+    <color name="dark_gray_chapter">#202020</color>
 </resources>
