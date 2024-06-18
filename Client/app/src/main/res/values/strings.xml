@@ -9,7 +9,7 @@
     <string name="email">"Email"</string>
     <string name="registration_text">Register your account</string>
     <string name="password_confirm">Confirm password</string>
-    <string name="IP">192.168.0.103:8080</string>
+    <string name="IP">192.168.0.108:8080</string>
     <string name="log_in_text">Log in to your account</string>
     <string name="forgot_password">Forgot password?</string>
     <string name="have_an_account">Have an account?</string>
@@ -58,7 +58,7 @@
     <string name="default_email">email</string>
     <string name="statisticButton">Statistic</string>
     <string name="invites_button">Invites</string>
-    <string name="log_out_button_text">Log out</string
+    <string name="log_out_button_text">Log out</string>
     <string name="acceptButtonDiscription">accept</string>
     <string name="cancel_button_description">decline</string>
     <string name="num">Num</string>

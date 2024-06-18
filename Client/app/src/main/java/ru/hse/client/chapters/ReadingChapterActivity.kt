@@ -10,6 +10,7 @@ import android.widget.TextView
 import ru.hse.client.databinding.ActivityReadingChapterBinding
 import ru.hse.client.utility.DrawerBaseActivity
 import ru.hse.server.proto.EntitiesProto
+import ru.hse.client.utility.user
 
 class ReadingChapterActivity : DrawerBaseActivity() {
     private lateinit var binding: ActivityReadingChapterBinding
@@ -35,7 +36,7 @@ class ReadingChapterActivity : DrawerBaseActivity() {
         val bundle = intent.extras
 
         if (bundle != null) {
-            Log.e("ReadingChapterActivity", "Got chapter")
+            Log.i("ReadingChapterActivity", "Got chapter")
             chapter = bundle.getSerializable("chapter") as EntitiesProto.ChapterModel
             text = bundle.getSerializable("text") as String
         }
@@ -60,6 +61,7 @@ class ReadingChapterActivity : DrawerBaseActivity() {
 
                 val nextBundle = Bundle()
                 nextBundle.putSerializable("test", tests?.testsList?.get(currentTest))
+                nextBundle.putSerializable("chapter", chapter)
                 intent.putExtras(nextBundle)
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 startActivityForResult(intent, 100)
@@ -75,7 +77,19 @@ class ReadingChapterActivity : DrawerBaseActivity() {
         }
     }
 
+    private fun isPassedTest(test : EntitiesProto.TestModel) : Boolean {
+        var isPassed = false
+        val passedTests = user.getUserModel()!!.passedTests.passedTestsList
+        for (passedTest in passedTests) {
+            isPassed = isPassed || passedTest.testId == test.id
+        }
+        return isPassed
+    }
+
     private fun changeReadableText() {
+        while (tests?.testsList?.size!! > currentTest && isPassedTest(tests!!.getTests(currentTest))) {
+            currentTest++;
+        }
         if (tests?.testsList?.size!! > currentTest) {
             chapterTextView.text = tests?.getTests(currentTest)?.position?.let { text.subSequence(0, it.toInt()) }
         } else {

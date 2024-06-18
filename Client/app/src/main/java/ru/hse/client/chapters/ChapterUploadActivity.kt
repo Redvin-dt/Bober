@@ -2,6 +2,7 @@ package ru.hse.client.chapters
 
 import android.app.Activity
 import android.app.AlertDialog
+import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -19,15 +20,13 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
-import okhttp3.Call
-import okhttp3.Callback
+import okhttp3.*
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.RequestBody
-import okhttp3.Response
+import okio.BufferedSink
 import okio.ByteString
+import okio.source
 import ru.hse.client.R
 import ru.hse.client.databinding.ActivityUploadChapterBinding
 import ru.hse.client.entry.hideKeyboard
@@ -40,10 +39,13 @@ import ru.hse.server.proto.EntitiesProto
 import ru.hse.server.proto.EntitiesProto.ChapterModel
 import ru.hse.server.proto.EntitiesProto.GroupModel
 import ru.hse.server.proto.EntitiesProto.TestList
+import java.io.File
 import java.io.FileInputStream
 import java.io.IOException
 import java.io.InputStream
+import java.nio.charset.StandardCharsets
 import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
 
 class ChapterUploadActivity : DrawerBaseActivity() {
 
@@ -53,6 +55,7 @@ class ChapterUploadActivity : DrawerBaseActivity() {
     private lateinit var group: GroupModel
     private var testStartPositions: MutableList<Int> = ArrayList()
     private lateinit var testListBuilder: TestList.Builder
+    private var okHttpClient = OkHttpClient()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -99,20 +102,111 @@ class ChapterUploadActivity : DrawerBaseActivity() {
                 }
             } else {
                 Log.d(this.localClassName, "uploadFileButton pressed")
-                val chapterModel = ChapterModel.newBuilder()
+                var chapterModel = ChapterModel.newBuilder()
                     .setName(binding.chapterName.text.toString())
                     .setTextFile(text)
                     .setTests(testListBuilder)
                     .setGroup(group)
                     .build()
 
-                sendChapterToServer(chapterModel)
+                val newChapter = sendChapterToServer(chapterModel)
+                if (newChapter != null) {
+                    chapterModel = newChapter
+                    setChapterText(chapterModel, text, false, this@ChapterUploadActivity, okHttpClient)
+                }
                 finish()
             }
         }
     }
 
-    private fun sendChapterToServer(chapterModel: ChapterModel) {
+    fun setChapterText(
+        chapter: EntitiesProto.ChapterModel,
+        text: String,
+        writeErrorMessage: Boolean,
+        activity: Activity,
+        okHttpClient: OkHttpClient
+    ) : EntitiesProto.ChapterModel? {
+        val file = File.createTempFile("file_to_send", chapter.id.toString() + ".txt")
+        file.writeText(text, StandardCharsets.UTF_8)
+
+        val urlChapterGet : String = ("http://" + ContextCompat.getString(activity, R.string.IP) + "/files").toHttpUrlOrNull()
+            ?.newBuilder()
+            ?.addQueryParameter("chapterId", chapter.id.toString())
+            ?.build().toString()
+
+        class InputStreamRequestBody(
+            private val contentType: MediaType,
+            private val contentResolver: ContentResolver,
+            private val uri: Uri
+        ) : RequestBody() {
+            override fun contentType() = contentType
+
+            override fun contentLength(): Long = -1
+
+            @Throws(IOException::class)
+            override fun writeTo(sink: BufferedSink) {
+                val input = contentResolver.openInputStream(uri)
+
+                input?.use { sink.writeAll(it.source()) }
+                    ?: throw IOException("Could not open $uri")
+            }
+        }
+        val contentResolver = applicationContext.getContentResolver()
+        val contentPart = InputStreamRequestBody("multipart/form-data".toMediaType(), contentResolver, Uri.fromFile(file))
+        val body = MultipartBody.Builder().setType(MultipartBody.FORM)
+            .addFormDataPart("file", "file.txt", contentPart)
+            .build()
+        val requestForGetGroups: Request =
+            Request.Builder()
+                .url(urlChapterGet)
+                .post(body)
+                .header("Authorization", "Bearer " + user.getUserToken())
+                .build()
+
+
+        var chapterModelAfterInsertion : EntitiesProto.ChapterModel? = null
+
+        val countDownLatch = CountDownLatch(1);
+        okHttpClient.newCall(requestForGetGroups).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                Log.e("Error while setChapterText", e.toString() + " " + e.message)
+                Handler(Looper.getMainLooper()).post {
+                    Toast.makeText(
+                        activity,
+                        "Something wrong try again",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+
+                countDownLatch.countDown()
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                Log.i("Info", response.toString())
+                if (response.isSuccessful) {
+                    val responseBody: ByteString? = response.body?.byteString()
+                    chapterModelAfterInsertion = EntitiesProto.ChapterModel.parseFrom(responseBody?.toByteArray())
+                } else {
+                    if (writeErrorMessage) {
+                        Handler(Looper.getMainLooper()).post {
+                            Toast.makeText(
+                                activity,
+                                "Check connection, try again",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
+                }
+
+                countDownLatch.countDown()
+            }
+        })
+
+        countDownLatch.await(10, TimeUnit.SECONDS)
+        return chapterModelAfterInsertion
+    }
+
+    private fun sendChapterToServer(chapterModel: ChapterModel) : EntitiesProto.ChapterModel? {
         val URlGetUser: String =
             ("http://" + ContextCompat.getString(this, R.string.IP) + "/chapters").toHttpUrlOrNull()
                 ?.newBuilder()
@@ -127,6 +221,8 @@ class ChapterUploadActivity : DrawerBaseActivity() {
             .header("Authorization", "Bearer ${user.getUserToken()}")
             .post(requestBody)
             .build()
+
+        var chapterModel : EntitiesProto.ChapterModel? = null
 
         val okHttpClient = OkHttpClient()
         val countDownLatch = CountDownLatch(1)
@@ -153,7 +249,8 @@ class ChapterUploadActivity : DrawerBaseActivity() {
                             Toast.LENGTH_SHORT
                         ).show()
                     }
-
+                    val responseBody: ByteString? = response.body?.byteString()
+                    chapterModel = EntitiesProto.ChapterModel.parseFrom(responseBody?.toByteArray())
                 } else {
                     Handler(Looper.getMainLooper()).post {
                         Toast.makeText(
@@ -167,6 +264,7 @@ class ChapterUploadActivity : DrawerBaseActivity() {
             }
         })
         countDownLatch.await()
+        return chapterModel
     }
 
     private fun addTest() {

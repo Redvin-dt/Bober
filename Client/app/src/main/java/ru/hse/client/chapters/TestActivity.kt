@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.*
+import okhttp3.OkHttpClient
 import ru.hse.client.R
 import ru.hse.client.databinding.ActivityTestBinding
 import ru.hse.client.utility.DrawerBaseActivity
@@ -23,6 +24,9 @@ class TestActivity : DrawerBaseActivity(){
     private var rightAnswersQuantity: Int = 0
     private val dataArrayList = ArrayList<String?>()
     private var test: EntitiesProto.TestModel? = null
+    private var chapter: EntitiesProto.ChapterModel? = null
+    private var okHttpClient = OkHttpClient()
+
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,6 +44,7 @@ class TestActivity : DrawerBaseActivity(){
 
         if (bundle != null) {
             test = bundle.getSerializable("test") as EntitiesProto.TestModel
+            chapter = bundle.getSerializable("chapter") as EntitiesProto.ChapterModel
         }
 
         if (test != null) {
@@ -72,6 +77,7 @@ class TestActivity : DrawerBaseActivity(){
             if (questions.questionsList.size >= currentQuestion) {
                 questionTextView.text = questions.getQuestions(currentQuestion - 1).question
             } else {
+                addTestToUser(chapter!!, test!!, rightAnswersQuantity, questions.questionsList.size, false, this@TestActivity, okHttpClient)
                 val data: Intent = Intent()
                 this.setResult(RESULT_OK, data)
                 this.finish()
@@ -102,8 +108,7 @@ class TestActivity : DrawerBaseActivity(){
             return false
         }
         for (symbol in text) {
-            val num = (symbol - '0').toLong()
-
+            val num = (symbol - '0').toLong() - 1
             flag = flag && (question.rightAnswersList.indexOf(num) != -1)
         }
         return flag
