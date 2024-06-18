@@ -24,7 +24,7 @@ public class Question {
     @Column(name = "question")
     private String question;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name="right_answers",
             joinColumns = @JoinColumn(name = "right_answer_id"))
     @Column(name = "right_answer")
@@ -34,7 +34,7 @@ public class Question {
     @JoinColumn(name = "test_host")
     private Test testHost;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name="answers",
             joinColumns = @JoinColumn(name = "answer_id"))
     @Column(name = "answer")

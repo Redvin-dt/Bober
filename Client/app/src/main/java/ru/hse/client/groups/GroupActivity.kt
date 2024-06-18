@@ -14,6 +14,7 @@ import ru.hse.server.proto.EntitiesProto.GroupModel
 import ru.hse.client.chapters.ChapterUploadActivity
 import ru.hse.client.chapters.ReadingChapterActivity
 import ru.hse.client.chapters.getChapter
+import ru.hse.client.chapters.getChapterText
 import ru.hse.server.proto.EntitiesProto
 
 class GroupActivity: DrawerBaseActivity() {
@@ -90,7 +91,7 @@ class GroupActivity: DrawerBaseActivity() {
             dataArrayList.add(
                 ListChapterData(
                     numOfChapter,
-                    group?.name.toString(),
+                    chapter.name.toString(),
                     chapter.tests.testsList.size,
                 )
             )
@@ -122,7 +123,8 @@ class GroupActivity: DrawerBaseActivity() {
                 val bundle = Bundle()
                 Log.e("Tests", chapterResponse.tests.testsList.size.toString())
                 bundle.putSerializable("chapter", chapterResponse)
-                bundle.putSerializable("text", "AAAAAAAAAAAABBBBBBBB")
+                val text = getChapterText(chapterResponse, false, this@GroupActivity, okHttpClient)
+                bundle.putSerializable("text", text)
                 intent.putExtras(bundle)
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 startActivity(intent)
