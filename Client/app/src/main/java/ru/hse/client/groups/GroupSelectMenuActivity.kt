@@ -19,8 +19,8 @@ import java.util.regex.Pattern
 class GroupSelectMenuActivity : DrawerBaseActivity() {
 
     private lateinit var binding: ActivityGroupSelectMenuBinding
-    private lateinit var dataArrayList: ArrayList<ListData?>
-    private lateinit var listViewAdapter: ListAdapter
+    private lateinit var dataArrayList: ArrayList<ListGroupData?>
+    private lateinit var listViewAdapter: ListGroupAdapter
 
     private var okHttpClient = OkHttpClient()
 
@@ -29,7 +29,7 @@ class GroupSelectMenuActivity : DrawerBaseActivity() {
         binding = ActivityGroupSelectMenuBinding.inflate(layoutInflater)
 
         dataArrayList = ArrayList()
-        listViewAdapter = ListAdapter(this, dataArrayList)
+        listViewAdapter = ListGroupAdapter(this, dataArrayList)
 
         setContentView(binding.root)
         allocateActivityTitle("Groups")
@@ -124,7 +124,7 @@ class GroupSelectMenuActivity : DrawerBaseActivity() {
                     )
             )
             dataArrayList.add(
-                    ListData(
+                    ListGroupData(
                             group.name.toString(),
                             group.admin.login.toString(),
                             R.drawable.base_group_item_img
