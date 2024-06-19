@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="12sp"
+        android:layout_marginStart="12sp"
+        android:layout_marginVertical="10sp"
+        android:layout_marginHorizontal="10sp"
+        app:cardCornerRadius="12sp"
+        app:cardElevation="8sp"
+        android:backgroundTint="@color/white">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <TextView
+                android:layout_width="150sp"
+                android:layout_height="wrap_content"
+                android:id="@+id/group_chapter"
+                android:text="@string/group_chapter"
+                android:textColor="@color/dark_gray_chapter"
+                android:textSize="17sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/chapter_img"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintVertical_bias="0.9"
+        />
+        <com.google.android.material.imageview.ShapeableImageView
+                android:layout_width="60sp"
+                android:layout_height="60sp"
+                android:id="@+id/chapter_img"
+                android:scaleType="centerCrop"
+                android:src="@drawable/test_image"
+                android:padding="15sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintVertical_bias="0.0"
+                app:shapeAppearanceOverlay="@style/roundImageBook"
+        />
+
+        <TextView
+                android:id="@+id/login_user"
+                android:layout_width="wrap_content"
+                android:layout_height="25sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toEndOf="@id/chapter_img"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintVertical_bias="0.25"
+                android:text="@string/login"
+                android:textSize="17sp"
+                android:textColor="@color/dark_gray_chapter"
+        />
+
+        <TextView
+                android:layout_width="150sp"
+                android:layout_height="25sp"
+                android:id="@+id/test_name_res"
+                android:text="@string/test_name1"
+                android:textColor="@color/dark_gray_chapter"
+                android:textSize="17sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/login_user"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintHorizontal_bias="0.085"
+                app:layout_constraintVertical_bias="0.25"
+        />
+        <TextView
+                android:layout_width="60sp"
+                android:layout_height="35sp"
+                android:id="@+id/result"
+                android:scaleType="centerCrop"
+                android:padding="7sp"
+                android:textSize="17sp"
+                android:text="@string/_10_12"
+                android:src="@drawable/chapter_done"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintHorizontal_bias="0.95"
+                app:layout_constraintVertical_bias="0.5"
+        />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>
