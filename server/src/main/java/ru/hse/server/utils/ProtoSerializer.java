@@ -46,6 +46,7 @@ public class ProtoSerializer {
                 .setId(chapter.getChapterId())
                 .setName(chapter.getChapterName())
                 .setMetaInfo(chapter.getMetaInfo())
+                .setDeadlineTs(chapter.getDeadlineTs())
                 .build();
     }
 
@@ -64,6 +65,7 @@ public class ProtoSerializer {
                 .setName(test.getTestName())
                 .setQuestions(convertQuestionsToProto(test.getQuestions()))
                 .setPosition(test.getPosition())
+                .setSecondsForTest(test.getSecondsForTest())
                 .build();
     }
 
@@ -176,6 +178,7 @@ public class ProtoSerializer {
                 .setMetaInfo(chapter.getMetaInfo())
                 .setGroup(getGroupInfo(DaoChapter.getGroupByChapter(chapter)))
                 .setTests(convertTestsToProto(chapter.getTests()))
+                .setDeadlineTs(chapter.getDeadlineTs())
                 .build();
     }
 }
