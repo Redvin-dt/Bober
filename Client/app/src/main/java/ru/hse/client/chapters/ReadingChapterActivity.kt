@@ -1,10 +1,12 @@
 package ru.hse.client.chapters
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.text.method.ScrollingMovementMethod
 import android.util.Log
 import android.view.View
+import android.view.View.INVISIBLE
 import android.widget.Button
 import android.widget.TextView
 import ru.hse.client.databinding.ActivityReadingChapterBinding
@@ -23,7 +25,7 @@ class ReadingChapterActivity : DrawerBaseActivity() {
     private var text: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
+        user.setUserByLogin(this, user.getUserLogin())
         super.onCreate(savedInstanceState)
         binding = ActivityReadingChapterBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -49,13 +51,18 @@ class ReadingChapterActivity : DrawerBaseActivity() {
             return
         }
 
-
+        titleTextView.text = chapter!!.name
         tests = chapter!!.tests
 
         changeReadableText()
         Log.i("ReadingChapterActivity", "TEXT:$text")
 
         startTestButton.setOnClickListener {
+            user.setUserByLogin(this, user.getUserLogin())
+            if (startTestButton.text == "Back") {
+                finish()
+                return@setOnClickListener
+            }
             if (startTestButton.visibility != View.INVISIBLE && tests != null && tests!!.testsList.size > currentTest) {
                 val intent = Intent(this, TestActivity::class.java)
 
@@ -65,6 +72,7 @@ class ReadingChapterActivity : DrawerBaseActivity() {
                 intent.putExtras(nextBundle)
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 startActivityForResult(intent, 100)
+                user.setUserByLogin(this, user.getUserLogin())
             }
         }
 
@@ -86,14 +94,17 @@ class ReadingChapterActivity : DrawerBaseActivity() {
         return isPassed
     }
 
+    @SuppressLint("SetTextI18n")
     private fun changeReadableText() {
         while (tests?.testsList?.size!! > currentTest && isPassedTest(tests!!.getTests(currentTest))) {
             currentTest++;
         }
         if (tests?.testsList?.size!! > currentTest) {
+            startTestButton.visibility = View.INVISIBLE
             chapterTextView.text = tests?.getTests(currentTest)?.position?.let { text.subSequence(0, it.toInt()) }
         } else {
-            startTestButton.visibility = View.INVISIBLE
+            startTestButton.visibility = View.VISIBLE
+            startTestButton.text = "Back"
             chapterTextView.text = text
         }
     }

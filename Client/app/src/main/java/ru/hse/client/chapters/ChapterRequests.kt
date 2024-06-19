@@ -214,6 +214,6 @@ fun addTestToUser(
         }
     })
 
-    countDownLatch.await(10, TimeUnit.SECONDS)
+    countDownLatch.await(15, TimeUnit.SECONDS)
     return getUserModel
 }

@@ -15,6 +15,7 @@ class ProfileActivity: DrawerBaseActivity() {
 
     lateinit var binding: ActivityProfileBinding
     override fun onCreate(savedInstanceState: Bundle?) {
+        user.setUserByLogin(this, user.getUserLogin())
         super.onCreate(savedInstanceState)
         binding = ActivityProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -28,15 +29,20 @@ class ProfileActivity: DrawerBaseActivity() {
             // TODO: set function for statistic
         }
 
-        binding.groupsButton.setOnClickListener {
-            goToGroupSelect()
+        binding.testsButton.setOnClickListener {
+            user.setUserByLogin(this, user.getUserLogin())
+            val intent = Intent(this, PassedTestActivity::class.java)
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            ContextCompat.startActivity(this, intent, null)
         }
 
         binding.inviteButton.setOnClickListener {
+            user.setUserByLogin(this, user.getUserLogin())
             goToInvites()
         }
 
         binding.logOutButton.setOnClickListener {
+            user.setUserByLogin(this, user.getUserLogin())
             val authManager = SingletonController.getInstance().getManager()
             authManager.logOut()
         }
@@ -49,9 +55,4 @@ class ProfileActivity: DrawerBaseActivity() {
         finish()
     }
 
-    private fun goToGroupSelect() {
-        val intent = Intent(this, GroupSelectMenuActivity::class.java)
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        ContextCompat.startActivity(this, intent, null)
-    }
 }

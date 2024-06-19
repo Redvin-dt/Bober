@@ -20,7 +20,7 @@ class TestResultAdapter(context: Context, dataArrayList: ArrayList<TestResultDat
         val listData = getItem(position)
 
         if (view == null) {
-            view = LayoutInflater.from(context).inflate(R.layout.group_list_item, parent, false)
+            view = LayoutInflater.from(context).inflate(R.layout.result_list_item, parent, false)
         }
         val listGroupChapter = view!!.findViewById<TextView>(R.id.group_chapter)
         val listLogin = view.findViewById<TextView>(R.id.login_user)

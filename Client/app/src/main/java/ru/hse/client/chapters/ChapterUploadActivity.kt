@@ -114,7 +114,9 @@ class ChapterUploadActivity : DrawerBaseActivity() {
                     chapterModel = newChapter
                     setChapterText(chapterModel, text, false, this@ChapterUploadActivity, okHttpClient)
                 }
-                finish()
+                val data: Intent = Intent()
+                this.setResult(RESULT_OK, data)
+                this.finish()
             }
         }
     }
