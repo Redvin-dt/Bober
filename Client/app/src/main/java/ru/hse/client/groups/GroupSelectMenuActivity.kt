@@ -25,6 +25,7 @@ class GroupSelectMenuActivity : DrawerBaseActivity() {
     private var okHttpClient = OkHttpClient()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        user.setUserByLogin(this, user.getUserLogin())
         super.onCreate(savedInstanceState)
         binding = ActivityGroupSelectMenuBinding.inflate(layoutInflater)
 
@@ -38,6 +39,7 @@ class GroupSelectMenuActivity : DrawerBaseActivity() {
 
         binding.createGroupButton.setOnClickListener {
             onNewGroupPressed()
+            user.setUserByLogin(this, user.getUserLogin())
         }
 
         binding.groupSearchView.setOnSearchClickListener {

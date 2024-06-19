@@ -9,6 +9,7 @@ import ru.hse.database.entities.Test;
 import ru.hse.database.utils.HibernateUtil;
 
 import java.util.List;
+import java.util.TimeZone;
 
 public class DaoPassedTest {
     static Logger logger = LoggerFactory.getLogger(DaoPassedTest.class);
@@ -19,7 +20,7 @@ public class DaoPassedTest {
         }
     }
     static public void createOrUpdatePassedTest(PassedTest test) {
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try (Session session = HibernateUtil.getSessionFactory().withOptions().jdbcTimeZone(TimeZone.getTimeZone("UTC")).openSession()) {
             session.beginTransaction();
             session.merge(test);
             session.getTransaction().commit();

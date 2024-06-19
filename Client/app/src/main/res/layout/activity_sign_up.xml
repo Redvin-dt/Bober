@@ -120,7 +120,8 @@
         <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/password"
                 style="@style/TextInputEditTextStyle"
-                android:hint="@string/password"/>
+                android:hint="@string/password"
+                android:inputType="textPassword" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -139,7 +140,8 @@
         <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/password_confirm"
                 style="@style/TextInputEditTextStyle"
-                android:hint="@string/password_confirm"/>
+                android:hint="@string/password_confirm"
+                android:inputType="textPassword" />
 
     </com.google.android.material.textfield.TextInputLayout>
 

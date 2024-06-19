@@ -44,7 +44,7 @@ public class PassedTest {
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "create_timestamp")
-    private Long timestamp;
+    private Timestamp timestamp;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_host")

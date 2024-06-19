@@ -1,6 +1,10 @@
 package ru.hse.client.chapters
 
 import android.app.Activity
+import android.app.PendingIntent.getActivity
+import android.content.ContentResolver
+import android.content.Context
+import android.net.Uri
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
@@ -8,13 +12,14 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import okhttp3.*
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MediaType.Companion.toMediaType
+import okio.BufferedSink
 import okio.ByteString
+import okio.source
 import ru.hse.client.R
 import ru.hse.client.utility.user
 import ru.hse.server.proto.EntitiesProto
 import ru.hse.server.proto.EntitiesProto.TestModel
-import ru.hse.server.proto.EntitiesProto.UserModel
 import java.io.BufferedReader
 import java.io.File
 import java.io.IOException
@@ -90,7 +95,7 @@ fun getChapterText(
     activity: Activity,
     okHttpClient: OkHttpClient
 ) : String? {
-    val urlFileChapterGet : String = ("http://" + ContextCompat.getString(activity, R.string.IP) + "/files/getFile").toHttpUrlOrNull()
+    val urlFileChapterGet : String = ("http://" + ContextCompat.getString(activity, R.string.IP) + "/files").toHttpUrlOrNull()
         ?.newBuilder()
         ?.addQueryParameter("fileName", chapter.textFile)
         ?.build().toString()
@@ -120,14 +125,9 @@ fun getChapterText(
         override fun onResponse(call: Call, response: Response) {
             Log.i("Info", response.toString())
             if (response.isSuccessful) {
-                val `in` = response.body!!.byteStream()
-                val reader = BufferedReader(InputStreamReader(`in`))
-                var line = reader.readLine()
-                result = line
-                while ((reader.readLine().also { line = it }) != null) {
-                    result += line
-                }
-                println(result)
+                val istream = response.body!!.byteStream()
+                result = istream.bufferedReader().use { it.readText() }
+                Log.e("Text got from file", result!!)
                 response.body!!.close()
             } else {
                 if (writeErrorMessage) {
@@ -147,73 +147,6 @@ fun getChapterText(
 
     countDownLatch.await(10, TimeUnit.SECONDS)
     return result
-}
-
-fun setChapterText(
-    chapter: EntitiesProto.ChapterModel,
-    text: String,
-    writeErrorMessage: Boolean,
-    activity: Activity,
-    okHttpClient: OkHttpClient
-) : EntitiesProto.ChapterModel? {
-    val file = File.createTempFile("file_to_send", chapter.id.toString())
-    file.writeText(text, StandardCharsets.UTF_8)
-
-    val urlChapterGet : String = ("http://" + ContextCompat.getString(activity, R.string.IP) + "/files/loadFileToChapter").toHttpUrlOrNull()
-        ?.newBuilder()
-        ?.addQueryParameter("id", chapter.id.toString())
-        ?.build().toString()
-
-    val body: RequestBody = RequestBody.create("media/type".toMediaTypeOrNull(), file)
-
-    val requestForGetGroups: Request =
-        Request.Builder()
-            .url(urlChapterGet)
-            .post(body)
-            .header("Authorization", "Bearer " + user.getUserToken())
-            .build()
-
-
-    var chapterModelAfterInsertion : EntitiesProto.ChapterModel? = null
-
-    val countDownLatch = CountDownLatch(1);
-    okHttpClient.newCall(requestForGetGroups).enqueue(object : Callback {
-        override fun onFailure(call: Call, e: IOException) {
-            Log.e("Error while setChapterText", e.toString() + " " + e.message)
-            Handler(Looper.getMainLooper()).post {
-                Toast.makeText(
-                    activity,
-                    "Something wrong try again",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-
-            countDownLatch.countDown()
-        }
-
-        override fun onResponse(call: Call, response: Response) {
-            Log.i("Info", response.toString())
-            if (response.isSuccessful) {
-                val responseBody: ByteString? = response.body?.byteString()
-                chapterModelAfterInsertion = EntitiesProto.ChapterModel.parseFrom(responseBody?.toByteArray())
-            } else {
-                if (writeErrorMessage) {
-                    Handler(Looper.getMainLooper()).post {
-                        Toast.makeText(
-                            activity,
-                            "Check connection, try again",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                }
-            }
-
-            countDownLatch.countDown()
-        }
-    })
-
-    countDownLatch.await(10, TimeUnit.SECONDS)
-    return chapterModelAfterInsertion
 }
 
 fun addTestToUser(
@@ -281,6 +214,6 @@ fun addTestToUser(
         }
     })
 
-    countDownLatch.await(10, TimeUnit.SECONDS)
+    countDownLatch.await(15, TimeUnit.SECONDS)
     return getUserModel
 }

@@ -16,12 +16,13 @@ import okhttp3.OkHttpClient
 import ru.hse.client.R
 import ru.hse.client.chapters.ReadingChapterActivity
 import ru.hse.client.chapters.getChapter
+import ru.hse.client.chapters.getChapterText
 import ru.hse.client.databinding.FragmentGroupChaptersBinding
 import ru.hse.server.proto.EntitiesProto
 import ru.hse.server.proto.EntitiesProto.GroupModel
 
 
-class GroupChaptersFragment(activity: GroupActivity, groupModel: GroupModel) : Fragment(R.layout.fragment_group_chapters) {
+class   GroupChaptersFragment(activity: GroupActivity, groupModel: GroupModel) : Fragment(R.layout.fragment_group_chapters) {
     private lateinit var binding: FragmentGroupChaptersBinding
     private var mGroupModel = groupModel
     private var mActivity = activity
@@ -67,7 +68,7 @@ class GroupChaptersFragment(activity: GroupActivity, groupModel: GroupModel) : F
             dataArrayList.add(
                 ListChapterData(
                     numOfChapter,
-                    mGroupModel.name.toString(),
+                    chapter.name.toString(),
                     chapter.tests.testsList.size,
                 )
             )
@@ -103,7 +104,10 @@ class GroupChaptersFragment(activity: GroupActivity, groupModel: GroupModel) : F
                     val bundle = Bundle()
                     Log.e("Tests", chapterResponse.tests.testsList.size.toString())
                     bundle.putSerializable("chapter", chapterResponse)
-                    bundle.putSerializable("text", "AAAAAAAAAAAABBBBBBBB")
+                    val text = getChapterText(chapterResponse, false, mActivity, okHttpClient)
+                    bundle.putSerializable("text", text)
+                    bundle.putSerializable("chapters", mGroupModel.chapters)
+                    bundle.putSerializable("position", position)
                     intent.putExtras(bundle)
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                     startActivity(intent)

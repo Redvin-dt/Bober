@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" >
-
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+          xmlns:tools="http://schemas.android.com/tools"
+          android:installLocation="auto">
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.ADD_ACCOUNTS" />
     <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
     <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
-
     <application
+        android:installLocation="preferExternal"  
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -110,6 +110,10 @@
         <activity
             android:name=".chapters.TestActivity"
             android:exported="true" >
+        </activity>
+        <activity
+                android:name=".profile.PassedTestActivity"
+                android:exported="true" >
         </activity>
     </application>
 

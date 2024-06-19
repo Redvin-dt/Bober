@@ -34,8 +34,11 @@ public class Chapter {
     @JoinColumn(name = "group_host")
     private Group groupHost;
 
-    @OneToMany(mappedBy = "chapterHost", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "chapterHost", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Test> tests = new ArrayList<>();
+
+    @Column(name = "deadline_ts")
+    private Long deadlineTs = (long) -1;
 
     public Chapter() {
     }

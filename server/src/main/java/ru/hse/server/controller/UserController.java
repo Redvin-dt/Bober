@@ -61,7 +61,7 @@ public class UserController {
         }
     }
 
-    @PostMapping(value = "/userPassedTest", produces = {MediaType.APPLICATION_PROTOBUF_VALUE})
+    @GetMapping(value = "/userPassedTest", produces = {MediaType.APPLICATION_PROTOBUF_VALUE})
     public ResponseEntity userPassedTest(@RequestParam Long userId, @RequestParam Long testId,
                                          @RequestParam Long chapterId, @RequestParam String testName,
                                          @RequestParam String chapterName, @RequestParam Long rightAns, @RequestParam Long questNum) {
