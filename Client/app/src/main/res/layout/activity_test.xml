@@ -57,22 +57,22 @@
                     app:layout_constraintVertical_bias="0.02" />
 
             <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/question_text_layout"
-                    style="@style/TextInputLayoutStyleForQuestion"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/questionNumberTextView"
-                    android:layout_height="150dp"
-                    app:layout_constraintVertical_bias="0">
+                android:id="@+id/question_text_layout"
+                style="@style/TextInputLayoutStyleForQuestion"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/questionNumberTextView"
+                app:layout_constraintVertical_bias="0">
 
-                <TextView
-                        android:id="@+id/questionTextView"
-                        style="@style/TextInputEditTextStyleForQuestion"
-                        android:textAlignment="center"
-                        android:textSize="25sp"
-                        android:hint="@string/question_text" />
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/question_text"
+                    style="@style/TextInputEditTextStyleForQuestion"
+                    android:hint="@string/question_text"
+                    android:inputType="none" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -80,12 +80,12 @@
             <ListView
                     android:id="@+id/answersListView"
                     android:layout_width="match_parent"
-                    android:layout_height="400sp"
+                    android:layout_height="350sp"
                     android:divider="@android:color/transparent"
                     android:dividerHeight="10sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintHorizontal_bias="0"
                     app:layout_constraintStart_toStartOf="parent"
                     tools:listitem="@layout/answer_list_item"
                     app:layout_constraintTop_toBottomOf="@id/question_text_layout"

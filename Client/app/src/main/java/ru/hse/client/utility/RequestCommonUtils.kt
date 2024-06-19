@@ -36,22 +36,11 @@ fun printOkAboutGoodUser(activity: Activity) {
 }
 
 fun printMessageFromBadResponse(message: CharSequence?, activity: Activity) {
-    if (message == null) {
-        Log.e("Error", "null response message")
-        Handler(Looper.getMainLooper()).post {
-            Toast.makeText(
-                    activity,
-                    "Something went wrong, try again",
-                    Toast.LENGTH_SHORT
-            ).show()
-        }
-        return
-    }
-    Log.e("Info", message.toString())
+    Log.e("Error", "null response message")
     Handler(Looper.getMainLooper()).post {
         Toast.makeText(
                 activity,
-                message,
+                "Something went wrong, try again",
                 Toast.LENGTH_SHORT
         ).show()
     }

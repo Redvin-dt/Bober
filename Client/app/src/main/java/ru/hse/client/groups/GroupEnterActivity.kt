@@ -13,6 +13,7 @@ import com.google.android.material.textfield.TextInputEditText
 import okhttp3.OkHttpClient
 import ru.hse.client.R
 import ru.hse.client.databinding.ActivityGroupEnterBinding
+import ru.hse.client.entry.generateHash
 import ru.hse.client.entry.hideKeyboard
 import ru.hse.client.entry.isNotValidPassword
 import ru.hse.client.utility.DrawerBaseActivity
@@ -111,7 +112,8 @@ class GroupEnterActivity : DrawerBaseActivity() {
             }
         }
 
-        val groupModel = EntitiesProto.GroupModel.newBuilder().setId(groupId).setName(groupName).setPasswordHash(password).build()
+        val groupModel = EntitiesProto.GroupModel.newBuilder().setId(groupId).setName(groupName).setPasswordHash(
+            generateHash(password, this)).build()
 
         val responseGroupModel = enterGroup(groupModel, true, this@GroupEnterActivity, okHttpClient)
 
