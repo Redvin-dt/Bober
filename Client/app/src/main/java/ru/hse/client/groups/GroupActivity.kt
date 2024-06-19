@@ -42,14 +42,6 @@ class GroupActivity : DrawerBaseActivity() {
 
         allocateActivityTitle(group.name.toString())
 
-        binding.groupTitle.text = group.name.toString()
-        binding.groupTitle.ellipsize = TextUtils.TruncateAt.END
-        binding.groupTitle.maxLines = 1
-
-        binding.groupAdmin.text = group.admin.login.toString()
-        binding.groupAdmin.ellipsize = TextUtils.TruncateAt.END
-        binding.groupAdmin.maxLines = 1
-
         binding.newChapterButton.setOnClickListener {
             newChapterButtonPressed()
         }

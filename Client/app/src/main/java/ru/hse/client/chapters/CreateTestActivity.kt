@@ -349,12 +349,12 @@ class QuestionBody(questionNumber: String, binding: ActivityCreateTestBinding, c
         }
         for (answerNumber in 0..<numberOfAnswers) {
             if (answerAdapter.getAnswerDataByPosition(answerNumber).getString("answer text")
-                    .toString().isNotEmpty()
+                    .toString().isEmpty()
             ) {
-                return true
+                return false
             }
         }
-        return false
+        return true
     }
 
    fun toQuestionModel(): QuestionModel {

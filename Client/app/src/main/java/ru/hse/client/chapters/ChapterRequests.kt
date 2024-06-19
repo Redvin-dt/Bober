@@ -125,13 +125,8 @@ fun getChapterText(
         override fun onResponse(call: Call, response: Response) {
             Log.i("Info", response.toString())
             if (response.isSuccessful) {
-                val `in` = response.body!!.byteStream()
-                val reader = BufferedReader(InputStreamReader(`in`))
-                var line = reader.readLine()
-                result = line
-                while ((reader.readLine().also { line = it }) != null) {
-                    result += line + "\n";
-                }
+                val istream = response.body!!.byteStream()
+                result = istream.bufferedReader().use { it.readText() }
                 Log.e("Text got from file", result!!)
                 response.body!!.close()
             } else {
