@@ -27,6 +27,9 @@ public class Test {
     @Column(name = "position")
     private long position;
 
+    @Column(name = "seconds_for_test")
+    private Long secondsForTest = (long) -1;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "chapter_host")
     private Chapter chapterHost;

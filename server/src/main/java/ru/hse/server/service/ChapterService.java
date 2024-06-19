@@ -62,6 +62,9 @@ public class ChapterService {
             chapter.setMetaInfo(chapter.getMetaInfo());
         }
 
+        if (chapterModel.hasDeadlineTs()) {
+            chapter.setDeadlineTs(chapterModel.getDeadlineTs());
+        }
         chapterRepository.save(chapter);
 
         if (chapterModel.hasTests()) {
@@ -92,6 +95,7 @@ public class ChapterService {
             questionList.add(question);
         }
         chapterTest.setQuestions(questionList);
+        chapterTest.setSecondsForTest(test.getSecondsForTest());
         return chapterTest;
     }
 
