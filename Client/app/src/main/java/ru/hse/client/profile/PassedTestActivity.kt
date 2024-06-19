@@ -24,8 +24,6 @@ class PassedTestActivity: DrawerBaseActivity() {
     private lateinit var dataArrayList: ArrayList<TestResultData?>
     private lateinit var listViewAdapter: TestResultAdapter
 
-    private var okHttpClient = OkHttpClient()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPassedTestBinding.inflate(layoutInflater)

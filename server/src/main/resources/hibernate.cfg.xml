@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+
+<hibernate-configuration>
+    <session-factory>
+        <property name="hibernate.connection.driver_class"> org.postgresql.Driver </property>
+        <property name="connection.url">jdbc:postgresql://localhost:5432/postgres</property>
+        <property name="connection.username">postgres</property>
+        <property name="connection.password">Ywn7n976</property>
+        <property name="connection.pool_size">10</property>
+        <property name="dialect">org.hibernate.dialect.PostgreSQLDialect</property>
+        <property name="current_session_context_class">thread</property>
+        <property name="show_sql">true</property>
+        <property name="format_sql">true</property>
+        <property name="hbm2ddl.auto">update</property>
+        <property name="hibernate.dbcp.initialSize">5</property>
+        <property name="hibernate.dbcp.maxTotal">20</property>
+        <property name="hibernate.dbcp.maxIdle">10</property>
+        <property name="hibernate.dbcp.minIdle">5</property>
+        <property name="hibernate.dbcp.maxWaitMillis">-1</property>
+        <mapping class="ru.hse.database.entities.User" />
+        <mapping class="ru.hse.database.entities.Group" />
+        <mapping class="ru.hse.database.entities.Chapter" />
+        <mapping class="ru.hse.database.entities.Test" />
+        <mapping class="ru.hse.database.entities.Question" />
+        <mapping class="ru.hse.database.entities.PassedTest" />
+    </session-factory>
+</hibernate-configuration>
