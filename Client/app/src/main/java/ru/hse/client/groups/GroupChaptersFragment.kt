@@ -106,6 +106,8 @@ class   GroupChaptersFragment(activity: GroupActivity, groupModel: GroupModel) :
                     bundle.putSerializable("chapter", chapterResponse)
                     val text = getChapterText(chapterResponse, false, mActivity, okHttpClient)
                     bundle.putSerializable("text", text)
+                    bundle.putSerializable("chapters", mGroupModel.chapters)
+                    bundle.putSerializable("position", position)
                     intent.putExtras(bundle)
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                     startActivity(intent)

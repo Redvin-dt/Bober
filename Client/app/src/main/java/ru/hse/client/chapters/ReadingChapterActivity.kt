@@ -8,21 +8,29 @@ import android.util.Log
 import android.view.View
 import android.view.View.INVISIBLE
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.TextView
+import okhttp3.OkHttpClient
 import ru.hse.client.databinding.ActivityReadingChapterBinding
 import ru.hse.client.utility.DrawerBaseActivity
 import ru.hse.server.proto.EntitiesProto
 import ru.hse.client.utility.user
+import ru.hse.server.proto.EntitiesProto.ChapterList
 
 class ReadingChapterActivity : DrawerBaseActivity() {
     private lateinit var binding: ActivityReadingChapterBinding
     private lateinit var chapterTextView: TextView
     private lateinit var titleTextView: TextView
     private lateinit var startTestButton: Button
+    private lateinit var nextTestButton: ImageButton
+    private lateinit var prevTestButton: ImageButton
     private var currentTest: Int = 0
     private var chapter: EntitiesProto.ChapterModel? = null
     private var tests: EntitiesProto.TestList? = null
     private var text: String = ""
+    private var pos: Int = 0
+    private var chapters: ChapterList? = null
+    private var okHttpClient = OkHttpClient()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         user.setUserByLogin(this, user.getUserLogin())
@@ -33,6 +41,9 @@ class ReadingChapterActivity : DrawerBaseActivity() {
         chapterTextView = binding.contentTextView
         titleTextView = binding.titleTextView
         startTestButton = binding.startTestButton
+        nextTestButton = binding.nextButton
+        prevTestButton = binding.prevButton
+
         startTestButton.visibility = View.INVISIBLE
         chapterTextView.movementMethod = ScrollingMovementMethod()
         val bundle = intent.extras
@@ -41,6 +52,8 @@ class ReadingChapterActivity : DrawerBaseActivity() {
             Log.i("ReadingChapterActivity", "Got chapter")
             chapter = bundle.getSerializable("chapter") as EntitiesProto.ChapterModel
             text = bundle.getSerializable("text") as String
+            pos = bundle.getSerializable("position") as Int
+            chapters = bundle.getSerializable("chapters") as EntitiesProto.ChapterList
         }
 
         if (chapter != null) {
@@ -74,6 +87,59 @@ class ReadingChapterActivity : DrawerBaseActivity() {
                 startActivityForResult(intent, 100)
                 user.setUserByLogin(this, user.getUserLogin())
             }
+        }
+
+        prevTestButton.setOnClickListener {
+            if (pos <= 0) {
+                finish()
+                return@setOnClickListener
+            }
+            pos--
+            val chapterResponse = getChapter(chapters!!.chaptersList.get(pos), false, this, okHttpClient)
+
+            if (chapterResponse == null) {
+                Log.e("GroupActivity", "can't get chapter from sever")
+            } else {
+                Log.e("GroupActivity", chapterResponse.name)
+                val intent = Intent(this, ReadingChapterActivity::class.java)
+                val bundleNext = Bundle()
+                Log.e("Tests", chapterResponse.tests.testsList.size.toString())
+                bundleNext.putSerializable("chapter", chapterResponse)
+                val text = getChapterText(chapterResponse, false, this, okHttpClient)
+                bundleNext.putSerializable("text", text)
+                bundleNext.putSerializable("chapters", chapters)
+                bundleNext.putSerializable("position", pos)
+                intent.putExtras(bundleNext)
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                startActivity(intent)
+            }
+            finish()
+        }
+
+        nextTestButton.setOnClickListener {
+            pos++
+            if (pos >= chapters!!.chaptersList.size) {
+                finish()
+                return@setOnClickListener
+            }
+            val chapterResponse = getChapter(chapters!!.chaptersList.get(pos), false, this, okHttpClient)
+
+            if (chapterResponse == null) {
+                Log.e("GroupActivity", "can't get chapter from sever")
+            } else {
+                val intent = Intent(this, ReadingChapterActivity::class.java)
+                val bundleNext = Bundle()
+                Log.e("Tests", chapterResponse.tests.testsList.size.toString())
+                bundleNext.putSerializable("chapter", chapterResponse)
+                val text = getChapterText(chapterResponse, false, this, okHttpClient)
+                bundleNext.putSerializable("text", text)
+                bundleNext.putSerializable("chapters", chapters)
+                bundleNext.putSerializable("position", pos)
+                intent.putExtras(bundleNext)
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                startActivity(intent)
+            }
+            finish()
         }
 
         chapterTextView.viewTreeObserver.addOnScrollChangedListener {
