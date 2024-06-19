@@ -84,4 +84,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="person_name">Full name</string>
     <string name="scoreboard">Scoreboard</string>
+    <string name="test_name1">Test name</string>
+    <string name="_10_12">10/12</string>
+    <string name="group_chapter">group/chapter</string>
 </resources>
