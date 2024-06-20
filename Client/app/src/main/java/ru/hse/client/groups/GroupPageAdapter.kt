@@ -20,7 +20,7 @@ class GroupPageAdapter(
     private var mActivity = activity
 
     override fun getItemCount(): Int {
-        return 2
+        return 3
     }
 
     override fun createFragment(position: Int): Fragment {
@@ -29,8 +29,12 @@ class GroupPageAdapter(
                 GroupChaptersFragment(mActivity, mGroupModel)
             }
 
-            else -> {
+            1 -> {
                 GroupMembersFragment(mActivity, mGroupModel)
+            }
+
+            else -> {
+                GroupScoreboardFragment(mActivity, mGroupModel)
             }
         }
     }
