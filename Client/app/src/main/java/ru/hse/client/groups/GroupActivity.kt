@@ -6,6 +6,7 @@ import android.os.Handler
 import android.os.Looper
 import android.text.TextUtils
 import android.util.Log
+import android.view.View
 import android.widget.AdapterView
 import android.widget.Toast
 import androidx.viewpager.widget.ViewPager
@@ -45,7 +46,9 @@ class GroupActivity : DrawerBaseActivity() {
         group = enterGroup(group, false, this, okHttpClient)!!
 
         allocateActivityTitle(group.name.toString())
-
+        if (user.getId() != group.admin.id) {
+            binding.newChapterButton.visibility = View.INVISIBLE
+        }
         binding.newChapterButton.setOnClickListener {
             newChapterButtonPressed()
         }
