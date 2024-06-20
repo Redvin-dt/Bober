@@ -38,6 +38,7 @@ public class ProtoSerializer {
                 .setLogin(user.getUserLogin())
                 .setEmail(user.getUserEmail())
                 .setMetaInfo(user.getMetaInfo())
+                .setPassedTests(convertPassedTestsToProto(user.getPassedTests()))
                 .build();
     }
 

@@ -88,4 +88,6 @@
     <string name="_10_12">10/12</string>
     <string name="group_chapter">group/chapter</string>
     <string name="tests">Tests</string>
+    <string name="_10_0">10.0</string>
+    <string name="tests_solved_10">tests solved: 10</string>
 </resources>
