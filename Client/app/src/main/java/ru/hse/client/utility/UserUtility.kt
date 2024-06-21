@@ -10,6 +10,7 @@ import okio.ByteString
 import ru.hse.client.R
 import ru.hse.server.proto.EntitiesProto
 import ru.hse.server.proto.EntitiesProto.GroupModel
+import ru.hse.server.proto.EntitiesProto.PassedTestList
 import ru.hse.server.proto.EntitiesProto.UserModel
 import java.io.IOException
 import java.util.concurrent.CountDownLatch
@@ -92,6 +93,10 @@ class User {
             return "";
         }
         return user!!.metaInfo
+    }
+
+    fun getUserPassedTestList(): PassedTestList {
+        return user!!.passedTests
     }
 
     fun setUserByLogin(context: Context, login: String) {

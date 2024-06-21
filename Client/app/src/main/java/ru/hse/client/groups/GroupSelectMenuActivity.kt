@@ -157,7 +157,6 @@ class GroupSelectMenuActivity : DrawerBaseActivity() {
                 bundle.putString("groupName", group.name)
                 intent.putExtras(bundle)
                 startActivity(intent)
-                finish()
             } else {
                 val intent = Intent(this, GroupActivity::class.java)
                 val bundle = Bundle()
@@ -165,7 +164,6 @@ class GroupSelectMenuActivity : DrawerBaseActivity() {
                 intent.putExtras(bundle)
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 startActivity(intent)
-                finish()
             }
         }
     }

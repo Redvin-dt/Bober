@@ -51,7 +51,7 @@
                 app:layout_constraintBottom_toBottomOf="@id/list_img"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@id/list_img"
+                app:layout_constraintStart_toEndOf="@id/admin_name"
                 app:layout_constraintTop_toTopOf="@id/list_img"
                 />
 
@@ -64,7 +64,7 @@
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="@id/list_img"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/admin_icon"
+                app:layout_constraintStart_toEndOf="@id/list_img"
                 app:layout_constraintTop_toTopOf="@id/list_img"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintVertical_bias="0.5"
