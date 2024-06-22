@@ -130,7 +130,7 @@ class ChapterCreateActivity : DrawerBaseActivity() {
 
 
 
-    fun setChapterText(
+    private fun setChapterText(
         chapter: EntitiesProto.ChapterModel,
         text: String,
         writeErrorMessage: Boolean,

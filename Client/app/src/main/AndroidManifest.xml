@@ -116,6 +116,10 @@
                 android:name=".profile.PassedTestActivity"
                 android:exported="true" >
         </activity>
+        <activity
+                android:name=".profile.DeadlinesActivity"
+                android:exported="true" >
+        </activity>
     </application>
 
 </manifest>

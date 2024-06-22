@@ -47,6 +47,7 @@ public class ProtoSerializer {
                 .setId(chapter.getChapterId())
                 .setName(chapter.getChapterName())
                 .setMetaInfo(chapter.getMetaInfo())
+                .setTests(convertTestsToProto(chapter.getTests()))
                 .setDeadlineTs(chapter.getDeadlineTs())
                 .build();
     }

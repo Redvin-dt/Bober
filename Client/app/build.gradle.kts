@@ -129,5 +129,6 @@ dependencies {
     implementation("org.bouncycastle:bcpkix-jdk15to18:1.68")
     implementation("org.bouncycastle:bcprov-jdk15to18:1.68")
     runtimeOnly("org.jetbrains.kotlin:kotlin-reflect:1.3.10")
+    implementation("com.applandeo:material-calendar-view:1.9.2")
 }
 

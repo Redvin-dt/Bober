@@ -38,6 +38,34 @@ public class ChapterController {
         }
     }
 
+    @PostMapping(value = "/addTests", consumes = {MediaType.APPLICATION_PROTOBUF_VALUE, MediaType.APPLICATION_OCTET_STREAM_VALUE},
+            produces = {MediaType.APPLICATION_PROTOBUF_VALUE, MediaType.TEXT_PLAIN_VALUE})
+    public ResponseEntity addTestsToChapter(@RequestBody EntitiesProto.TestList tests, @RequestParam Long chapterId) {
+        try {
+            var savedChapter = chapterService.addTest(tests, chapterId);
+            logger.info("added test to chapter={}", chapterId);
+            return ResponseEntity.ok(savedChapter);
+        } catch (EntityNotFoundException e) {
+            logger.error("can not find models with required field", e);
+            return ResponseEntity.badRequest().body("error while creating chapter: " + e.getMessage());
+        } catch (InvalidProtocolBufferException e) {
+            logger.error("incorrect protobuf type", e);
+            return ResponseEntity.badRequest().body("error while creating chapter: " + e.getMessage());
+        }
+    }
+
+    @GetMapping(value = "/changeDeadline", produces = {MediaType.APPLICATION_PROTOBUF_VALUE, MediaType.TEXT_PLAIN_VALUE})
+    public ResponseEntity changeDeadlineChapter(@RequestParam Long deadlineTs, @RequestParam Long chapterId) {
+        try {
+            var savedChapter = chapterService.changeDeadline(deadlineTs, chapterId);
+            logger.info("changed deadline to chapter id={}", chapterId);
+            return ResponseEntity.ok(savedChapter);
+        } catch (EntityNotFoundException e) {
+            logger.error("can not find models with required field", e);
+            return ResponseEntity.badRequest().body("error while creating chapter: " + e.getMessage());
+        }
+    }
+
     @GetMapping(value = "/chapterById", produces = {MediaType.APPLICATION_PROTOBUF_VALUE, MediaType.TEXT_PLAIN_VALUE})
     public ResponseEntity getChapter(@RequestParam Long id) {
         try {

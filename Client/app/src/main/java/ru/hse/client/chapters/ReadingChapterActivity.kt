@@ -16,6 +16,7 @@ import ru.hse.client.utility.DrawerBaseActivity
 import ru.hse.server.proto.EntitiesProto
 import ru.hse.client.utility.user
 import ru.hse.server.proto.EntitiesProto.ChapterList
+import java.util.*
 
 class ReadingChapterActivity : DrawerBaseActivity() {
     private lateinit var binding: ActivityReadingChapterBinding
@@ -160,9 +161,15 @@ class ReadingChapterActivity : DrawerBaseActivity() {
         return isPassed
     }
 
+    private fun isDeadlineOver(timestamp: Long): Boolean {
+        val calendar = Calendar.getInstance()
+        val currentTimestamp = calendar.timeInMillis
+        return timestamp < currentTimestamp
+    }
+
     @SuppressLint("SetTextI18n")
     private fun changeReadableText() {
-        while (tests?.testsList?.size!! > currentTest && isPassedTest(tests!!.getTests(currentTest))) {
+        while ((chapter!!.deadlineTs != -1L && isDeadlineOver(chapter!!.deadlineTs)) || (tests?.testsList?.size!! > currentTest && isPassedTest(tests!!.getTests(currentTest)))) {
             currentTest++;
         }
         if (tests?.testsList?.size!! > currentTest) {
