@@ -90,4 +90,6 @@
     <string name="setdeadline">Set deadline for completion tests</string>
     <string name="sample_date">01–01–2000 23:59</string>
     <string name="deadline">Deadline: 01–01–2000 23:59</string>
+    <string name="_10_0">10.0</string>
+    <string name="tests_solved_10">tests solved: 10</string>
 </resources>
