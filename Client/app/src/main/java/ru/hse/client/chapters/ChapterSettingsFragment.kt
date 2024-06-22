@@ -52,16 +52,17 @@ class ChapterSettingsFragment() :
     }
 
     override fun onDateSet(view: DatePicker, year: Int, month: Int, day: Int) {
+
         Log.i("ChapterSettingsFragment", "onDateSet")
         selectedDate = if (day < 10) {
             "0$day-"
         } else {
             "$day-"
         }
-        selectedDate += if (month < 10) {
-            "0$month-$year"
+        selectedDate += if (month + 1 < 10) {
+            "0${month + 1}-$year"
         } else {
-            "$month-$year"
+            "${month + 1}-$year"
         }
         TimePickerFragment().show(childFragmentManager, "timePicker")
     }
