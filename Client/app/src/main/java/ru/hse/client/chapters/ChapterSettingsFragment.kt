@@ -110,8 +110,8 @@ class ChapterSettingsFragment() :
         calendar.set(Calendar.DAY_OF_MONTH, date.subSequence(0, 2).toString().toInt())
         calendar.set(Calendar.HOUR_OF_DAY, date.subSequence(11, 13).toString().toInt())
         calendar.set(Calendar.MINUTE, date.subSequence(15, date.length).toString().toInt())
-        calendar.set(Calendar.SECOND, 0)
-        calendar.set(Calendar.MILLISECOND, 0)
+        calendar.set(Calendar.SECOND, 59)
+        calendar.set(Calendar.MILLISECOND, 999)
 
         val timestamp = calendar.timeInMillis
         return timestamp
