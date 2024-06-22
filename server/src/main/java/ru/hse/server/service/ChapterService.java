@@ -79,6 +79,41 @@ public class ChapterService {
         return ProtoSerializer.getChapterInfo(chapter);
     }
 
+    public ChapterModel addTest(EntitiesProto.TestList tests, Long chapterId) throws EntityExistsException,
+            InvalidProtocolBufferException {
+        Optional<Chapter> chapter = chapterRepository.findById(chapterId);
+        if (chapter.isEmpty()) {
+            logger.error("chapter with id {} is empty", chapterId);
+            return null;
+        }
+
+        for (var test : tests.getTestsList()) {
+            Test chapterTest = getTest(test, chapter.get());
+            testRepository.save(chapterTest);
+        }
+
+        chapter = chapterRepository.findById(chapterId);
+        if (chapter.isEmpty()) {
+            logger.error("error while saving chapter with id {}", chapterId);
+            return null;
+        }
+
+        return ProtoSerializer.getChapterInfo(chapter.get());
+    }
+
+    public ChapterModel changeDeadline(Long deadlineTs, Long chapterId) throws EntityExistsException {
+        Optional<Chapter> chapter = chapterRepository.findById(chapterId);
+        if (chapter.isEmpty()) {
+            logger.error("chapter with id {} is empty", chapterId);
+            return null;
+        }
+
+        chapter.get().setDeadlineTs(deadlineTs);
+        chapterRepository.save(chapter.get());
+
+        return ProtoSerializer.getChapterInfo(chapter.get());
+    }
+
     private static Test getTest(EntitiesProto.TestModel test, Chapter chapter) throws InvalidProtocolBufferException {
         if (!test.hasName() || !test.hasPosition() || !test.hasQuestions()) {
             throw new InvalidProtocolBufferException("invalid protobuf test in chapter creation");

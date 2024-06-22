@@ -13,6 +13,7 @@ import androidx.core.content.ContextCompat
 import okhttp3.*
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okio.BufferedSink
 import okio.ByteString
 import okio.source
@@ -44,6 +45,133 @@ fun getChapter(
         Request.Builder()
             .url(urlChapterGet)
             .header("Authorization", "Bearer " + user.getUserToken())
+            .build()
+
+
+    var getChapterModel : EntitiesProto.ChapterModel? = null
+
+    val countDownLatch = CountDownLatch(1);
+    okHttpClient.newCall(requestForGetGroups).enqueue(object : Callback {
+        override fun onFailure(call: Call, e: IOException) {
+            Log.e("Error while getChapter", e.toString() + " " + e.message)
+            Handler(Looper.getMainLooper()).post {
+                Toast.makeText(
+                    activity,
+                    "Something wrong try again",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+
+            countDownLatch.countDown()
+        }
+
+        override fun onResponse(call: Call, response: Response) {
+            Log.i("Info", response.toString())
+            if (response.isSuccessful) {
+                val responseBody: ByteString? = response.body?.byteString()
+                getChapterModel = EntitiesProto.ChapterModel.parseFrom(responseBody?.toByteArray())
+            } else {
+                if (writeErrorMessage) {
+                    Handler(Looper.getMainLooper()).post {
+                        Toast.makeText(
+                            activity,
+                            "Check connection, try again",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            }
+
+            countDownLatch.countDown()
+        }
+    })
+
+    countDownLatch.await(10, TimeUnit.SECONDS)
+    return getChapterModel
+}
+
+fun changeChapterDeadline(
+    deadlineTs: Long,
+    chapter: EntitiesProto.ChapterModel,
+    writeErrorMessage: Boolean,
+    activity: Activity,
+    okHttpClient: OkHttpClient
+) : EntitiesProto.ChapterModel? {
+    val urlChapterGet : String = ("http://" + ContextCompat.getString(activity, R.string.IP) + "/chapters/changeDeadline").toHttpUrlOrNull()
+        ?.newBuilder()
+        ?.addQueryParameter("deadlineTs", deadlineTs.toString())
+        ?.addQueryParameter("chapterId", chapter.id.toString())
+        ?.build().toString()
+
+    val requestForGetGroups: Request =
+        Request.Builder()
+            .url(urlChapterGet)
+            .header("Authorization", "Bearer " + user.getUserToken())
+            .build()
+
+
+    var getChapterModel : EntitiesProto.ChapterModel? = null
+
+    val countDownLatch = CountDownLatch(1);
+    okHttpClient.newCall(requestForGetGroups).enqueue(object : Callback {
+        override fun onFailure(call: Call, e: IOException) {
+            Log.e("Error while getChapter", e.toString() + " " + e.message)
+            Handler(Looper.getMainLooper()).post {
+                Toast.makeText(
+                    activity,
+                    "Something wrong try again",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+
+            countDownLatch.countDown()
+        }
+
+        override fun onResponse(call: Call, response: Response) {
+            Log.i("Info", response.toString())
+            if (response.isSuccessful) {
+                val responseBody: ByteString? = response.body?.byteString()
+                getChapterModel = EntitiesProto.ChapterModel.parseFrom(responseBody?.toByteArray())
+            } else {
+                if (writeErrorMessage) {
+                    Handler(Looper.getMainLooper()).post {
+                        Toast.makeText(
+                            activity,
+                            "Check connection, try again",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            }
+
+            countDownLatch.countDown()
+        }
+    })
+
+    countDownLatch.await(10, TimeUnit.SECONDS)
+    return getChapterModel
+}
+
+fun addTestsToChapter(
+    tests: EntitiesProto.TestList,
+    chapter: EntitiesProto.ChapterModel,
+    writeErrorMessage: Boolean,
+    activity: Activity,
+    okHttpClient: OkHttpClient
+) : EntitiesProto.ChapterModel? {
+    val urlChapterGet : String = ("http://" + ContextCompat.getString(activity, R.string.IP) + "/chapters/addTests").toHttpUrlOrNull()
+        ?.newBuilder()
+        ?.addQueryParameter("chapterId", chapter.id.toString())
+        ?.build().toString()
+
+    val requestBody: RequestBody =
+        RequestBody.create("application/x-protobuf".toMediaTypeOrNull(), tests.toByteArray())
+
+    val requestForGetGroups: Request =
+        Request.Builder()
+            .url(urlChapterGet)
+            .header("Authorization", "Bearer " + user.getUserToken())
+            .post(requestBody)
             .build()
 
 

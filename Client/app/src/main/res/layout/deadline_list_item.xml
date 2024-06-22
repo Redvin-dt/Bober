@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="12sp"
+        android:layout_marginStart="12sp"
+        android:layout_marginVertical="10sp"
+        android:layout_marginHorizontal="10sp"
+        app:cardCornerRadius="25sp"
+        app:cardElevation="13sp"
+        android:backgroundTint="@color/white">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <com.google.android.material.imageview.ShapeableImageView
+                android:layout_width="45sp"
+                android:layout_height="45sp"
+                android:id="@+id/list_img"
+                android:scaleType="centerCrop"
+                android:padding="2dp"
+                android:src="@drawable/deadline_icon"
+                android:layout_marginTop="4sp"
+                android:layout_marginStart="8sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintVertical_bias="0.0"
+                app:shapeAppearanceOverlay="@style/roundImage"
+        />
+
+        <TextView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/chapter"
+                android:text="@string/chapter"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="@id/list_img"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/list_img"
+                app:layout_constraintTop_toTopOf="@id/list_img"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintVertical_bias="0.0"
+                android:layout_marginStart="5sp"
+        />
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                app:layout_constraintVertical_bias="0.0"
+                android:id="@+id/deadline"
+                android:text="DD-MM-YYYY HH:MM"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/list_img"
+                android:layout_marginEnd="32dp"/>
+        <TextView
+                android:layout_width="100sp"
+                android:layout_height="wrap_content"
+                android:id="@+id/group"
+                android:text="@string/group"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                app:layout_constraintTop_toBottomOf="@id/chapter"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/list_img"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintVertical_bias="1.0"
+                android:layout_marginStart="5sp"
+        />
+        <TextView
+                android:layout_width="100sp"
+                android:layout_height="wrap_content"
+                android:id="@+id/tests_passed"
+                android:text="10 tests left"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                app:layout_constraintTop_toBottomOf="@id/deadline"
+                app:layout_constraintStart_toStartOf="@id/deadline"
+        />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

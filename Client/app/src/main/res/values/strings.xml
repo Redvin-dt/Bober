@@ -9,7 +9,7 @@
     <string name="email">"Email"</string>
     <string name="registration_text">Register your account</string>
     <string name="password_confirm">Confirm password</string>
-    <string name="IP">192.168.0.103:8080</string>
+    <string name="IP">192.168.0.108:8080</string>
     <string name="log_in_text">Log in to your account</string>
     <string name="forgot_password">Forgot password?</string>
     <string name="have_an_account">Have an account?</string>
@@ -92,4 +92,6 @@
     <string name="deadline">Deadline: 01–01–2000 23:59</string>
     <string name="_10_0">10.0</string>
     <string name="tests_solved_10">tests solved: 10</string>
+    <string name="group">Group</string>
+    <string name="chapter">Chapter</string>
 </resources>

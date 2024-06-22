@@ -12,7 +12,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
 import ru.hse.client.R
 import ru.hse.client.auth.SingletonController
-import ru.hse.client.groups.DeadlinesActivity
+import ru.hse.client.profile.DeadlinesActivity
 import ru.hse.client.groups.GroupSelectMenuActivity
 import ru.hse.client.profile.ProfileActivity
 

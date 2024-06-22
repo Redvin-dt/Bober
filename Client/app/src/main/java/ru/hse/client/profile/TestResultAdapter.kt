@@ -1,4 +1,4 @@
-package ru.hse.client.groups
+package ru.hse.client.profile
 
 import android.content.Context
 import android.text.TextUtils

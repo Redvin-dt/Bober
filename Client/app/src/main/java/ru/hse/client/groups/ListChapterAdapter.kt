@@ -52,7 +52,7 @@ class ListChapterAdapter(context: Context, dataArrayList: ArrayList<ListChapterD
         if (listData.passedTests == listData.tests) {
             listIcon.setImageResource(R.drawable.chapter_done)
             listIcon.setBackgroundResource(R.drawable.border_green)
-        } else if (listData.timestamp != -1L && !isDeadlineOver(listData.timestamp)) {
+        } else if (listData.timestamp == -1L || !isDeadlineOver(listData.timestamp)) {
             listIcon.setImageResource(R.drawable.chapter_done)
             listIcon.setBackgroundResource(R.drawable.dotted_border_green)
         } else {
