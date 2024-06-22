@@ -1,8 +1,10 @@
 package ru.hse.client.groups
 
+import android.media.MediaTimestamp
+
 class ListChapterData (
-    var number: Int,
     var name: String,
     var tests: Int,
-    var passedTests: Int
+    var passedTests: Int,
+    var timestamp: Long
 )

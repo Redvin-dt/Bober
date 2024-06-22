@@ -80,10 +80,10 @@ class  GroupChaptersFragment(activity: GroupActivity, groupModel: GroupModel) : 
             }
             dataArrayList.add(
                 ListChapterData(
-                    numOfChapter,
                     chapter.name.toString(),
                     chapter.tests.testsList.size,
-                    numberOfPassedTestForCurrentChapter
+                    numberOfPassedTestForCurrentChapter,
+                    chapter.deadlineTs
                 )
             )
         }

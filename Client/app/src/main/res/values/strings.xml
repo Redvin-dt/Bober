@@ -79,7 +79,6 @@
     <string name="tab_text_2">Tab 2</string>
     <string name="chapters1">Chapters</string>
     <string name="members">Members</string>
-    <string name="nearest_deadline">Next deadline: 01.01 23:59</string>
     <string name="person_name">Full name</string>
     <string name="scoreboard">Scoreboard</string>
     <string name="test_name1">Test name</string>
@@ -89,5 +88,6 @@
     <string name="settings">Settings</string>
     <string name="test_creation">Tests creation</string>
     <string name="setdeadline">Set deadline for completion tests</string>
-    <string name="sample_date">01.01.2000 23:59</string>
+    <string name="sample_date">01–01–2000 23:59</string>
+    <string name="deadline">Deadline: 01–01–2000 23:59</string>
 </resources>
