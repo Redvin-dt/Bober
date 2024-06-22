@@ -63,48 +63,41 @@
         android:singleLine="true"
         />
 
-
-    <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/preview"
-        android:layout_width="350sp"
-        android:layout_height="0sp"
-        android:textColor="@color/black"
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tab_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/chapter_name"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="5sp"
-        android:layout_marginBottom="65sp"
-        android:background="@drawable/bordered_image"
+        app:layout_constraintVertical_bias="0"
+        app:tabIndicatorColor="@color/lavanda"
+        app:tabTextColor="@color/black"
+        app:tabSelectedTextColor="@color/lavanda"
+        android:background="@color/white">
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/test_creation" />
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/settings" />
+
+    </com.google.android.material.tabs.TabLayout>
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="0sp"
+        app:layout_constraintTop_toBottomOf="@id/tab_layout"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         />
 
-    <ImageButton
-            android:id="@+id/help_button"
-            android:src="@drawable/question_mark"
-            android:layout_width="45sp"
-            android:layout_height="45sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="@id/preview"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/preview"
-            app:layout_constraintHorizontal_bias="1"
-            app:layout_constraintVertical_bias="0.5"
-            android:background="@drawable/roundcorner"
-            />
-
-    <ImageButton
-            android:id="@+id/add_test"
-            android:src="@drawable/baseline_add_24"
-            android:layout_width="50sp"
-            android:layout_height="50sp"
-            app:layout_constraintStart_toEndOf="@id/choose_file_button"
-            app:layout_constraintEnd_toStartOf="@id/upload_file_button"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/preview"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintVertical_bias="0.5"
-            android:background="@drawable/roundcorner"
-            android:backgroundTint="@color/lavanda"
-    />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

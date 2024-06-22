@@ -23,7 +23,7 @@ import ru.hse.server.proto.EntitiesProto
 import ru.hse.server.proto.EntitiesProto.GroupModel
 import ru.hse.client.chapters.getChapter
 
-class   GroupChaptersFragment(activity: GroupActivity, groupModel: GroupModel) : Fragment(R.layout.fragment_group_chapters) {
+class  GroupChaptersFragment(activity: GroupActivity, groupModel: GroupModel) : Fragment(R.layout.fragment_group_chapters) {
     private lateinit var binding: FragmentGroupChaptersBinding
     private var mGroupModel = groupModel
     private var mActivity = activity

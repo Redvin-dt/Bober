@@ -13,10 +13,10 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayout
 import okhttp3.OkHttpClient
+import ru.hse.client.chapters.ChapterCreateActivity
 import ru.hse.client.databinding.ActivityGroupBinding
 import ru.hse.client.utility.DrawerBaseActivity
 import ru.hse.server.proto.EntitiesProto.GroupModel
-import ru.hse.client.chapters.ChapterUploadActivity
 import ru.hse.client.chapters.ReadingChapterActivity
 import ru.hse.client.chapters.getChapter
 import ru.hse.client.chapters.getChapterText
@@ -72,7 +72,7 @@ class GroupActivity : DrawerBaseActivity() {
     }
 
     private fun newChapterButtonPressed() {
-        val intent = Intent(this@GroupActivity, ChapterUploadActivity::class.java)
+        val intent = Intent(this@GroupActivity, ChapterCreateActivity::class.java)
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         intent.putExtra("group info", group.toByteArray())
         startActivityForResult(intent, 100)
