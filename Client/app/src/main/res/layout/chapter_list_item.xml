@@ -34,21 +34,6 @@
             />
 
         <TextView
-                android:id="@+id/list_number"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toEndOf="@id/chapter_img"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintVertical_bias="0.5"
-                android:text="@string/num"
-                android:textSize="15sp"
-                android:textColor="@color/dark_gray_chapter"
-        />
-
-        <TextView
                 android:layout_width="150sp"
                 android:layout_height="wrap_content"
                 android:id="@+id/list_name"
@@ -57,9 +42,9 @@
                 android:textSize="15sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/list_number"
+                app:layout_constraintStart_toEndOf="@id/chapter_img"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintHorizontal_bias="0.05"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintVertical_bias="0.5"
         />
 
@@ -83,10 +68,10 @@
             android:id="@+id/nearest_deadline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/nearest_deadline"
+            android:text="@string/deadline"
             android:textSize="9sp"
-            app:layout_constraintTop_toBottomOf="@id/list_number"
-            app:layout_constraintStart_toStartOf="@id/list_number"
+            app:layout_constraintTop_toBottomOf="@id/list_name"
+            app:layout_constraintStart_toStartOf="@id/list_name"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -105,10 +90,10 @@
             android:id="@+id/progress_bar"
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="match_parent"
-            android:layout_height="2dp"
+            android:layout_height="3dp"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
-            android:background="@color/green" />
+            android:background="@color/gray" />
 
     </LinearLayout>
 

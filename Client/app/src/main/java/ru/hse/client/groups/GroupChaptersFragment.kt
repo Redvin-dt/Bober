@@ -18,11 +18,12 @@ import ru.hse.client.chapters.ReadingChapterActivity
 import ru.hse.client.chapters.getChapter
 import ru.hse.client.chapters.getChapterText
 import ru.hse.client.databinding.FragmentGroupChaptersBinding
+import ru.hse.client.utility.user
 import ru.hse.server.proto.EntitiesProto
 import ru.hse.server.proto.EntitiesProto.GroupModel
+import ru.hse.client.chapters.getChapter
 
-
-class   GroupChaptersFragment(activity: GroupActivity, groupModel: GroupModel) : Fragment(R.layout.fragment_group_chapters) {
+class  GroupChaptersFragment(activity: GroupActivity, groupModel: GroupModel) : Fragment(R.layout.fragment_group_chapters) {
     private lateinit var binding: FragmentGroupChaptersBinding
     private var mGroupModel = groupModel
     private var mActivity = activity
@@ -58,18 +59,31 @@ class   GroupChaptersFragment(activity: GroupActivity, groupModel: GroupModel) :
         val data: MutableList<Map<String, String>> = mutableListOf()
 
         dataArrayList.clear()
-        for ((numOfChapter, chapter) in chapters.withIndex()) {
+        for ((numOfChapter, fChapter) in chapters.withIndex()) {
+            val chapter = getChapter(fChapter, false, mActivity, okHttpClient)!!
             data.add(
                 mapOf(
                     KEY_TITLE to chapter.name,
                     KEY_NUMBER to numOfChapter.toString(),
                 )
             )
+            var numberOfPassedTestForCurrentChapter = 0
+            val passedTestList = user.getUserPassedTestList().passedTestsList
+            val idsOfPassedTestList = ArrayList<Long>()
+            for (test in passedTestList) {
+                idsOfPassedTestList.add(test.id)
+            }
+            for (test in chapter.tests.testsList) {
+                if (idsOfPassedTestList.contains(test.id)) {
+                    numberOfPassedTestForCurrentChapter++
+                }
+            }
             dataArrayList.add(
                 ListChapterData(
-                    numOfChapter,
                     chapter.name.toString(),
                     chapter.tests.testsList.size,
+                    numberOfPassedTestForCurrentChapter,
+                    chapter.deadlineTs
                 )
             )
         }
@@ -114,7 +128,6 @@ class   GroupChaptersFragment(activity: GroupActivity, groupModel: GroupModel) :
                 }
             }
     }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

@@ -9,7 +9,7 @@
     <string name="email">"Email"</string>
     <string name="registration_text">Register your account</string>
     <string name="password_confirm">Confirm password</string>
-    <string name="IP">192.168.0.108:8080</string>
+    <string name="IP">192.168.0.103:8080</string>
     <string name="log_in_text">Log in to your account</string>
     <string name="forgot_password">Forgot password?</string>
     <string name="have_an_account">Have an account?</string>
@@ -79,15 +79,17 @@
     <string name="tab_text_2">Tab 2</string>
     <string name="chapters1">Chapters</string>
     <string name="members">Members</string>
-    <string name="nearest_deadline">Next deadline: 01.01 23:59</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="person_name">Full name</string>
     <string name="scoreboard">Scoreboard</string>
     <string name="test_name1">Test name</string>
     <string name="_10_12">10/12</string>
     <string name="group_chapter">group/chapter</string>
     <string name="tests">Tests</string>
+    <string name="settings">Settings</string>
+    <string name="test_creation">Tests creation</string>
+    <string name="setdeadline">Set deadline for completion tests</string>
+    <string name="sample_date">01–01–2000 23:59</string>
+    <string name="deadline">Deadline: 01–01–2000 23:59</string>
     <string name="_10_0">10.0</string>
     <string name="tests_solved_10">tests solved: 10</string>
 </resources>
