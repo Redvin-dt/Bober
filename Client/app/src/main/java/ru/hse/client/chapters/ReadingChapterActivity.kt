@@ -169,8 +169,8 @@ class ReadingChapterActivity : DrawerBaseActivity() {
 
     @SuppressLint("SetTextI18n")
     private fun changeReadableText() {
-        while ((chapter!!.deadlineTs != -1L && isDeadlineOver(chapter!!.deadlineTs)) || (tests?.testsList?.size!! > currentTest && isPassedTest(tests!!.getTests(currentTest)))) {
-            currentTest++;
+        if (chapter!!.deadlineTs != -1L && isDeadlineOver(chapter!!.deadlineTs)) {
+            currentTest = tests?.testsList?.size!!
         }
         if (tests?.testsList?.size!! > currentTest) {
             startTestButton.visibility = View.INVISIBLE
