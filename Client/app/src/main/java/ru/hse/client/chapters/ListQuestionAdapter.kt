@@ -12,6 +12,7 @@ import ru.hse.client.R
 
 class ListQuestionAdapter(context: Context, dataArrayList: ArrayList<ListQuestionData?>?) :
     ArrayAdapter<ListQuestionData?>(context, R.layout.answer_test_list_item, dataArrayList!!) {
+    private val itemsPadding = 20F
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
 
         var view = convertView
@@ -30,6 +31,8 @@ class ListQuestionAdapter(context: Context, dataArrayList: ArrayList<ListQuestio
         listCheckBox.setOnCheckedChangeListener { _, isChecked ->
             onCheckBoxCheckedListener?.onCheckBoxChecked(position, isChecked)
         }
+
+        view.translationY = itemsPadding
 
         return view
     }

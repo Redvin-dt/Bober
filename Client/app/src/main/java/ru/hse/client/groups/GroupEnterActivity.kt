@@ -29,7 +29,7 @@ class GroupEnterActivity : DrawerBaseActivity() {
         binding = ActivityGroupEnterBinding.inflate(layoutInflater)
 
         setContentView(binding.root)
-        allocateActivityTitle("GroupsEnter")
+        allocateActivityTitle("Group enter")
 
         val bundle = intent.extras
         val groupId : Long?

@@ -3,21 +3,25 @@
 
     <group android:checkableBehavior="single">
 
-        <item android:id="@+id/nav_profile"
+        <item
+            android:id="@+id/nav_profile"
             android:icon="@drawable/person_icon"
             android:title="@string/menu_profile" />
 
-        <item android:id="@+id/nav_groups"
+        <item
+            android:id="@+id/nav_groups"
             android:icon="@drawable/group_icon"
             android:title="@string/menu_groups" />
 
-        <item android:id="@+id/nav_deadilnes"
+        <item
+            android:id="@+id/nav_deadilnes"
             android:icon="@drawable/deadline_icon"
             android:title="@string/menu_deadlines" />
 
-        <item android:id="@+id/nav_log_out"
-              android:icon="@drawable/logout_icon"
-              android:title="@string/log_out" />
+        <item
+            android:id="@+id/nav_log_out"
+            android:icon="@drawable/logout_icon"
+            android:title="@string/log_out" />
 
     </group>
 

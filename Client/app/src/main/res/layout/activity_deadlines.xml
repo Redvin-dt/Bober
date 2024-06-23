@@ -14,7 +14,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:headerColor="@color/cyan"
+            app:headerColor="@color/light_gray"
             app:highlightedDaysLabelsColor="@color/red"
     />
 
@@ -23,7 +23,6 @@
             android:id="@+id/deadline_list"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="12sp"
             android:scrollbars="vertical"
             tools:listitem="@layout/deadline_list_item"
             app:layout_constraintTop_toBottomOf="@id/calendar"

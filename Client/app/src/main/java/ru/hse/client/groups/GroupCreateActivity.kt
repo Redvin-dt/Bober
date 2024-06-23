@@ -13,9 +13,10 @@ import okhttp3.OkHttpClient
 import ru.hse.client.R
 import ru.hse.client.databinding.ActivityGroupCreateBinding
 import ru.hse.client.entry.*
+import ru.hse.client.utility.DrawerBaseActivity
 
 
-class GroupCreateActivity : AppCompatActivity() {
+class GroupCreateActivity : DrawerBaseActivity() {
 
     private lateinit var binding: ActivityGroupCreateBinding
     private val context = this@GroupCreateActivity
@@ -25,6 +26,7 @@ class GroupCreateActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityGroupCreateBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        allocateActivityTitle("Group create")
 
         val nameEditText: TextInputEditText = binding.name
         val nameLayout: TextInputLayout = binding.nameBox

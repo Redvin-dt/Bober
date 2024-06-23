@@ -4,6 +4,7 @@ import android.content.Intent
 import android.view.MenuItem
 import android.view.View
 import android.widget.FrameLayout
+import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -31,10 +32,15 @@ open class DrawerBaseActivity: AppCompatActivity(), NavigationView.OnNavigationI
 
         val navigationView: NavigationView = drawerLayout.findViewById(R.id.nav_view)
         navigationView.setNavigationItemSelectedListener(this)
-
+        val header = navigationView.getHeaderView(0)
+        val nameTextView = header.findViewById<TextView>(R.id.name)
+        nameTextView.text = user.getUserLogin()
+        val emailTextView = header.findViewById<TextView>(R.id.email)
+        emailTextView.text = user.getUserEmail()
         val toggle: ActionBarDrawerToggle = ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.menu_drawer_open, R.string.menu_drawer_close)
         drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
+
 
     }
 

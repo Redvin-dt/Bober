@@ -39,12 +39,6 @@ class DeadlinesActivity: DrawerBaseActivity() {
         calendarView.setOnCalendarDayClickListener(object : OnCalendarDayClickListener {
             override fun onClick(calendarDay: CalendarDay) {
                 val clickedDayCalendar = calendarDay.calendar
-                Log.e("SECOND", "KEK")
-                Log.e("SECOND", clickedDayCalendar.get(Calendar.YEAR).toString())
-
-                Log.e("SECOND", clickedDayCalendar.get(Calendar.MONTH).toString())
-
-                Log.e("SECOND", clickedDayCalendar.get(Calendar.DAY_OF_MONTH).toString())
                 clickedDayCalendar.set(Calendar.HOUR_OF_DAY, 0)
                 clickedDayCalendar.set(Calendar.MINUTE, 0)
                 clickedDayCalendar.set(Calendar.SECOND, 0)
@@ -152,7 +146,7 @@ class DeadlinesActivity: DrawerBaseActivity() {
                         DeadlineData(
                             chapter.name,
                             fullGroup.name,
-                            (chapter.tests.testsList.size - countSolvedTests(chapter.id)).toString() + " remaining",
+                            (chapter.tests.testsList.size - countSolvedTests(chapter.id)).toString() + " test(s) remaining",
                             getTimeFromTimestamp(chapter.deadlineTs)
                         )
                     )
