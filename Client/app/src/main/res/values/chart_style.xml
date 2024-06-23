@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- <resources>
+    <color name="chart_color">#ff5500</color>
+
+    <style name="ChartColumnStyle">
+        <item name="color">@color/chart_color</item>
+        <item name="thickness">8sp</item>
+    </style>
+
+    <style name="ChartColumnChartStyle">
+        <item name="column1">@style/ChartColumnStyle</item>
+    </style>
+</resources>
+-->
+
+<resources>
+    <color name="chart_color_1">#ffbb00</color>
+    <color name="chart_color_2">#9db591</color>
+
+    <style name="ChartAxisStyle">
+        <item name="showTitle">true</item>
+    </style>
+
+    <style name="ChartAxisTitleStyle">
+        <item name="android:paddingStart">8dp</item>
+        <item name="android:paddingTop">2dp</item>
+        <item name="android:paddingEnd">8dp</item>
+        <item name="android:paddingBottom">2dp</item>
+        <item name="typeface">monospace</item>
+    </style>
+
+    <style name="ChartAxisTitleBackgroundShapeStyle">
+        <item name="cornerSize">100%</item>
+        <item name="cornerTreatment">rounded</item>
+    </style>
+
+    <style name="ChartAxisTitleBackgroundStyle">
+        <item name="shapeStyle">@style/ChartAxisTitleBackgroundShapeStyle</item>
+    </style>
+
+    <style name="ChartBottomAxisTitleBackgroundStyle" parent="ChartAxisTitleBackgroundStyle">
+        <item name="color">@color/chart_color_2</item>
+    </style>
+
+    <style name="ChartBottomAxisTitleStyle" parent="ChartAxisTitleStyle">
+        <item name="labelColor">@android:color/black</item>
+        <item name="backgroundStyle">@style/ChartBottomAxisTitleBackgroundStyle</item>
+        <item name="marginTop">4dp</item>
+    </style>
+
+    <style name="ChartColumnStyle">
+        <item name="color">@color/chart_color_1</item>
+        <item name="thickness">8sp</item>
+    </style>
+
+    <style name="ChartStartAxisTitleBackgroundStyle" parent="ChartAxisTitleBackgroundStyle">
+        <item name="color">@color/chart_color_1</item>
+    </style>
+
+    <style name="ChartStartAxisTitleStyle" parent="ChartAxisTitleStyle">
+        <item name="labelColor">@android:color/black</item>
+        <item name="backgroundStyle">@style/ChartStartAxisTitleBackgroundStyle</item>
+        <item name="marginEnd">4sp</item>
+    </style>
+
+    <style name="ChartBottomAxisStyle" parent="ChartAxisStyle">
+        <item name="titleStyle">@style/ChartBottomAxisTitleStyle</item>
+        <item name="title">@string/x_axis_group</item>
+    </style>
+
+    <style name="ChartColumnChartStyle">
+        <item name="column1">@style/ChartColumnStyle</item>
+    </style>
+
+    <style name="ChartStartAxisStyle" parent="ChartAxisStyle">
+        <item name="showGuideline">true</item>
+        <item name="verticalAxisHorizontalLabelPosition">outside</item>
+        <item name="titleStyle">@style/ChartStartAxisTitleStyle</item>
+        <item name="title">@string/y_axis_percent</item>
+    </style>
+
+    <string name="y_axis_percent">percent</string>
+    <string name="x_axis_group">groups</string>
+</resources>

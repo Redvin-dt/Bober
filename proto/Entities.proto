@@ -88,3 +88,27 @@ message UserModel {
   optional GroupList invitations = 9;
   optional PassedTestList passedTests = 10;
 }
+
+message GroupTestPercent {
+    string groupName = 1;
+    int64 testPercent = 2;
+}
+
+message DateTestCount {
+    string date = 1;
+    int64 testCount = 2;
+}
+
+message GroupTestPercentList {
+    repeated GroupTestPercent groupTestPercent = 1;
+}
+
+message DateTestCountList {
+    repeated DateTestCount dateTestCount = 1;
+}
+
+message UserStatistic {
+    optional GroupTestPercentList groupTestPercentList = 1;
+    optional DateTestCountList dateTestCountList = 2;
+}
+

@@ -16,10 +16,17 @@ import ru.hse.server.proto.EntitiesProto.GroupList;
 import ru.hse.server.proto.EntitiesProto.UserList;
 import ru.hse.server.proto.EntitiesProto.ChapterList;
 import ru.hse.server.proto.EntitiesProto.PassedTestModel;
+import ru.hse.server.proto.EntitiesProto.UserStatistic;
+import ru.hse.server.proto.EntitiesProto.GroupTestPercent;
+import ru.hse.server.proto.EntitiesProto.GroupTestPercentList;
+import ru.hse.server.proto.EntitiesProto.DateTestCount;
+import ru.hse.server.proto.EntitiesProto.DateTestCountList;
+import ru.hse.server.service.StatisticService;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class ProtoSerializer {
@@ -182,5 +189,41 @@ public class ProtoSerializer {
                 .setTests(convertTestsToProto(chapter.getTests()))
                 .setDeadlineTs(chapter.getDeadlineTs())
                 .build();
+    }
+
+    static public GroupTestPercentList getGroupPercentListFromData(Map<String, StatisticService.TestAnswers> data) {
+        List<GroupTestPercent> groupTestPercent = new ArrayList<>();
+        for (var item : data.entrySet()) {
+            groupTestPercent.add(
+                    GroupTestPercent.newBuilder()
+                            .setGroupName(item.getKey())
+                            .setTestPercent(item.getValue().getTestPercent())
+                            .build()
+            );
+        }
+
+        return GroupTestPercentList.newBuilder().addAllGroupTestPercent(groupTestPercent).build();
+    }
+
+    static public DateTestCountList getDateTestCountList(Map<String, Integer> data) {
+        List<DateTestCount> dateTestCount = new ArrayList<>();
+        for (var item : data.entrySet()) {
+            dateTestCount.add(
+                    DateTestCount.newBuilder()
+                            .setDate(item.getKey())
+                            .setTestCount(item.getValue())
+                            .build()
+            );
+        }
+
+        return DateTestCountList.newBuilder().addAllDateTestCount(dateTestCount).build();
+    }
+
+    static public UserStatistic getProtoFromStatisticData(Map<String, StatisticService.TestAnswers> data) {
+        return UserStatistic.newBuilder().setGroupTestPercentList(getGroupPercentListFromData(data)).build();
+    }
+
+    static public UserStatistic getProtoFromDateStatisticData(Map<String, Integer> data) {
+        return UserStatistic.newBuilder().setDateTestCountList(getDateTestCountList(data)).build();
     }
 }

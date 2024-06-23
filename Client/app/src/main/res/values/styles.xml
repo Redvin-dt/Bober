@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+
     <style name="TextInputLayoutStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="android:layout_width">230sp</item>
         <item name="android:layout_height">60sp</item>
@@ -47,7 +49,7 @@
         <item name="android:layout_marginRight">10dp</item>
         <item name="android:background">@color/green</item>
     </style>
-    
+
     <style name="roundImage">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item>

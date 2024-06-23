@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:background="@color/white"
+             app:cardElevation="20sp">
+
+    <com.patrykandpatrick.vico.views.chart.ChartView
+            android:id="@+id/chart_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:padding="15sp"
+            app:horizontalLayout="fullWidth"
+            app:endContentPadding="16sp"
+            app:startContentPadding="16sp"
+            app:showBottomAxis="true"
+            app:showStartAxis="true"
+            app:chart="column"
+            app:columnChartStyle="@style/ChartColumnChartStyle"
+            app:startAxisStyle="@style/ChartStartAxisStyle"
+            app:bottomAxisStyle="@style/ChartBottomAxisStyle"
+    />
+</androidx.cardview.widget.CardView>

@@ -1,9 +1,11 @@
 package ru.hse.server.service;
 
 import ru.hse.database.dao.DaoPassedTest;
+import ru.hse.database.entities.Chapter;
 import ru.hse.database.entities.PassedTest;
 import ru.hse.server.proto.EntitiesProto.UserModel;
 import ru.hse.database.entities.User;
+import ru.hse.server.repository.ChapterRepository;
 import ru.hse.server.repository.UserRepository;
 import ru.hse.server.utils.ProtoSerializer;
 
@@ -20,11 +22,13 @@ import java.util.Optional;
 @Service
 public class UserService {
     private final UserRepository userRepository;
+    private final ChapterRepository chapterRepository;
     private final PasswordEncoderService passwordEncoderService;
 
-    UserService(@Qualifier("userDatabaseRepository") UserRepository userRepository, PasswordEncoderService passwordEncoderService) {
+    UserService(@Qualifier("userDatabaseRepository") UserRepository userRepository, PasswordEncoderService passwordEncoderService, ChapterRepository chapterRepository) {
         this.userRepository = userRepository;
         this.passwordEncoderService = passwordEncoderService;
+        this.chapterRepository = chapterRepository;
     }
 
     public UserModel registration(UserModel userInfo) throws EntityExistsException,
@@ -81,7 +85,10 @@ public class UserService {
         if (userOptional.isEmpty()) {
             throw new EntityNotFoundException("user with that id not found");
         }
-        PassedTest passedTest = new PassedTest(testName, chapterName, testId, chapterId, userOptional.get(), rightAns, questNum);
+
+        var chapter = chapterRepository.findById(chapterId).orElseThrow(() -> new EntityExistsException("chapter with that id not found"));
+
+        PassedTest passedTest = new PassedTest(testName, chapterName, testId, chapterId, chapter.getGroupHost().getGroupId(), userOptional.get(), rightAns, questNum);
         DaoPassedTest.createOrUpdatePassedTest(passedTest);
     }
 }

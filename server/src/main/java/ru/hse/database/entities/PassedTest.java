@@ -35,6 +35,9 @@ public class PassedTest {
     @Column(name = "chapter_id")
     private Long chapterId;
 
+    @Column(name = "group_id")
+    private Long groupId;
+
     @Column(name = "right_answers")
     private Long rightAnswers;
 
@@ -50,11 +53,13 @@ public class PassedTest {
     @JoinColumn(name = "user_host")
     private User userHost;
 
-    public PassedTest(String testName, String chapterName, Long testId, Long chapterId, User userHost, Long rightAnswers, Long questionsNumber) {
+    public PassedTest(String testName, String chapterName, Long testId, Long chapterId, Long groupId, User userHost,
+                      Long rightAnswers, Long questionsNumber) {
         this.testName = testName;
         this.chapterName = chapterName;
         this.testId = testId;
         this.chapterId = chapterId;
+        this.groupId = groupId;
         this.userHost = userHost;
         this.rightAnswers = rightAnswers;
         this.questionsNumber = questionsNumber;

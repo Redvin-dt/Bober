@@ -128,6 +128,8 @@ dependencies {
     implementation("com.google.protobuf:protobuf-kotlin:3.25.3")
     implementation("org.bouncycastle:bcpkix-jdk15to18:1.68")
     implementation("org.bouncycastle:bcprov-jdk15to18:1.68")
+    implementation("com.patrykandpatrick.vico:core:1.14.0")
+    implementation("com.patrykandpatrick.vico:views:1.14.0")
     runtimeOnly("org.jetbrains.kotlin:kotlin-reflect:1.3.10")
     implementation("com.applandeo:material-calendar-view:1.9.2")
 }

@@ -11,9 +11,11 @@ import ru.hse.client.R
 import ru.hse.server.proto.EntitiesProto
 import ru.hse.server.proto.EntitiesProto.GroupModel
 import ru.hse.server.proto.EntitiesProto.PassedTestList
+import ru.hse.server.proto.EntitiesProto.PassedTestModel
 import ru.hse.server.proto.EntitiesProto.UserModel
 import java.io.IOException
 import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
 
 class User {
     private var user: UserModel? = null
@@ -132,7 +134,7 @@ class User {
                 countDownLatch.countDown()
             }
         })
-        countDownLatch.await()
+        countDownLatch.await(10, TimeUnit.SECONDS)
     }
 
     fun setUserByEmail(context: Context, email: String, token: String) {
@@ -251,7 +253,7 @@ class User {
         setUserByLogin(activity, getUserLogin())
     }
 
-    fun isUserHasInvites() : Boolean {
+    fun hasInvites() : Boolean {
         return user!!.hasInvitations()
     }
 
@@ -259,8 +261,16 @@ class User {
         return user!!.invitations.groupsList.toList()
     }
 
-    fun isUserHasId() : Boolean {
+    fun hasId() : Boolean {
         return user!!.hasId()
+    }
+
+    fun getPassedTests() : List<PassedTestModel> {
+        return user!!.passedTests.passedTestsList.toList()
+    }
+
+    fun hasPassedTests() : Boolean {
+        return user!!.hasPassedTests()
     }
 
     fun getId() : Long {

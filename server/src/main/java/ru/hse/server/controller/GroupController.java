@@ -86,7 +86,7 @@ public class GroupController {
             logger.error("invalid protocol buffer in enter request", e);
             return ResponseEntity.badRequest().body("invalid protobuf, error: " + e.getMessage());
         } catch (AccessException e) {
-            logger.error("failed to access group");
+            logger.error("failed to access group", e);
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (EntityNotFoundException e) {
             logger.error("failed while find user or group in enter request", e);

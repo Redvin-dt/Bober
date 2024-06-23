@@ -1,6 +1,8 @@
 package ru.hse.client.groups
 
 import android.app.Activity
+import android.content.ContentResolver
+import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import android.util.Log

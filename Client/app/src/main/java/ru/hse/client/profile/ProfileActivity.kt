@@ -8,6 +8,7 @@ import ru.hse.client.databinding.ActivityProfileBinding
 import ru.hse.client.groups.GroupActivity
 import ru.hse.client.groups.GroupSelectMenuActivity
 import ru.hse.client.groups.InvitesActivity
+import ru.hse.client.statistic.UserStatisticActivity
 import ru.hse.client.utility.DrawerBaseActivity
 import ru.hse.client.utility.user
 
@@ -26,7 +27,7 @@ class ProfileActivity: DrawerBaseActivity() {
         binding.metaInfo.text = user.getUserMetaInfo()
 
         binding.statisticButton.setOnClickListener {
-            // TODO: set function for statistic
+            goToStatistic()
         }
 
         binding.testsButton.setOnClickListener {
@@ -46,6 +47,13 @@ class ProfileActivity: DrawerBaseActivity() {
             val authManager = SingletonController.getInstance().getManager()
             authManager.logOut()
         }
+    }
+
+    private fun goToStatistic() {
+        val intent = Intent(this, UserStatisticActivity::class.java)
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        startActivity(intent)
+        finish()
     }
 
     private fun goToInvites() {
