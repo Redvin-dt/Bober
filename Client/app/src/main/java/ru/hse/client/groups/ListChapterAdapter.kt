@@ -42,7 +42,12 @@ class ListChapterAdapter(context: Context, dataArrayList: ArrayList<ListChapterD
         listName.maxLines = 1
         listProgressBar.progressDrawable.setColorFilter(Color.GREEN, PorterDuff.Mode.SRC_IN)
         listProgressBar!!.max = 100
-        listProgressBar.progress = (listData.passedTests.toDouble() / listData.tests.toDouble() * 100).toInt()
+        if (listData.tests == 0) {
+            listProgressBar.progress = 100
+        }else {
+            listProgressBar.progress =
+                (listData.passedTests.toDouble() / listData.tests.toDouble() * 100).toInt()
+        }
         if (listData.timestamp != -1L) {
             listDeadline.text = getTimeFromTimestamp(listData.timestamp)
         } else {
@@ -57,7 +62,7 @@ class ListChapterAdapter(context: Context, dataArrayList: ArrayList<ListChapterD
             listIcon.setBackgroundResource(R.drawable.dotted_border_green)
         } else {
             listIcon.setImageResource(R.drawable.chapter_close)
-            listIcon.setBackgroundResource(R.drawable.border_red)
+            listIcon.setBackgroundResource(R.drawable.border_gray)
         }
 
         return view

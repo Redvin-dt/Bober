@@ -87,7 +87,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             android:text="@string/start_test"
-            android:textSize="22sp"
+            android:textSize="20sp"
+            android:textColor="@color/white"
             app:layout_constraintVertical_bias="1.0"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -14,6 +14,7 @@ import ru.hse.client.profile.TestResultData
 
 class DeadlineAdapter(context: Context, dataArrayList: ArrayList<DeadlineData?>?) :
     ArrayAdapter<DeadlineData?>(context, R.layout.deadline_list_item, dataArrayList!!) {
+    private val itemsPadding = 40F
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
 
@@ -29,9 +30,15 @@ class DeadlineAdapter(context: Context, dataArrayList: ArrayList<DeadlineData?>?
         val listDeadline = view.findViewById<TextView>(R.id.deadline)
 
         listGroup.text = listData!!.group
+        listGroup.ellipsize = TextUtils.TruncateAt.END
+        listGroup.maxLines = 1
         listChapter.text = listData.chapter
+        listChapter.ellipsize = TextUtils.TruncateAt.END
+        listChapter.maxLines = 1
         listTestsRemaining.text = listData.testsRemaining
         listDeadline.text = listData.deadline
+
+        view.translationY = itemsPadding
 
         return view
     }

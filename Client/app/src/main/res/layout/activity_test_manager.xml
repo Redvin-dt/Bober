@@ -7,20 +7,36 @@
     tools:context=".chapters.TestManagerActivity"
     android:background="@color/white">
 
-    <TextView
-        android:id="@+id/test_number"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/progress_bar_layout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="25sp"
-        android:text="@string/text_for_test"
-        android:textColor="@color/black"
+        android:orientation="vertical"
+        android:layout_gravity="top"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintHorizontal_bias="0"
         app:layout_constraintVertical_bias="0">
-    </TextView>
+
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="8dp" />
+
+        <TextView
+            android:id="@+id/part"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:textAlignment="center"
+            android:text="@string/check_text_and_set_name_for_test"
+            android:textColor="@color/dark_gray" />
+
+    </LinearLayout>
+
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/test_name"
@@ -33,7 +49,7 @@
         android:textColor="@color/black"
         android:textCursorDrawable="@null"
         android:backgroundTint="@color/gray"
-        app:layout_constraintTop_toBottomOf="@id/test_number"
+        app:layout_constraintTop_toBottomOf="@id/progress_bar_layout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"

@@ -9,7 +9,7 @@
         android:layout_marginVertical="10sp"
         android:layout_marginHorizontal="10sp"
         app:cardCornerRadius="25sp"
-        app:cardElevation="13sp"
+        app:cardElevation="20sp"
         android:backgroundTint="@color/white">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -40,7 +40,7 @@
                 android:id="@+id/chapter"
                 android:text="@string/chapter"
                 android:textColor="@color/black"
-                android:textSize="18sp"
+                android:textSize="15sp"
                 app:layout_constraintBottom_toBottomOf="@id/list_img"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/list_img"
@@ -57,7 +57,7 @@
                 android:id="@+id/deadline"
                 android:text="DD-MM-YYYY HH:MM"
                 android:textColor="@color/black"
-                android:textSize="18sp"
+                android:textSize="15sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/list_img"
@@ -68,7 +68,7 @@
                 android:id="@+id/group"
                 android:text="@string/group"
                 android:textColor="@color/black"
-                android:textSize="14sp"
+                android:textSize="13sp"
                 app:layout_constraintTop_toBottomOf="@id/chapter"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/list_img"
@@ -76,13 +76,14 @@
                 app:layout_constraintVertical_bias="1.0"
                 android:layout_marginStart="5sp"
         />
+
         <TextView
                 android:layout_width="100sp"
                 android:layout_height="wrap_content"
                 android:id="@+id/tests_passed"
                 android:text="10 tests left"
                 android:textColor="@color/black"
-                android:textSize="14sp"
+                android:textSize="11sp"
                 app:layout_constraintTop_toBottomOf="@id/deadline"
                 app:layout_constraintStart_toStartOf="@id/deadline"
         />

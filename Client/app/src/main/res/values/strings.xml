@@ -9,7 +9,7 @@
     <string name="email">"Email"</string>
     <string name="registration_text">Register your account</string>
     <string name="password_confirm">Confirm password</string>
-    <string name="IP">192.168.0.108:8080</string>
+    <string name="IP">192.168.0.103:8080</string>
     <string name="log_in_text">Log in to your account</string>
     <string name="forgot_password">Forgot password?</string>
     <string name="have_an_account">Have an account?</string>
@@ -94,4 +94,11 @@
     <string name="tests_solved_10">tests solved: 10</string>
     <string name="group">Group</string>
     <string name="chapter">Chapter</string>
+    <string name="_00_00">00:00</string>
+    <string name="check_text_and_set_name_for_test">Check text and set name for test</string>
+    <string name="create_questions">Create questions</string>
+    <string name="questions_created">Questions created</string>
+    <string name="create_time_limit_for_the_test">Create time limit for the test</string>
+    <string name="set_additional_settings_for_the_test">Set additional settings for the test</string>
+    <string name="settings_are_set">Settings are set</string>
 </resources>
