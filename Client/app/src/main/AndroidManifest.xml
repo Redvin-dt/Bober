@@ -120,6 +120,10 @@
                 android:name=".profile.DeadlinesActivity"
                 android:exported="true" >
         </activity>
+        <activity
+            android:name=".chapters.CreateSettingsForTestActivity"
+            android:exported="true" >
+        </activity>
     </application>
 
 </manifest>

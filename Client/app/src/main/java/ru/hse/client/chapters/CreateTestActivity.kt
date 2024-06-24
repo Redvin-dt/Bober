@@ -3,6 +3,8 @@ package ru.hse.client.chapters
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.PorterDuff
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -65,6 +67,10 @@ class CreateTestActivity : DrawerBaseActivity() {
         binding.testName.ellipsize = TextUtils.TruncateAt.END
         binding.testName.text = testName
 
+        binding.progressBar.progressDrawable.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_IN)
+        binding.progressBar.max = 3
+        binding.progressBar.progress = 2
+
         questionManager = QuestionManager(binding, this)
         questionManager.addNewQuestion()
 
@@ -104,16 +110,27 @@ class CreateTestActivity : DrawerBaseActivity() {
     }
 
     private fun createQuestionProto() {
-        val questionList = questionManager.getQuestionsList()
-        val testModel = TestModel.newBuilder()
-            .setName(testName)
-            .setPosition(testStartPosition.toLong())
-            .setQuestions(questionList)
-            .build()
-        val data: Intent = Intent()
-        setResult(RESULT_OK, data)
-        data.putExtra("test model", testModel.toByteArray())
-        finish()
+        val intent = Intent(this, CreateSettingsForTestActivity::class.java)
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        startActivityForResult(intent, 255)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 255 && resultCode == RESULT_OK && data != null) {
+            val secondsForTest = data.extras!!.getLong("secondsForTest")
+            val questionList = questionManager.getQuestionsList()
+            val testModel = TestModel.newBuilder()
+                .setName(testName)
+                .setPosition(testStartPosition.toLong())
+                .setQuestions(questionList)
+                .setSecondsForTest(secondsForTest)
+                .build()
+            val data: Intent = Intent()
+            setResult(RESULT_OK, data)
+            data.putExtra("test model", testModel.toByteArray())
+            finish()
+        }
     }
 
     private fun printErrorAboutNotFullQuestion() {

@@ -1,6 +1,8 @@
 package ru.hse.client.chapters
 
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.PorterDuff
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -32,7 +34,11 @@ class TestManagerActivity: DrawerBaseActivity() {
         currentTestNumber = intent.extras?.get("test number") as Int
         testStartPosition = intent.extras?.get("test start position") as Int
 
-        binding.testNumber.text = "Text for Test ${currentTestNumber}"
+        binding.progressBar.progressDrawable.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_IN)
+        binding.progressBar.max = 3
+        binding.progressBar.progress = 1
+        binding.part.text = "Check text and set name for test $currentTestNumber"
+
         binding.preview.text = textForCurrentTest
         binding.preview.movementMethod = ScrollingMovementMethod()
 

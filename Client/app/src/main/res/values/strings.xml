@@ -95,4 +95,10 @@
     <string name="group">Group</string>
     <string name="chapter">Chapter</string>
     <string name="_00_00">00:00</string>
+    <string name="check_text_and_set_name_for_test">Check text and set name for test</string>
+    <string name="create_questions">Create questions</string>
+    <string name="questions_created">Questions created</string>
+    <string name="create_time_limit_for_the_test">Create time limit for the test</string>
+    <string name="set_additional_settings_for_the_test">Set additional settings for the test</string>
+    <string name="settings_are_set">Settings are set</string>
 </resources>
