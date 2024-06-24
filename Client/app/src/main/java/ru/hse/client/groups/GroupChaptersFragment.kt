@@ -14,14 +14,12 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import okhttp3.OkHttpClient
 import ru.hse.client.R
-import ru.hse.client.chapters.ReadingChapterActivity
-import ru.hse.client.chapters.getChapter
-import ru.hse.client.chapters.getChapterText
+import ru.hse.client.chapters.*
 import ru.hse.client.databinding.FragmentGroupChaptersBinding
 import ru.hse.client.utility.user
 import ru.hse.server.proto.EntitiesProto
 import ru.hse.server.proto.EntitiesProto.GroupModel
-import ru.hse.client.chapters.getChapter
+import ru.hse.server.proto.groupModel
 
 class  GroupChaptersFragment(activity: GroupActivity, groupModel: GroupModel) : Fragment(R.layout.fragment_group_chapters) {
     private lateinit var binding: FragmentGroupChaptersBinding
@@ -37,7 +35,21 @@ class  GroupChaptersFragment(activity: GroupActivity, groupModel: GroupModel) : 
         dataArrayList = ArrayList()
         listViewAdapter = ListChapterAdapter(mActivity, dataArrayList)
 
+        if (user.getId() != mGroupModel.admin.id) {
+            binding.newChapterButton.visibility = View.INVISIBLE
+        }
+        binding.newChapterButton.setOnClickListener {
+            newChapterButtonPressed()
+        }
+
         drawGroupChapterList()
+    }
+
+    private fun newChapterButtonPressed() {
+        val intent = Intent(activity, ChapterCreateActivity::class.java)
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        intent.putExtra("group info", mGroupModel.toByteArray())
+        startActivityForResult(intent, 100)
     }
 
     private fun drawGroupChapterList() {

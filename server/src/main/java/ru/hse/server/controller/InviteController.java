@@ -23,15 +23,15 @@ public class InviteController {
     private final InviteService inviteService;
 
     @PostMapping("/invite")
-    public ResponseEntity inviteUser(@RequestParam Long userId, @RequestParam Long groupId) {
+    public ResponseEntity inviteUser(@RequestParam String userLogin, @RequestParam Long groupId) {
         try {
-            inviteService.createInvite(userId, groupId);
+            inviteService.createInvite(userLogin, groupId);
             return ResponseEntity.ok().body("user successfully invited");
         } catch (EntityNotFoundException e) {
             logger.error("error while invite user", e);
             return ResponseEntity.badRequest().body("error while invite user, error message: " + e.getMessage());
         } catch (AccessException e) {
-            logger.error("user with id={} has no access to group with id={}", userId, groupId, e);
+            logger.error("user with id={} has no access to group with login={}", userLogin, groupId, e);
             return ResponseEntity.badRequest().body("user has no access for this group: " + e.getMessage());
         } catch (EntityUpdateException e) {
             logger.error("error while update entity", e);

@@ -85,11 +85,27 @@
         android:paddingHorizontal="5sp"
         android:paddingVertical="10sp"
         android:scrollbars="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/invite_member_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/admin_element"
         app:layout_constraintVertical_bias="0"
         tools:listitem="@layout/members_list_item" />
+
+    <Button
+            android:id="@+id/invite_member_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/invite"
+            android:textSize="15sp"
+            android:textColor="@color/white"
+            app:backgroundTint="@color/lavanda"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintHorizontal_bias="0.96"
+            app:layout_constraintVertical_bias="0.98"
+    />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
