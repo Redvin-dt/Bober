@@ -46,12 +46,6 @@ class GroupActivity : DrawerBaseActivity() {
         group = enterGroup(group, false, this, okHttpClient)!!
 
         allocateActivityTitle(group.name.toString())
-        if (user.getId() != group.admin.id) {
-            binding.newChapterButton.visibility = View.INVISIBLE
-        }
-        binding.newChapterButton.setOnClickListener {
-            newChapterButtonPressed()
-        }
 
         pageAdapter = GroupPageAdapter(supportFragmentManager, lifecycle, this, group)
         binding.viewPager.adapter = pageAdapter
@@ -74,12 +68,6 @@ class GroupActivity : DrawerBaseActivity() {
         })
     }
 
-    private fun newChapterButtonPressed() {
-        val intent = Intent(this@GroupActivity, ChapterCreateActivity::class.java)
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        intent.putExtra("group info", group.toByteArray())
-        startActivityForResult(intent, 100)
-    }
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)

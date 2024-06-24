@@ -36,6 +36,8 @@ class ChapterSettingsFragment() :
         }
     }
 
+
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

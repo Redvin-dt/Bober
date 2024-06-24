@@ -40,12 +40,11 @@ public class User {
     @OneToMany(mappedBy = "userHost", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<PassedTest> passedTests = new ArrayList<>();
 
-
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "users_groups", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "group_id", referencedColumnName = "id"))
     private Set<Group> groupsUserSet = new HashSet<Group>();
 
-    @ManyToMany(cascade =  CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.REFRESH}, fetch = FetchType.EAGER)
     @JoinTable(name = "users_invitations",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "group_id", referencedColumnName = "id"))
     private Set<Group> invitations = new HashSet<>();

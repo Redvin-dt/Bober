@@ -243,6 +243,8 @@ fun declineInvite(groupId: Long, activity: Activity, okHttpClient: OkHttpClient)
     val URlCreateGroup: String =
             ("http://" + ContextCompat.getString(activity, R.string.IP) + "/invitations/decline/user").toHttpUrlOrNull()
                     ?.newBuilder()
+                    ?.addQueryParameter("groupId", groupId.toString())
+                    ?.addQueryParameter("userId", user.getId().toString())
                     ?.build()
                     .toString()
 
@@ -284,4 +286,53 @@ fun declineInvite(groupId: Long, activity: Activity, okHttpClient: OkHttpClient)
 
     countDownLatch.await()
     return isSuccess
+}
+
+fun sendInvite(groupId : Long, userLogin: String, activity: Activity, okHttpClient: OkHttpClient) : Boolean {
+    val URlCreateGroup: String =
+            ("http://" + ContextCompat.getString(activity, R.string.IP) + "/invitations/invite").toHttpUrlOrNull()
+                    ?.newBuilder()
+                    ?.addQueryParameter("groupId", groupId.toString())
+                    ?.addQueryParameter("userLogin", userLogin)
+                    ?.build()
+                    .toString()
+
+    val requestBody: RequestBody = RequestBody.create(null, ByteArray(0))
+
+    val request: Request = Request.Builder()
+            .url(URlCreateGroup)
+            .post(requestBody)
+            .header("Authorization", "Bearer " + user.getUserToken())
+            .build()
+
+    Log.i("GroupRequest", "Request has been sent $URlCreateGroup")
+
+    val somethingWentWrongMessage: String = "Something went wrong, try again"
+    var isSuccessful = false
+    val countDownLatch = CountDownLatch(1)
+    okHttpClient.newCall(request).enqueue(object : Callback {
+        override fun onFailure(call: Call, e: IOException) {
+            Log.e("GroupRequest", e.toString() + " " + e.message)
+            Handler(Looper.getMainLooper()).post {
+                Toast.makeText(activity, somethingWentWrongMessage, Toast.LENGTH_SHORT).show()
+            }
+            countDownLatch.countDown()
+        }
+
+        override fun onResponse(call: Call, response: Response) {
+            Log.i("Info", response.toString())
+            if (response.isSuccessful) {
+                Log.i("GroupRequest", "user invited")
+                isSuccessful = true
+            } else {
+                Handler(Looper.getMainLooper()).post {
+                    Toast.makeText(activity, response.body?.string(), Toast.LENGTH_SHORT).show() // TODO: set another text
+                }
+            }
+            countDownLatch.countDown()
+        }
+    })
+
+    countDownLatch.await()
+    return isSuccessful
 }

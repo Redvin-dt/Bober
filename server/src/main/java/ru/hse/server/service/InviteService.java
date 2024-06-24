@@ -16,7 +16,7 @@ import ru.hse.server.repository.UserRepository;
 public class InviteService {
     private final Logger logger = LoggerFactory.getLogger(InviteService.class);
 
-    private final UserRepository userRepository; // TODO: add constructor with qualified
+    private final UserRepository userRepository;
     private final GroupRepository groupRepository;
 
     public InviteService(@Qualifier("userDatabaseRepository") UserRepository userRepository, GroupRepository groupRepository) {
@@ -25,7 +25,7 @@ public class InviteService {
     }
 
     public void acceptInvite(Long userId, Long groupId) throws EntityUpdateException {
-        var user = getUser(userId);
+        var user = getUserByID(userId);
         var group = getGroup(groupId);
 
         var invitations = user.getInvitations();
@@ -36,12 +36,12 @@ public class InviteService {
         }
 
         invitations.remove(group);
-        group.addUser(user);
-        updateEntities(user, group);
+        user.getGroupsUserSet().add(group);
+        updateEntities(user);
     }
 
     public void declineInvite(Long userId, Long groupId) throws EntityUpdateException {
-        var user = getUser(userId);
+        var user = getUserByID(userId);
         var group = getGroup(groupId);
 
         var invitations = user.getInvitations();
@@ -51,28 +51,33 @@ public class InviteService {
         }
 
         invitations.remove(group);
-        updateEntities(user, group);
+
+        updateEntities(user);
     }
 
-    public void createInvite(Long userId, Long groupId) throws AccessException, EntityUpdateException {
-        var user = getUser(userId);
+    public void createInvite(String userLogin, Long groupId) throws AccessException, EntityUpdateException {
+        var user = getUserByLogin(userLogin);
         var group = getGroup(groupId);
 
-        //var admin = group.getAdmin();
-;
-        //if (user.equals(admin)) {
-        //    logger.error("user has to be admin of group to invite other members");
-        //    throw new AccessException("user has to be admin of group to invite other members");
-        //}
-
         user.addInvitation(group);
-        updateEntities(user, group);
+        updateEntities(user);
     }
 
-    private User getUser(Long userId) {
+    private User getUserByLogin(String userLogin) {
+        var user = userRepository.findByUserLogin(userLogin);
+        if (user == null) {
+            logger.error("user not found, login={}", userLogin);
+            throw new EntityNotFoundException("user not found, login=" + userLogin);
+        }
+
+        return user;
+    }
+
+
+    private User getUserByID(Long userId) {
         var user = userRepository.findById(userId);
         if (user.isEmpty()) {
-            logger.error("group not found, id={}", userId);
+            logger.error("user not found, id={}", userId);
             throw new EntityNotFoundException("group not found, id=" + userId);
         }
 
@@ -89,12 +94,9 @@ public class InviteService {
         return group.get();
     }
 
-    private void updateEntities(User user, Group group) throws EntityUpdateException {
+    private void updateEntities(User user) throws EntityUpdateException {
         if (userRepository.update(user) == null) {
             throw new EntityUpdateException("failed while update user with id=" + user.getUserId());
-        }
-        if (groupRepository.update(group) == null) {
-            throw new EntityUpdateException("failed while update group with id=" + group.getGroupId());
         }
     }
 }

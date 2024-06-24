@@ -16,6 +16,7 @@ import ru.hse.client.chapters.ReadingChapterActivity
 import ru.hse.client.chapters.getChapter
 import ru.hse.client.databinding.FragmentGroupChaptersBinding
 import ru.hse.client.databinding.FragmentGroupMembersBinding
+import ru.hse.client.utility.user
 import ru.hse.server.proto.EntitiesProto
 
 class GroupMembersFragment(activity: GroupActivity, groupModel: EntitiesProto.GroupModel) : Fragment() {
@@ -30,7 +31,23 @@ class GroupMembersFragment(activity: GroupActivity, groupModel: EntitiesProto.Gr
         dataArrayList = ArrayList()
         listViewAdapter = ListMemberAdapter(mActivity, dataArrayList)
 
+        if (user.getId() != mGroupModel.admin.id) {
+            binding.inviteMemberButton.visibility = View.INVISIBLE
+        }
+        binding.inviteMemberButton.setOnClickListener {
+            inviteButtonPressed()
+        }
+
         drawGroupMembersList()
+    }
+
+    private fun inviteButtonPressed() {
+        val intent = Intent(activity, InviteActivity::class.java)
+        val bundle = Bundle()
+        bundle.putLong("groupId", mGroupModel.id)
+        bundle.putString("groupName", mGroupModel.name)
+        intent.putExtras(bundle)
+        startActivity(intent)
     }
 
     private fun drawGroupMembersList() {
