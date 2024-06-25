@@ -69,7 +69,7 @@ fun isNotValidPassword(password: CharSequence?): Boolean {
     return if (password == null) {
         true
     } else {
-        val passwordPattern: String = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])([@#$%^&+=]*)(?=\\S+$).{4,}$"
+        val passwordPattern: String = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])([@#$%^&+=_-]*)(?=\\S+$).{4,}$"
         val pattern: Pattern = Pattern.compile(passwordPattern)
         val matcher: Matcher = pattern.matcher(password)
         !matcher.matches()
@@ -77,35 +77,35 @@ fun isNotValidPassword(password: CharSequence?): Boolean {
 }
 
 fun writeErrorAboutPassword(password: CharSequence, activity: Activity) {
-    val passwordPatternWithoutDigit: String = "^(?=.*[a-z])(?=.*[A-Z])([@#$%^&+=]*)(?=\\S+$).{4,}$"
+    val passwordPatternWithoutDigit: String = "^(?=.*[a-z])(?=.*[A-Z])([@#$%^&+=_-]*)(?=\\S+$).{4,}$"
     var pattern: Pattern = Pattern.compile(passwordPatternWithoutDigit)
     var matcher: Matcher = pattern.matcher(password)
     if (matcher.matches()) {
         Toast.makeText(activity, "Password must contain at least one digit", Toast.LENGTH_LONG).show()
         return
     }
-    val passwordPatternWithoutLCaseLetter: String = "^(?=.*[0-9])(?=.*[A-Z])([@#$%^&+=]*)(?=\\S+$).{4,}$"
+    val passwordPatternWithoutLCaseLetter: String = "^(?=.*[0-9])(?=.*[A-Z])([@#$%^&+=_-]*)(?=\\S+$).{4,}$"
     pattern = Pattern.compile(passwordPatternWithoutLCaseLetter)
     matcher = pattern.matcher(password)
     if (matcher.matches()) {
         Toast.makeText(activity, "Password must contain at least one lower case letter", Toast.LENGTH_LONG).show()
         return
     }
-    val passwordPatternWithoutUCaseLetter: String = "^(?=.*[0-9])(?=.*[a-z])([@#$%^&+=]*)(?=\\S+$).{4,}$"
+    val passwordPatternWithoutUCaseLetter: String = "^(?=.*[0-9])(?=.*[a-z])([@#$%^&+=_-]*)(?=\\S+$).{4,}$"
     pattern = Pattern.compile(passwordPatternWithoutUCaseLetter)
     matcher = pattern.matcher(password)
     if (matcher.matches()) {
         Toast.makeText(activity, "Password must contain at least one upper case letter", Toast.LENGTH_LONG).show()
         return
     }
-    val passwordPatternWithSpace: String = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])([@#$%^&+=]*).{4,}$"
+    val passwordPatternWithSpace: String = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])([@#$%^&+=_-]*).{4,}$"
     pattern = Pattern.compile(passwordPatternWithSpace)
     matcher = pattern.matcher(password)
     if (matcher.matches()) {
         Toast.makeText(activity, "Password must not contain spaces", Toast.LENGTH_LONG).show()
         return
     }
-    val passwordPatternShortLen: String = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])([@#$%^&+=]*)(?=\\S+\$).{0,3}$"
+    val passwordPatternShortLen: String = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])([@#$%^&+=_-]*)(?=\\S+\$).{0,3}$"
     pattern = Pattern.compile(passwordPatternShortLen)
     matcher = pattern.matcher(password)
     if (matcher.matches()) {

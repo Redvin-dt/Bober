@@ -24,10 +24,12 @@
             android:name=".groups.GroupMembersActivity"
             android:exported="false"
             android:label="@string/title_activity_group_members"
-            android:theme="@style/Theme.Client.NoActionBar" />
+            android:theme="@style/Theme.Client.NoActionBar"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".auth.MainActivity"
-            android:exported="true" >
+            android:exported="true"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -36,12 +38,14 @@
         </activity>
         <activity
             android:name=".auth.AuthenticatorActivity"
-            android:exported="true" >
+            android:exported="true"
+            android:screenOrientation="portrait" >
         </activity>
 
         <service
             android:name=".auth.AuthenticatorActivity"
-            android:exported="false" >
+            android:exported="false"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.accounts.AccountAuthenticator" />
             </intent-filter>
@@ -53,81 +57,99 @@
 
         <activity
             android:name=".entry.SignInActivity"
-            android:exported="true" >
+            android:exported="true"
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".entry.SignUpActivity"
-            android:exported="true" >
+            android:exported="true"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".profile.ProfileActivity"
-            android:exported="true" >
+            android:exported="true"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".groups.DeadlinesActivity"
-            android:exported="true" >
+            android:exported="true"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".utility.DrawerBaseActivity"
-            android:exported="true" >
+            android:exported="true"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".groups.GroupSelectMenuActivity"
-            android:exported="true" >
+            android:exported="true"
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".groups.GroupCreateActivity"
-            android:exported="true" >
+            android:exported="true"
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".groups.GroupActivity"
-            android:exported="true" >
+            android:exported="true"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".groups.GroupEnterActivity"
-            android:exported="true" >
+            android:exported="true"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".groups.InvitesActivity"
-            android:exported="true">
+            android:exported="true"
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".chapters.ChapterCreateActivity"
             android:enableOnBackInvokedCallback="true"
-            android:exported="false" >
+            android:exported="false"
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".chapters.CreateTestActivity"
-            android:exported="true" >
+            android:exported="true"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".chapters.TestManagerActivity"
-            android:exported="true" >
+            android:exported="true"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".chapters.ReadingChapterActivity"
-            android:exported="true" >
+            android:exported="true"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".chapters.TestActivity"
-            android:exported="true" >
+            android:exported="true"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
                 android:name=".profile.PassedTestActivity"
-                android:exported="true" >
+                android:exported="true"
+                android:screenOrientation="portrait">
         </activity>
         <activity
                 android:name=".profile.DeadlinesActivity"
-                android:exported="true" >
+                android:exported="true"
+                android:screenOrientation="portrait">
         </activity>
         <activity
-
             android:name=".chapters.CreateSettingsForTestActivity"
-            android:exported="true" >
+            android:exported="true"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
                 android:name=".groups.InviteActivity"
-                android:exported="true">
+                android:exported="true"
+                android:screenOrientation="portrait" >
         </activity>
 
     </application>

@@ -1,10 +1,12 @@
 package ru.hse.client.groups
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.google.android.material.textfield.TextInputEditText
@@ -14,6 +16,8 @@ import ru.hse.client.R
 import ru.hse.client.databinding.ActivityGroupCreateBinding
 import ru.hse.client.entry.*
 import ru.hse.client.utility.DrawerBaseActivity
+import java.util.regex.Matcher
+import java.util.regex.Pattern
 
 
 class GroupCreateActivity : DrawerBaseActivity() {
@@ -44,7 +48,7 @@ class GroupCreateActivity : DrawerBaseActivity() {
                 charSequence: CharSequence, start: Int, before: Int, count: Int
             ) {
                 val newText = charSequence.toString()
-                if (isNotValidLogin(newText)) {
+                if (isNotValidGroupName(newText)) {
                     nameLayout.error = "Unacceptable symbols in login"
                 } else {
                     nameLayout.boxStrokeColor =
@@ -102,8 +106,8 @@ class GroupCreateActivity : DrawerBaseActivity() {
         val name: String = binding.name.text.toString()
         val password: String = binding.password.text.toString()
 
-        if (isNotValidLogin(name)) {
-            writeErrorAboutLogin(name, context)
+        if (isNotValidGroupName(name)) {
+            writeErrorAboutGroupName(name, context)
             Log.e("Create group", "incorrect name: $name")
             return
         }
@@ -121,6 +125,27 @@ class GroupCreateActivity : DrawerBaseActivity() {
         startActivity(intent)
         finish()
     }
+}
 
+fun isNotValidGroupName(name: CharSequence?): Boolean {
+    return if (name == null) {
+        true
+    } else {
+        val namePattern: String = "^([0-9]*)([A-Z]*)([a-z]*)([_-]*).{3,}$"
+        val pattern: Pattern = Pattern.compile(namePattern)
+        val matcher: Matcher = pattern.matcher(name)
+        !matcher.matches()
+    }
+}
 
+fun writeErrorAboutGroupName(name: CharSequence, activity: Activity) {
+    val groupNameSmallLength: String = "^([0-9]*)([A-Z]*)([a-z]*)([_-]*).{0,2}$"
+    var pattern: Pattern = Pattern.compile(groupNameSmallLength)
+    var matcher: Matcher = pattern.matcher(name)
+    if (matcher.matches()) {
+        Toast.makeText(activity, "Group name must be at least 3 in length", Toast.LENGTH_LONG).show()
+        return
+    }
+
+    Toast.makeText(activity, "Group name must consist of letters, numbers and spaces", Toast.LENGTH_LONG).show()
 }

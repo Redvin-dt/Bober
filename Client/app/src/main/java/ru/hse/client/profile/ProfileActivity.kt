@@ -41,11 +41,6 @@ class ProfileActivity: DrawerBaseActivity() {
             goToInvites()
         }
 
-        binding.logOutButton.setOnClickListener {
-            user.setUserByLogin(this, user.getUserLogin())
-            val authManager = SingletonController.getInstance().getManager()
-            authManager.logOut()
-        }
     }
 
     private fun goToInvites() {
