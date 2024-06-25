@@ -13,7 +13,7 @@
     <View
             android:id="@+id/border"
             android:layout_width="300sp"
-            android:layout_height="400sp"
+            android:layout_height="380sp"
             android:background="@drawable/rounded_border"
             android:backgroundTint="@color/sign_in_color"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -86,34 +86,14 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <Button
-            android:id="@+id/forgot_password"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/transparent_background"
-            android:text="@string/forgot_password"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            app:layout_constraintEnd_toEndOf="@id/password_box"
-            app:layout_constraintTop_toBottomOf="@id/password_box"
-            app:layout_constraintBottom_toTopOf="@id/sign_in_button"
-            app:layout_constraintStart_toStartOf="@id/border"
-            app:layout_constraintHorizontal_bias="1.1"
-            app:layout_constraintVertical_bias="0.5"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
-
-    />
 
     <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/password_box"
             style="@style/TextInputLayoutStyle"
             app:layout_constraintTop_toBottomOf="@id/sign_in_label"
-            app:layout_constraintBottom_toTopOf="@id/sign_in_button"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/border"
-            app:layout_constraintVertical_bias="0.7"
+            app:layout_constraintVertical_bias="0.27"
             app:layout_constraintStart_toStartOf="@id/border"
             app:passwordToggleEnabled="true"
             app:errorEnabled="true"
@@ -144,9 +124,11 @@
             android:text="@string/sign_in"
             android:textColor="@color/black"
             android:textSize="16sp"
+            app:layout_constraintTop_toTopOf="@id/password_box"
             app:layout_constraintBottom_toBottomOf="@id/border"
             app:layout_constraintEnd_toEndOf="@id/border"
             app:layout_constraintStart_toStartOf="@id/border"
+            app:layout_constraintVertical_bias="0.9"
             app:layout_constraintHorizontal_bias="0.5"
             android:layout_marginBottom="30sp"/>
 

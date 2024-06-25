@@ -112,10 +112,6 @@ class SignInActivity : AppCompatActivity() {
             finish()
         }
 
-        val forgotPasswordButton: Button = findViewById(R.id.forgot_password)
-        forgotPasswordButton.setOnClickListener {
-            // TODO: create an opportunity to restore data
-        }
     }
 
 }

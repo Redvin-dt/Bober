@@ -106,7 +106,6 @@ class TestActivity : DrawerBaseActivity(), ListQuestionAdapter.OnCheckBoxListene
             }
             createAnswersList(questions!!.getQuestions(currentQuestion - 1))
             questionNumberTextView.text = "Question number: $currentQuestion"
-            answerEditText.text.clear()
         }
     }
 
