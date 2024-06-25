@@ -61,7 +61,8 @@ class UserStatisticActivity : DrawerBaseActivity() {
     private val okHttpClient = OkHttpClient()
     private lateinit var binding : ActivityUserStatisticBinding
 
-    private val chartEntryModelProducer: ChartEntryModelProducer = ChartEntryModelProducer()
+    private val groupChartEntryModelProducer: ChartEntryModelProducer = ChartEntryModelProducer()
+    private val dateChartEntryModelProducer: ChartEntryModelProducer = ChartEntryModelProducer()
     private var groupNameByValue: MutableMap<Int, String> = HashMap<Int, String>().toMutableMap()
     private var dateByIndex : MutableMap<Int, String> = HashMap<Int, String>().toMutableMap()
 
@@ -79,10 +80,10 @@ class UserStatisticActivity : DrawerBaseActivity() {
             value, _ -> if (groupNameByValue.containsKey(value.toInt())) groupNameByValue[value.toInt()].toString() else "error"
         }
 
-        chartEntryModelProducer.setEntries(getGroupStatisticAsEntries())
+        groupChartEntryModelProducer.setEntries(getGroupStatisticAsEntries())
         with(groupChartView) {
             runInitialAnimation = true
-            entryProducer = chartEntryModelProducer
+            entryProducer = groupChartEntryModelProducer
             with(bottomAxis as HorizontalAxis) {
                 itemPlacer = bottomAxisItemPlacer
                 valueFormatter = groupHorizontalAxisValueFormatter
@@ -113,10 +114,10 @@ class UserStatisticActivity : DrawerBaseActivity() {
             value, _ -> if (dateByIndex.containsKey(value.toInt())) dateByIndex[value.toInt()].toString() else "error"
         }
 
-        chartEntryModelProducer.setEntries(getDateStatisticAsEntries())
+        dateChartEntryModelProducer.setEntries(getDateStatisticAsEntries())
         with(dateChartView) {
             runInitialAnimation = true
-            entryProducer = chartEntryModelProducer
+            entryProducer = dateChartEntryModelProducer
             with(bottomAxis as HorizontalAxis) {
                 itemPlacer = bottomAxisItemPlacer
                 valueFormatter = dateHorizontalAxisValueFormatter
@@ -153,8 +154,6 @@ class UserStatisticActivity : DrawerBaseActivity() {
             return listOf()
         }
 
-        dateTestCountList.add(EntitiesProto.DateTestCount.newBuilder().setDate("11-01-2024").setTestCount(5).build())
-
         val entries : MutableList<FloatEntry> = ArrayList<FloatEntry>().toMutableList()
         for ((index, test) in dateTestCountList.withIndex()) {
             dateByIndex[index] = test.date
@@ -174,17 +173,6 @@ class UserStatisticActivity : DrawerBaseActivity() {
             return listOf()
         }
 
-        Log.i("UserStatistic", "try to add test") // TODO: remove
-        groupTestPercentList.add(0, GroupTestPercent.newBuilder().setGroupName("hui").setTestPercent(50).build()) // TODO: remove
-        groupTestPercentList.add(0, GroupTestPercent.newBuilder().setGroupName("hui1").setTestPercent(50).build()) // TODO: remove
-        groupTestPercentList.add(0, GroupTestPercent.newBuilder().setGroupName("hui2").setTestPercent(25).build()) // TODO: remove
-        groupTestPercentList.add(0, GroupTestPercent.newBuilder().setGroupName("hui3").setTestPercent(100).build()) // TODO: remove
-        groupTestPercentList.add(0, GroupTestPercent.newBuilder().setGroupName("hui4").setTestPercent(75).build()) // TODO: remove
-
-        for (i in 1..10) {
-            groupTestPercentList.add(GroupTestPercent.newBuilder().setGroupName("pizda$i").setTestPercent((i * 10).toLong()).build())
-        }
-
         Log.i("UserStatistic", "start set entities")
         val entries : MutableList<FloatEntry> = ArrayList<FloatEntry>().toMutableList()
         for ((index, testPercent) in groupTestPercentList.withIndex()) {
@@ -200,7 +188,7 @@ class UserStatisticActivity : DrawerBaseActivity() {
     companion object {
         private const val MAX_START_AXIS_ITEM_COUNT = 5
         private const val BOTTOM_AXIS_ITEM_SPACING = 1
-        private const val BOTTOM_AXIS_ITEM_OFFSET = 5
+        private const val BOTTOM_AXIS_ITEM_OFFSET = 10
         private const val MAX_BOTTOM_AXIS_ITEM_COUNT = 5
     }
 

@@ -51,7 +51,7 @@
 
     <style name="ChartColumnStyle">
         <item name="color">@color/chart_color_1</item>
-        <item name="thickness">8sp</item>
+        <item name="thickness">6sp</item>
     </style>
 
     <style name="ChartStartAxisTitleBackgroundStyle" parent="ChartAxisTitleBackgroundStyle">

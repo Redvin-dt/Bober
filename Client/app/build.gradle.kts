@@ -131,6 +131,6 @@ dependencies {
     implementation("com.patrykandpatrick.vico:core:1.14.0")
     implementation("com.patrykandpatrick.vico:views:1.14.0")
     runtimeOnly("org.jetbrains.kotlin:kotlin-reflect:1.3.10")
-    implementation("com.applandeo:material-calendar-view:1.9.2")
+    //implementation("com.applandeo:material-calendar-view:1.9.2")
 }
 

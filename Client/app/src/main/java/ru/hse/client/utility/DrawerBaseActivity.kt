@@ -12,7 +12,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
 import ru.hse.client.R
 import ru.hse.client.auth.SingletonController
-import ru.hse.client.profile.DeadlinesActivity
+//import ru.hse.client.profile.DeadlinesActivity
 import ru.hse.client.groups.GroupSelectMenuActivity
 import ru.hse.client.profile.ProfileActivity
 
@@ -53,9 +53,9 @@ open class DrawerBaseActivity: AppCompatActivity(), NavigationView.OnNavigationI
                 overridePendingTransition(0, 0)
             }
             R.id.nav_deadilnes -> {
-                val intent = Intent(this, DeadlinesActivity::class.java)
-                startActivity(intent)
-                overridePendingTransition(0, 0)
+               // val intent = Intent(this, DeadlinesActivity::class.java)
+               // startActivity(intent)
+               // overridePendingTransition(0, 0)
             }
             R.id.nav_log_out -> {
                 val authManager = SingletonController.getInstance().getManager()
