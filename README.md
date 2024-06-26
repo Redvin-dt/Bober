@@ -1,6 +1,9 @@
 # Bober
 
 <p align="middle">
+  BOBER - Best Online Book Education Resource
+</p>
+<p align="middle">
   Modern educational platform based on Android
 </p>
 
